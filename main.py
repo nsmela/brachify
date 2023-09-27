@@ -10,44 +10,13 @@ from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QMainWindow, QGraphicsDropShadowEffect
 
 # GUI FILE
-from ui_main import Ui_MainWindow
+from Presentation.MainWindow.core import MainWindow
 
 # IMPORT FUNCTIONS
-from ui_functions import *
-from ui_splash_interface import Ui_SplashScreen
+from Presentation.MainWindow.ui_functions import *
+from Presentation.SplashScreen.ui_splash_interface import Ui_SplashScreen
 
 counter = 0
-
-
-class MainWindow(QMainWindow):
-    def __init__(self):
-        QMainWindow.__init__(self)
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
-
-        ## TOGGLE/BURGUER MENU
-        ########################################################################
-        self.ui.Btn_Toggle.clicked.connect(lambda: UIFunctions.toggleMenu(self, 250, True))
-        self.ui.btn_page_1.setCheckable(True)
-        self.ui.btn_page_2.setCheckable(True)
-        self.ui.btn_page_3.setCheckable(True)
-
-        ## PAGES
-        ########################################################################
-
-        # PAGE 1
-        self.ui.btn_page_1.clicked.connect(lambda: UIFunctions.setPage(self, 0))
-
-        # PAGE 2
-        self.ui.btn_page_2.clicked.connect(lambda: UIFunctions.setPage(self, 1))
-
-        # PAGE 3
-        self.ui.btn_page_3.clicked.connect(lambda: UIFunctions.setPage(self, 2))
-
-        ## SHOW ==> MAIN WINDOW
-        ########################################################################
-        # self.show()
-        ## ==> END ##
 
 
 class SplashScreen(QMainWindow):
