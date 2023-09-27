@@ -1,0 +1,77 @@
+from OCC.Core.BRepAdaptor import BRepAdaptor_Surface
+from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
+from OCC.Core.BRepFilletAPI import BRepFilletAPI_MakeFillet
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder
+from OCC.Core.GeomAbs import GeomAbs_Plane
+from OCC.Core.TopAbs import TopAbs_FACE
+from OCC.Core.TopExp import TopExp_Explorer
+from OCC.Core.TopoDS import topods, TopoDS_Face, TopoDS_Solid, TopoDS_Shape
+from OCC.Core.gp import gp_Dir, gp_Ax2, gp_Pnt, gp_Pln
+from OCC.Extend.TopologyUtils import TopologyExplorer
+
+
+def face_is_plane(face: TopoDS_Face) -> bool:
+    """
+    Returns True if the TopoDS_Face is a plane, False otherwise
+    """
+    surf = BRepAdaptor_Surface(face, True)
+    surf_type = surf.GetType()
+    return surf_type == GeomAbs_Plane
+
+
+def geom_plane_from_face(face: TopoDS_Face) -> gp_Pln:
+    """
+    Returns the geometric plane entity from a planar surface
+    """
+    return BRepAdaptor_Surface(face, True).Plane()
+
+
+def add_base(shape: TopoDS_Solid, radius: float = 27.0) -> TopoDS_Shape:
+    # cylinder references
+    cylinder_axis = gp_Dir(0, 0, 1)
+    cylinder_vector = gp_Ax2(gp_Pnt(0, 0, 0), cylinder_axis)
+    cylinder = BRepPrimAPI_MakeCylinder(cylinder_vector, radius, 5.0).Shape()
+
+    return BRepAlgoAPI_Fuse(shape, cylinder).Shape()
+
+
+class BrachyCylinder:
+    def __init__(self, length: float = 200.0, radius: float = 15.0, has_base: bool = False):
+        self.length = length
+        self.radius = radius
+        self.has_base = has_base
+        self.shape = self._generate()
+
+    def _generate(self):
+        # cylinder references
+        cylinder_axis = gp_Dir(0, 0, 1)
+        cylinder_vector = gp_Ax2(gp_Pnt(0, 0, 0), cylinder_axis)
+        cylinder = BRepPrimAPI_MakeCylinder(cylinder_vector, self.radius, (self.length + self.radius))
+
+        # Our goal is to find the highest Z face and remove it
+        z_max = -300.0
+
+        # We have to work our way through all the faces to find the highest Z face so we can remove it for the shell
+        face_explorer = TopExp_Explorer(cylinder.Shape(), TopAbs_FACE)
+        while face_explorer.More():
+            face = topods.Face(face_explorer.Current())
+            if face_is_plane(face):
+                a_plane = geom_plane_from_face(face)
+
+                # We want the highest Z face, so compare this to the previous faces
+                a_pnt_loc = a_plane.Location()
+                z = a_pnt_loc.Z()
+                if z > z_max:
+                    z_max = z
+                    top_face = face
+            face_explorer.Next()
+
+        # applying fillet to whole cylinder
+        fillet = BRepFilletAPI_MakeFillet(cylinder.Shape())
+        for e in TopologyExplorer(top_face).edges():
+            fillet.Add(self.radius, e)
+        fillet.Build()
+        cylinder = fillet.Shape()
+        if self.has_base:
+            cylinder = add_base(shape=cylinder, radius=self.radius + 12.0)
+        return cylinder
