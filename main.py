@@ -10,10 +10,10 @@ from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QMainWindow, QGraphicsDropShadowEffect
 
 # GUI FILE
-from Presentation.MainWindow.core import MainWindow
+from Presentation.MainDisplay.core import Display
 
 # IMPORT FUNCTIONS
-from Presentation.MainWindow.ui_functions import *
+from Presentation.MainDisplay.ui_functions import *
 from Presentation.SplashScreen.ui_splash_interface import Ui_SplashScreen
 
 counter = 0
@@ -47,14 +47,13 @@ class SplashScreen(QMainWindow):
         self.timer.start()
 
         # load window in advance
-        self.main = MainWindow()
+        self.main = Display()
 
         self.show()
 
     def progress(self):
         global counter
         counter += 1
-        print(f"Counter: {counter}")
 
         # set value to progress bar
         self.ui.progressBar.setValue(counter)

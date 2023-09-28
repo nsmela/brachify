@@ -6,11 +6,13 @@
 ##
 ################################################################################
 from PyQt5.QtCore import QPropertyAnimation
+from PyQt5 import QtCore
 
 ## ==> GUI FILE
-from main import *
+from Presentation.MainDisplay.core import Display
 
-class UIFunctions(MainWindow):
+
+class UIFunctions(Display):
 
     def toggleMenu(self, maxWidth, enable):
         if enable:
@@ -18,16 +20,16 @@ class UIFunctions(MainWindow):
             # GET WIDTH
             width = self.ui.frame_left_menu.width()
             maxExtend = maxWidth
-            standard = 70
+            standard = 80
 
             # SET MAX WIDTH
-            if width == 70:
+            if width == 80:
                 widthExtended = maxExtend
             else:
                 widthExtended = standard
 
             # ANIMATION
-            self.animation = QPropertyAnimation(self.ui.frame_left_menu, b"minimumWidth")
+            self.animation = QtCore.QPropertyAnimation(self.ui.frame_left_menu, b"minimumWidth")
             self.animation.setDuration(200)
             self.animation.setStartValue(width)
             self.animation.setEndValue(widthExtended)

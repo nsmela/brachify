@@ -13,4 +13,5 @@ https://www.youtube.com/watch?v=Ap865V3sAdw
 
 # PyQt5 converter
 >pyuic5 -x ./Presentation/SplashScreen/ui_splash_screen.ui -o ./ui_splash_interface.py
->pyrcc5 ./python/resources.qrc -o ./python/resources_rc.py
+>pyuic5 -x ./Presentation/MainWindow/ui_main.ui -o ./Presentation/MainWindow/ui_main.py
+>pyrcc5 ./Presentation/MainWindow/resources.qrc -o ./Presentation/MainWindow/resources_rc.py

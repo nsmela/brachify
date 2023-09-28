@@ -51,7 +51,7 @@ class Ui_SplashScreen(object):
         self.progressBar = QtWidgets.QProgressBar(self.dropShadowFrame)
         self.progressBar.setGeometry(QtCore.QRect(20, 270, 620, 32))
         self.progressBar.setStyleSheet("QProgressBar{\n"
-"    background-colour: rgb(98, 114, 164);\n"
+"    background-color: rgb(98, 114, 164);\n"
 "    color: rbg(200, 200, 200);\n"
 "    border-style: none;\n"
 "    border-radius: 8px;\n"
