@@ -62,10 +62,9 @@ class MainWindow(QMainWindow):
         from Presentation.Features.Imports.Widgets import ListWidget
         self.files = []
         self.ui.btn_add_file.clicked.connect(lambda: ImportFunctions.get_dicom_rs_file(self))
+        self.ui.btn_remove_file.clicked.connect(lambda: self.remove_file(self.ui.files_list.selectedIndexes()[0].row()))
         
-        # drag and drop
-        self.setAcceptDrops(True)
-        
+        # drag and drop      
         self.ui.files_list.installEventFilter(self)
         
         
@@ -78,9 +77,14 @@ class MainWindow(QMainWindow):
             event.acceptProposedAction()
             return True
         elif event.type() == QtCore.QEvent.Type.Drop:
-            self.add_file(event.mimeData().urls()[0].url())
+            for filepath in event.mimeData().urls():
+                self.add_file(filepath.url())
             return True
         return False
     
     def add_file(self, filepath: str) -> None:
         self.ui.files_list.addItem(filepath)
+        
+    def remove_file(self, index: int) -> None:
+        self.ui.files_list.takeItem(index)
+    
