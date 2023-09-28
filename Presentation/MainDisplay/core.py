@@ -10,10 +10,8 @@ class Display(QMainWindow):
         ## TOGGLE/BURGUER MENU
         ########################################################################
         self.ui.Btn_Toggle.clicked.connect(lambda: UIFunctions.toggleMenu(self, 250, True))
-        self.ui.btn_page_1.setCheckable(True)
-        self.ui.btn_page_2.setCheckable(True)
-        self.ui.btn_page_3.setCheckable(True)
-
+        self.button_style = self.ui.btn_page_1.styleSheet()
+        
         ## PAGES
         ########################################################################
         from Presentation.MainDisplay.ui_functions import UIFunctions
@@ -25,3 +23,9 @@ class Display(QMainWindow):
 
         # PAGE 3
         self.ui.btn_page_3.clicked.connect(lambda: UIFunctions.setPage(self, 2))
+        
+        # PAGE 4
+        self.ui.btn_page_4.clicked.connect(lambda: UIFunctions.setPage(self, 3))
+        
+        # PAGE 5
+        self.ui.btn_page_5.clicked.connect(lambda: UIFunctions.setPage(self, 4))

@@ -37,24 +37,23 @@ class UIFunctions(Display):
             self.animation.start()
 
     def setPage(self, index: int):
-        stylesheet = "QPushButton{background-color: lightgreen;}"
-        self.ui.btn_page_1.setChecked(False)
-        self.ui.btn_page_1.setStyleSheet("")
-
-        self.ui.btn_page_2.setChecked(False)
-        self.ui.btn_page_2.setStyleSheet("")
-
-        self.ui.btn_page_3.setChecked(False)
-        self.ui.btn_page_3.setStyleSheet("")
-
+        oldStyle = self.button_style
+        stylesheet = "QPushButton{background-color: rgb(85, 170, 255);}"
+        self.ui.btn_page_1.setStyleSheet(oldStyle)
+        self.ui.btn_page_2.setStyleSheet(oldStyle)
+        self.ui.btn_page_3.setStyleSheet(oldStyle)
+        self.ui.btn_page_4.setStyleSheet(oldStyle)
+        self.ui.btn_page_5.setStyleSheet(oldStyle)
+        
         if index == 0:
-            self.ui.btn_page_1.setChecked(True)
             self.ui.btn_page_1.setStyleSheet(stylesheet)
         elif index == 1:
-            self.ui.btn_page_2.setChecked(True)
             self.ui.btn_page_2.setStyleSheet(stylesheet)
         elif index == 2:
-            self.ui.btn_page_3.setChecked(True)
             self.ui.btn_page_3.setStyleSheet(stylesheet)
+        elif index == 3:
+            self.ui.btn_page_4.setStyleSheet(stylesheet)
+        elif index == 4:
+            self.ui.btn_page_5.setStyleSheet(stylesheet)
 
         self.ui.stackedWidget.setCurrentIndex(index)
