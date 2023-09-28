@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file './ui_splash_screen.ui'
+# Form implementation generated from reading ui file './Presentation/SplashScreen/ui_splash.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -14,14 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_SplashScreen(object):
     def setupUi(self, SplashScreen):
         SplashScreen.setObjectName("SplashScreen")
-        SplashScreen.resize(680, 400)
-        self.centralwidget = QtWidgets.QWidget(SplashScreen)
-        self.centralwidget.setObjectName("centralwidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setContentsMargins(10, 10, 10, 10)
-        self.verticalLayout.setSpacing(0)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.dropShadowFrame = QtWidgets.QFrame(self.centralwidget)
+        SplashScreen.resize(660, 390)
+        self.dropShadowFrame = QtWidgets.QFrame(SplashScreen)
+        self.dropShadowFrame.setGeometry(QtCore.QRect(0, 0, 660, 390))
         self.dropShadowFrame.setStyleSheet("QFrame{\n"
 "    background-color: rgb(56, 58, 89);\n"
 "    color: rgb(220, 220, 220);\n"
@@ -53,12 +48,10 @@ class Ui_SplashScreen(object):
         self.progressBar.setStyleSheet("QProgressBar{\n"
 "    background-color: rgb(98, 114, 164);\n"
 "    color: rbg(200, 200, 200);\n"
-"    border-style: none;\n"
 "    border-radius: 8px;\n"
 "    text-align: center;\n"
 "}\n"
 "QProgressBar::chunk{\n"
-"    border-style: none;\n"
 "    border-radius: 8px;\n"
 "    background-color: qlineargradient(spread:pad, x1:0, y1:0.505, x2:1, y2:0.511, stop:0 rgba(75, 75, 75, 255), stop:1 rgba(10, 10, 10, 255));\n"
 "\n"
@@ -84,15 +77,13 @@ class Ui_SplashScreen(object):
         self.label_credits.setStyleSheet("color: rgb(98, 114, 164);")
         self.label_credits.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_credits.setObjectName("label_credits")
-        self.verticalLayout.addWidget(self.dropShadowFrame)
-        #SplashScreen.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(SplashScreen)
         QtCore.QMetaObject.connectSlotsByName(SplashScreen)
 
     def retranslateUi(self, SplashScreen):
         _translate = QtCore.QCoreApplication.translate
-        SplashScreen.setWindowTitle(_translate("SplashScreen", "MainWindow"))
+        SplashScreen.setWindowTitle(_translate("SplashScreen", "Dialog"))
         self.label_title.setText(_translate("SplashScreen", "<strong>BRACHY</strong>APP"))
         self.label_description.setText(_translate("SplashScreen", "STREAMLINING <strong>EXCELLENCE</strong>"))
         self.label_loading.setText(_translate("SplashScreen", "loading..."))
@@ -102,7 +93,7 @@ class Ui_SplashScreen(object):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    SplashScreen = QtWidgets.QMainWindow()
+    SplashScreen = QtWidgets.QDialog()
     ui = Ui_SplashScreen()
     ui.setupUi(SplashScreen)
     SplashScreen.show()

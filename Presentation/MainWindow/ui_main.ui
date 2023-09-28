@@ -107,6 +107,9 @@
           </property>
           <item>
            <widget class="QPushButton" name="Btn_Toggle">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -486,21 +489,7 @@ QPushButton:hover {
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-            <layout class="QGridLayout" name="gridLayout">
-             <item row="0" column="0">
-              <widget class="QWidget" name="widget" native="true">
-               <property name="minimumSize">
-                <size>
-                 <width>600</width>
-                 <height>600</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-color: rgb(85, 255, 255);</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <layout class="QGridLayout" name="gridLayout"/>
            </widget>
           </item>
          </layout>

@@ -9,10 +9,10 @@ from PyQt5.QtCore import QPropertyAnimation
 from PyQt5 import QtCore
 
 ## ==> GUI FILE
-from Presentation.MainDisplay.core import Display
+from Presentation.MainWindow.core import MainWindow
 
 
-class UIFunctions(Display):
+class UIFunctions(MainWindow):
 
     def toggleMenu(self, maxWidth, enable):
         if enable:

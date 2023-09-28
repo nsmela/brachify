@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file './Presentation/MainWindow/ui_main.ui'
+# Form implementation generated from reading ui file './Presentation/MainDisplay/ui_main.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -44,6 +44,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.Btn_Toggle = QtWidgets.QPushButton(self.frame_toggle)
+        self.Btn_Toggle.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -229,11 +230,6 @@ class Ui_MainWindow(object):
         self.model_frame.setObjectName("model_frame")
         self.gridLayout = QtWidgets.QGridLayout(self.model_frame)
         self.gridLayout.setObjectName("gridLayout")
-        self.widget = QtWidgets.QWidget(self.model_frame)
-        self.widget.setMinimumSize(QtCore.QSize(600, 600))
-        self.widget.setStyleSheet("background-color: rgb(85, 255, 255);")
-        self.widget.setObjectName("widget")
-        self.gridLayout.addWidget(self.widget, 0, 0, 1, 1)
         self.horizontalLayout_3.addWidget(self.model_frame)
         self.horizontalLayout_2.addWidget(self.frame_pages)
         self.verticalLayout.addWidget(self.Content)
