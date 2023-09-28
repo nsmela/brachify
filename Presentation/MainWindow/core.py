@@ -1,3 +1,4 @@
+from ast import List
 from PyQt5.QtWidgets import QMainWindow
 
 from Presentation.MainWindow.ui_main import Ui_MainWindow
@@ -56,6 +57,8 @@ class MainWindow(QMainWindow):
         
         ## Imports Functions
         ########################################################################
-        from Presentation.Features.Imports.Commands import ImportFunctions
+        from Presentation.Features.Imports.Commands import  ImportDragFunctions, ImportFunctions
+        from Presentation.Features.Imports.Widgets import ListWidget
         self.files = []
         self.ui.btn_add_file.clicked.connect(lambda: ImportFunctions.get_dicom_rs_file(self))
+        #self.ui.files_list = ListWidget()# = ListWidget() #.acceptDrops()
