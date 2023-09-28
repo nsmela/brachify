@@ -69,20 +69,18 @@ class MainWindow(QMainWindow):
         self.ui.files_list.installEventFilter(self)
         
         
-    def eventFilter(self, o, e):
+    def eventFilter(self, widget, event):
         #if o.objectName() == "files_list":
-        if e.type() == QtCore.QEvent.Type.DragEnter:
-            print("drag enter success!")
-            e.acceptProposedAction()
+        if event.type() == QtCore.QEvent.Type.DragEnter:
+            event.acceptProposedAction()
             return True
-        if e.type() == QtCore.QEvent.Type.DragMove:
-            print("drag enter success!")
-            e.acceptProposedAction()
+        if event.type() == QtCore.QEvent.Type.DragMove:
+            event.acceptProposedAction()
             return True
-        elif e.type() == QtCore.QEvent.Type.Drop:
-            print("drop success!")
-            return True
-        elif e.type() == QtCore.QEvent.Type.Enter:
-            print("enter success!")
+        elif event.type() == QtCore.QEvent.Type.Drop:
+            self.add_file(event.mimeData().urls()[0].url())
             return True
         return False
+    
+    def add_file(self, filepath: str) -> None:
+        self.ui.files_list.addItem(filepath)
