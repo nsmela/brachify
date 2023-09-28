@@ -361,7 +361,7 @@ QPushButton:hover {
              </size>
             </property>
             <property name="currentIndex">
-             <number>4</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="page_1">
              <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -381,6 +381,35 @@ QPushButton:hover {
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
                 </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QListWidget" name="files_list"/>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                 <item>
+                  <widget class="QPushButton" name="btn_add_file">
+                   <property name="text">
+                    <string>Add file</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_remove_file">
+                   <property name="text">
+                    <string>Remove file</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>

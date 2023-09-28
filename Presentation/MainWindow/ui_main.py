@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file './Presentation/MainDisplay/ui_main.ui'
+# Form implementation generated from reading ui file './Presentation/MainWindow/ui_main.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -169,6 +169,22 @@ class Ui_MainWindow(object):
         self.label_1.setAlignment(QtCore.Qt.AlignCenter)
         self.label_1.setObjectName("label_1")
         self.verticalLayout_7.addWidget(self.label_1, 0, QtCore.Qt.AlignTop)
+        self.files_list = QtWidgets.QListWidget(self.page_1)
+        self.files_list.setObjectName("files_list")
+        self.verticalLayout_7.addWidget(self.files_list)
+        self.frame = QtWidgets.QFrame(self.page_1)
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.btn_add_file = QtWidgets.QPushButton(self.frame)
+        self.btn_add_file.setObjectName("btn_add_file")
+        self.horizontalLayout_4.addWidget(self.btn_add_file)
+        self.btn_remove_file = QtWidgets.QPushButton(self.frame)
+        self.btn_remove_file.setObjectName("btn_remove_file")
+        self.horizontalLayout_4.addWidget(self.btn_remove_file)
+        self.verticalLayout_7.addWidget(self.frame)
         self.stackedWidget.addWidget(self.page_1)
         self.page_2 = QtWidgets.QWidget()
         self.page_2.setObjectName("page_2")
@@ -236,7 +252,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(4)
+        self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -249,6 +265,8 @@ class Ui_MainWindow(object):
         self.btn_page_4.setText(_translate("MainWindow", "tandem"))
         self.btn_page_5.setText(_translate("MainWindow", "export"))
         self.label_1.setText(_translate("MainWindow", "imports"))
+        self.btn_add_file.setText(_translate("MainWindow", "Add file"))
+        self.btn_remove_file.setText(_translate("MainWindow", "Remove file"))
         self.label_2.setText(_translate("MainWindow", "cylinder"))
         self.label_3.setText(_translate("MainWindow", "channels"))
         self.label_4.setText(_translate("MainWindow", "tandem"))

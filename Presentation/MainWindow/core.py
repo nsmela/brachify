@@ -53,3 +53,9 @@ class MainWindow(QMainWindow):
         a_box = BRepPrimAPI_MakeBox(10.0, 20.0, 30.0).Shape()
         self.ais_box = self.display.DisplayShape(a_box)[0]
         self.display.FitAll()
+        
+        ## Imports Functions
+        ########################################################################
+        from Presentation.Features.Imports.Commands import ImportFunctions
+        self.files = []
+        self.ui.btn_add_file.clicked.connect(lambda: ImportFunctions.get_dicom_rs_file(self))
