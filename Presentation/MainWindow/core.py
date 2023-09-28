@@ -1,4 +1,5 @@
 from ast import List
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow
 
 from Presentation.MainWindow.ui_main import Ui_MainWindow
@@ -61,4 +62,27 @@ class MainWindow(QMainWindow):
         from Presentation.Features.Imports.Widgets import ListWidget
         self.files = []
         self.ui.btn_add_file.clicked.connect(lambda: ImportFunctions.get_dicom_rs_file(self))
-        #self.ui.files_list = ListWidget()# = ListWidget() #.acceptDrops()
+        
+        # drag and drop
+        self.setAcceptDrops(True)
+        
+        self.ui.files_list.installEventFilter(self)
+        
+        
+    def eventFilter(self, o, e):
+        #if o.objectName() == "files_list":
+        if e.type() == QtCore.QEvent.Type.DragEnter:
+            print("drag enter success!")
+            e.acceptProposedAction()
+            return True
+        if e.type() == QtCore.QEvent.Type.DragMove:
+            print("drag enter success!")
+            e.acceptProposedAction()
+            return True
+        elif e.type() == QtCore.QEvent.Type.Drop:
+            print("drop success!")
+            return True
+        elif e.type() == QtCore.QEvent.Type.Enter:
+            print("enter success!")
+            return True
+        return False

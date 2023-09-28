@@ -16,6 +16,9 @@
     <height>500</height>
    </size>
   </property>
+  <property name="acceptDrops">
+   <bool>false</bool>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -23,6 +26,9 @@
    <string notr="true">background-color: rgb(45, 45, 45);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="acceptDrops">
+    <bool>false</bool>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
      <number>0</number>
@@ -143,6 +149,9 @@ border: 0px solid;</string>
     </item>
     <item>
      <widget class="QFrame" name="Content">
+      <property name="acceptDrops">
+       <bool>false</bool>
+      </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -345,6 +354,9 @@ QPushButton:hover {
        </item>
        <item>
         <widget class="QFrame" name="frame_pages">
+         <property name="acceptDrops">
+          <bool>false</bool>
+         </property>
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -360,10 +372,16 @@ QPushButton:hover {
               <height>16777215</height>
              </size>
             </property>
+            <property name="acceptDrops">
+             <bool>false</bool>
+            </property>
             <property name="currentIndex">
              <number>0</number>
             </property>
             <widget class="QWidget" name="page_1">
+             <property name="acceptDrops">
+              <bool>false</bool>
+             </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item alignment="Qt::AlignTop">
                <widget class="QLabel" name="label_1">
@@ -384,7 +402,14 @@ QPushButton:hover {
                </widget>
               </item>
               <item>
-               <widget class="QListWidget" name="files_list"/>
+               <widget class="QListWidget" name="files_list">
+                <property name="acceptDrops">
+                 <bool>true</bool>
+                </property>
+                <property name="dragDropMode">
+                 <enum>QAbstractItemView::DropOnly</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QFrame" name="frame">

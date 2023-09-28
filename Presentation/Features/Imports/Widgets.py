@@ -1,6 +1,8 @@
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QListWidget
 
+# https://www.youtube.com/watch?v=7hbL0ztIYCg
+
 class ListWidget(QListWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
