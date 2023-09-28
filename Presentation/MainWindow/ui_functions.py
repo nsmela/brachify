@@ -57,3 +57,9 @@ class UIFunctions(MainWindow):
             self.ui.btn_page_5.setStyleSheet(stylesheet)
 
         self.ui.stackedWidget.setCurrentIndex(index)
+        
+    def add_file(self, filepath: str) -> None:
+        self.ui.files_list.addItem(filepath)
+        
+    def remove_file(self, index: int) -> None:
+        self.ui.files_list.takeItem(index)
