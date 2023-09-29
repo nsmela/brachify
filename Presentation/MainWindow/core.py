@@ -1,8 +1,8 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow
 
-
 from Presentation.MainWindow.ui_main import Ui_MainWindow
+from Core.Models.Cylinder import BrachyCylinder
 
 from OCC.Display.backend import load_backend
 load_backend("qt-pyqt5")
@@ -69,7 +69,10 @@ class MainWindow(QMainWindow):
         # drag and drop      
         self.ui.centralwidget.installEventFilter(self)
         
-        
+        ## Cylinder Stuff
+        ########################################################################
+        self.brachyCylinder = BrachyCylinder(tip = [0, 0, 200], base = [0, 0, 0], radius = 10, expand_base= False)        
+
     def eventFilter(self, widget, event):
         from Presentation.Features.Imports.Commands import ImportFunctions
         

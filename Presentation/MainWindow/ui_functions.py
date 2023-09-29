@@ -11,6 +11,8 @@ from PyQt5 import QtCore
 ## ==> GUI FILE
 from Presentation.MainWindow.core import MainWindow
 
+## Functions
+from Application.Imports.import_dicom_structure import read_cylinder_origin
 
 class UIFunctions(MainWindow):
 
@@ -58,14 +60,15 @@ class UIFunctions(MainWindow):
 
         self.ui.stackedWidget.setCurrentIndex(index)
         
-    def add_file(self, filepath: str) -> None:
-        self.ui.files_list.addItem(filepath)
-        
-    def remove_file(self, index: int) -> None:
-        self.ui.files_list.takeItem(index)
-        
     def add_rs_file(self, filepath: str) -> None:
         self.ui.lineedit_dicom_rs.setText(filepath)
+        self.brachyCylinder = read_cylinder_origin(filepath=filepath)
+        
+        self.ui.cylinderLengthSpinBox.setValue(self.brachyCylinder.length)
+        self.ui.cylinderRadiusSpinBox.setValue(self.brachyCylinder.radius)
+
+        self.display.EraseAll()
+        self.display.DisplayShape(self.brachyCylinder.shape, update=True)
 
     def add_rp_file(self, filepath: str) -> None:
         self.ui.lineedit_dicom_rp.setText(filepath)

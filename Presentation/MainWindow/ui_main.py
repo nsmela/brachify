@@ -289,7 +289,7 @@ class Ui_MainWindow(object):
         self.label_6 = QtWidgets.QLabel(self.frame_6)
         self.label_6.setObjectName("label_6")
         self.horizontalLayout_9.addWidget(self.label_6)
-        self.cylinderLengthSpinBox = QtWidgets.QSpinBox(self.frame_6)
+        self.cylinderLengthSpinBox = QtWidgets.QDoubleSpinBox(self.frame_6)
         self.cylinderLengthSpinBox.setObjectName("cylinderLengthSpinBox")
         self.horizontalLayout_9.addWidget(self.cylinderLengthSpinBox)
         self.verticallayout_6.addWidget(self.frame_6)
@@ -436,7 +436,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

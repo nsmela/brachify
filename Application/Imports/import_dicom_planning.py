@@ -5,7 +5,6 @@ def convert_control_point(brachyControlPoint):
     point = [position[0], position[1], position[2]]
     return point
 
-
 def Rotate_Cloud(Points, V1, V2):
     # V1 is the current vector which the coordinate system is aligned to
     # V2 is the vector we want the system aligned to

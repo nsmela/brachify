@@ -11,18 +11,17 @@ import os
 class ImportFunctions(MainWindow):
     # https://srinikom.github.io/pyside-docs/PySide/QtGui/QFileDialog.html?highlight=qstringlist
     def get_dicom_rs_file(self) -> None:
-        filename = QFileDialog.getOpenFileName(self, 'Open Patient RS File', '', "DICOM files (*.dcm)")
-        file_type = os.path.splitext(filename[0])
+        filename = QFileDialog.getOpenFileName(self, 'Open Patient RS File', '', "DICOM files (*.dcm)")[0]
 
-        UIFunctions.add_rs_file(self, filename[0])
+        UIFunctions.add_rs_file(self, filename)
 
     def get_dicom_rp_file(self) -> None:
-        filename = QFileDialog.getOpenFileName(self, 'Open Patient RP File', '', "DICOM files (*.dcm)")
-        UIFunctions.add_rp_file(self, filename[0])
+        filename = QFileDialog.getOpenFileName(self, 'Open Patient RP File', '', "DICOM files (*.dcm)")[0]
+        UIFunctions.add_rp_file(self, filename)
 
     def get_tandem_file(self) -> None:
-        filename = QFileDialog.getOpenFileName(self, 'Select Tandem Model', '', "Supported files (*.stl *.3mf *.obj *.stp *.step)")
-        UIFunctions.add_tandem_file(self, filename[0])
+        filename = QFileDialog.getOpenFileName(self, 'Select Tandem Model', '', "Supported files (*.stl *.3mf *.obj *.stp *.step)")[0]
+        UIFunctions.add_tandem_file(self, filename)
 
     def process_file(self, filepath: str):
         '''receive a file and process it appropriately'''

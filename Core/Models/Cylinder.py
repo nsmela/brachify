@@ -9,6 +9,7 @@ from OCC.Core.TopoDS import topods, TopoDS_Face, TopoDS_Solid, TopoDS_Shape
 from OCC.Core.gp import gp_Dir, gp_Ax2, gp_Pnt, gp_Pln
 from OCC.Extend.TopologyUtils import TopologyExplorer
 
+import numpy as np
 
 def face_is_plane(face: TopoDS_Face) -> bool:
     """
@@ -36,11 +37,13 @@ def add_base(shape: TopoDS_Solid, radius: float = 27.0) -> TopoDS_Shape:
 
 
 class BrachyCylinder:
-    def __init__(self, length: float = 200.0, radius: float = 15.0, has_base: bool = False):
-        self.length = length
+    def __init__(self, tip, base, radius: float = 30.0, expand_base: bool = False ):
+        self.length = 200.0
+        self.tip = tip
+        self.base = base
         self.radius = radius
-        self.has_base = has_base
-        self.shape = self._generate()
+        self.expand_base = expand_base
+        self.shape = self._generate()       
 
     def _generate(self):
         # cylinder references
@@ -72,6 +75,6 @@ class BrachyCylinder:
             fillet.Add(self.radius, e)
         fillet.Build()
         cylinder = fillet.Shape()
-        if self.has_base:
+        if self.expand_base:
             cylinder = add_base(shape=cylinder, radius=self.radius + 12.0)
         return cylinder

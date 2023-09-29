@@ -1,6 +1,8 @@
 import pydicom
 import numpy as np
 
+from Core.Models.Cylinder import BrachyCylinder
+
 
 def read_cylinder_origin(filepath):
     # cylinder info
@@ -38,4 +40,4 @@ def read_cylinder_origin(filepath):
 
     cyl_vec = np.array(tip) - np.array(base)
 
-    return radius, base, tip, cyl_vec
+    return BrachyCylinder(tip, base, radius, True)
