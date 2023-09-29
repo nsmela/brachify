@@ -80,7 +80,8 @@ class MainWindow(QMainWindow):
             return True
         elif event.type() == QtCore.QEvent.Type.Drop:
             for filepath in event.mimeData().urls():
-                UIFunctions.add_file(filepath.url())
+                value = filepath.url()
+                UIFunctions.add_file(self, filepath.url())
             return True
         return False
     

@@ -8,7 +8,6 @@ class ImportFunctions(MainWindow):
     def get_dicom_rs_file(self) -> str:
         filename = QFileDialog.getOpenFileName(self, 'Open Patient RS File', '', "DICOM files (*.dcm)")
         self.ui.files_list.addItem(filename[0])
-        # window.files.append(filename[0])
 
 class ImportDragFunctions(QListWidget):
     def drag_enter_event(self, event):
