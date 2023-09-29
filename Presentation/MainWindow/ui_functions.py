@@ -12,7 +12,8 @@ from PyQt5 import QtCore
 from Presentation.MainWindow.core import MainWindow
 
 ## Functions
-from Application.Imports.import_dicom_structure import read_cylinder_origin
+from Application.Imports.import_dicom_structure import read_cylinder_file
+from Application.Imports.import_dicom_planning import read_needles_file
 
 class UIFunctions(MainWindow):
 
@@ -62,7 +63,7 @@ class UIFunctions(MainWindow):
         
     def add_rs_file(self, filepath: str) -> None:
         self.ui.lineedit_dicom_rs.setText(filepath)
-        self.brachyCylinder = read_cylinder_origin(filepath=filepath)
+        self.brachyCylinder = read_cylinder_file(filepath=filepath)
         
         self.ui.cylinderLengthSpinBox.setValue(self.brachyCylinder.length)
         self.ui.cylinderRadiusSpinBox.setValue(self.brachyCylinder.radius)
@@ -72,6 +73,9 @@ class UIFunctions(MainWindow):
 
     def add_rp_file(self, filepath: str) -> None:
         self.ui.lineedit_dicom_rp.setText(filepath)
+        
+        needles = read_needles_file(filepath)
+        print(needles)
         
     def add_tandem_file(self, filepath: str) -> None:
         self.ui.lineedit_tandem.setText(filepath)

@@ -4,7 +4,7 @@ import numpy as np
 from Core.Models.Cylinder import BrachyCylinder
 
 
-def read_cylinder_origin(filepath):
+def read_cylinder_file(filepath):
     # cylinder info
     #   origin is the middle point in the cylinder contour in ROIContourSequence
     #   Referenced ROI Number is found in RT ROI Observations Sequence with the ROI Observation Label contains Surface

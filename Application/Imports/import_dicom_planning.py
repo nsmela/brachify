@@ -1,9 +1,39 @@
 import numpy as np
+import pydicom
 
-def convert_control_point(brachyControlPoint):
+def _convert_control_point(brachyControlPoint):
     position = brachyControlPoint.ControlPoint3DPosition
     point = [position[0], position[1], position[2]]
     return point
+
+
+def read_needles_file(filepath: str):
+    dataset = pydicom.read_file(filepath)
+     
+    channelSequence = dataset.ApplicationSetupSequence[0].ChannelSequence
+
+    channels = []
+    for channel in channelSequence:
+        channelNumber = channel.ChannelNumber
+        channelID = channel.SourceApplicatorID
+        sequence = channel.BrachyControlPointSequence
+
+        # points = []
+        # for p in sequence:
+        #    points.append(_convert_control_point(p))
+        points = [_convert_control_point(p) for p in sequence]
+
+        # removing duplicate points
+        del points[::2]
+
+        needle = {
+            "Channel Number": channelNumber,
+            "Channel ID": channelID,
+            "Points": points
+        }
+        channels.append(needle)
+    return channels
+
 
 def Rotate_Cloud(Points, V1, V2):
     # V1 is the current vector which the coordinate system is aligned to
