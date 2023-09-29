@@ -71,7 +71,6 @@ class MainWindow(QMainWindow):
         
         
     def eventFilter(self, widget, event):
-        from Presentation.MainWindow.ui_functions import UIFunctions
         from Presentation.Features.Imports.Commands import ImportFunctions
         
         if event.type() == QtCore.QEvent.Type.DragEnter:
@@ -83,8 +82,6 @@ class MainWindow(QMainWindow):
         elif event.type() == QtCore.QEvent.Type.Drop:
             for url in event.mimeData().urls():
                 filepath = url.url().replace("file:///", "")
-                print(filepath)
                 result = ImportFunctions.process_file(self, filepath)
-                print(result)
             return True
         return False

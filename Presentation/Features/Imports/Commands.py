@@ -25,28 +25,24 @@ class ImportFunctions(MainWindow):
         UIFunctions.add_tandem_file(self, filename[0])
 
     def process_file(self, filepath: str):
-        file_type = os.path.splitext(filepath)[1]
+        '''receive a file and process it appropriately'''
+        file_type = os.path.splitext(filepath)[1].lower()
         
         # if is DICOM?
         if file_type == ".dcm":
             if is_rs_file(filepath):
-                print("RS file loaded!")
+                UIFunctions.add_rs_file(self, filepath)
                 return True
             if is_rp_file(filepath):
-                print("RP file loaded!")
+                UIFunctions.add_rp_file(self, filepath)
                 return True
         
-        if file_type == ".stl":
-            print("STL file loaded!")
-        elif file_type == ".3mf":
-            print("3MF file loaded!")
-        elif file_type == ".obj":
-            print("OBJ file loaded!")
-        elif file_type == ".stp":
-            print("STP file loaded!")
-        elif file_type == ".step":
-            print("STEP file loaded!")
+        supported_file_types = [".stl", ".3mf", ".obj", ".stp", ".step"]
+        if file_type in supported_file_types:
+            UIFunctions.add_tandem_file(self, filepath)
+            return True
         else:
             print("Invalid file!")
+            return False
         
 
