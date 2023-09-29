@@ -58,14 +58,14 @@ class MainWindow(QMainWindow):
         
         ## Imports Functions
         ########################################################################
-        from Presentation.Features.Imports.Commands import  ImportDragFunctions, ImportFunctions
-        from Presentation.Features.Imports.Widgets import ListWidget
-        self.files = []
-        self.ui.btn_add_file.clicked.connect(lambda: ImportFunctions.get_dicom_rs_file(self))
-        self.ui.btn_remove_file.clicked.connect(lambda: UIFunctions.remove_file(self, self.ui.files_list.selectedIndexes()[0].row()))
+        from Presentation.Features.Imports.Commands import  ImportFunctions
+
+        self.ui.btn_import_dicom_rs.clicked.connect(lambda: ImportFunctions.get_dicom_rs_file(self))
+        self.ui.btn_import_dicom_rp.clicked.connect(lambda: ImportFunctions.get_dicom_rp_file(self))
+        self.ui.btn_import_tandem.clicked.connect(lambda: ImportFunctions.get_tandem_file(self))
         
         # drag and drop      
-        self.ui.files_list.installEventFilter(self)
+
         
         
     def eventFilter(self, widget, event):

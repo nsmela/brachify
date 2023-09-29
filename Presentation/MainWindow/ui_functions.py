@@ -63,3 +63,12 @@ class UIFunctions(MainWindow):
         
     def remove_file(self, index: int) -> None:
         self.ui.files_list.takeItem(index)
+        
+    def add_rs_file(self, filepath: str) -> None:
+        self.ui.lineedit_dicom_rs.setText(filepath)
+
+    def add_rp_file(self, filepath: str) -> None:
+        self.ui.lineedit_dicom_rp.setText(filepath)
+        
+    def add_tandem_file(self, filepath: str) -> None:
+        self.ui.lineedit_tandem.setText(filepath)

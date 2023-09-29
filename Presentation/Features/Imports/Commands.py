@@ -2,34 +2,19 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QFileDialog, QListWidget, QMainWindow
 
 from Presentation.MainWindow.core import MainWindow
+from Presentation.MainWindow.ui_functions import UIFunctions
+
 
 class ImportFunctions(MainWindow):
     # https://srinikom.github.io/pyside-docs/PySide/QtGui/QFileDialog.html?highlight=qstringlist
-    def get_dicom_rs_file(self) -> str:
+    def get_dicom_rs_file(self) -> None:
         filename = QFileDialog.getOpenFileName(self, 'Open Patient RS File', '', "DICOM files (*.dcm)")
-        self.ui.files_list.addItem(filename[0])
+        UIFunctions.add_rs_file(self, filename[0])
 
-class ImportDragFunctions(QListWidget):
-    def drag_enter_event(self, event):
-        if event.mimeData().hasUrls():
-            event.accept()
-        else:
-            event.ignore() 
-    
-    def drag_move_event(self, event):
-        if event.mimeData().hasUrls():
-            event.setDropAction(Qt.CopyAction)
-            event.accept()
-        else:
-            event.ignore() 
+    def get_dicom_rp_file(self) -> None:
+        filename = QFileDialog.getOpenFileName(self, 'Open Patient RP File', '', "DICOM files (*.dcm)")
+        UIFunctions.add_rp_file(self, filename[0])
 
-    def drop(self, event):
-        print()
-        if event.mimeData().hasUrls():
-            event.setDropAction(Qt.CopyAction)
-            event.accept()
-            
-            list = []
-            print(event.mimeData().urls())
-        else:
-            event.ignore() 
+    def get_tandem_file(self) -> None:
+        filename = QFileDialog.getOpenFileName(self, 'Select Tandem Model', '', "Supported files (*.stl *.3mf *.obj *.stp *.step)")
+        UIFunctions.add_tandem_file(self, filename[0])    
