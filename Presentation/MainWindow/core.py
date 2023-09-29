@@ -1,6 +1,6 @@
-from ast import List
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow
+
 
 from Presentation.MainWindow.ui_main import Ui_MainWindow
 
@@ -9,6 +9,8 @@ load_backend("qt-pyqt5")
 import OCC.Display.qtDisplay as qtDisplay
 
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
+
+import os
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -65,13 +67,13 @@ class MainWindow(QMainWindow):
         self.ui.btn_import_tandem.clicked.connect(lambda: ImportFunctions.get_tandem_file(self))
         
         # drag and drop      
-
+        self.ui.centralwidget.installEventFilter(self)
         
         
     def eventFilter(self, widget, event):
         from Presentation.MainWindow.ui_functions import UIFunctions
+        from Presentation.Features.Imports.Commands import ImportFunctions
         
-        #if o.objectName() == "files_list":
         if event.type() == QtCore.QEvent.Type.DragEnter:
             event.acceptProposedAction()
             return True
@@ -79,11 +81,10 @@ class MainWindow(QMainWindow):
             event.acceptProposedAction()
             return True
         elif event.type() == QtCore.QEvent.Type.Drop:
-            for filepath in event.mimeData().urls():
-                value = filepath.url()
-                UIFunctions.add_file(self, filepath.url())
+            for url in event.mimeData().urls():
+                filepath = url.url().replace("file:///", "")
+                print(filepath)
+                result = ImportFunctions.process_file(self, filepath)
+                print(result)
             return True
         return False
-    
-
-    

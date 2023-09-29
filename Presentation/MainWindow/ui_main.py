@@ -19,7 +19,7 @@ class Ui_MainWindow(object):
         MainWindow.setAcceptDrops(False)
         MainWindow.setStyleSheet("background-color: rgb(45, 45, 45);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setAcceptDrops(False)
+        self.centralwidget.setAcceptDrops(True)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -441,7 +441,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Brachy App"))
         self.Btn_Toggle.setText(_translate("MainWindow", "TOGGLE"))
         self.btn_page_1.setText(_translate("MainWindow", "imports"))
         self.btn_page_2.setText(_translate("MainWindow", "cylinder"))
