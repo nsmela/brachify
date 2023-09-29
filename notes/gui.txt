@@ -15,3 +15,10 @@ https://www.youtube.com/watch?v=Ap865V3sAdw
 >pyuic5 -x ./Presentation/SplashScreen/ui_splash_screen.ui -o ./ui_splash_interface.py
 >pyuic5 -x ./Presentation/MainWindow/ui_main.ui -o ./Presentation/MainWindow/ui_main.py
 >pyrcc5 ./Presentation/MainWindow/resources.qrc -o ./Presentation/MainWindow/resources_rc.py
+
+# workflow
+-> edit in Qt Designer
+-> save as interface.ui
+-> convert interface.ui to ui.interface_py
+-> core.py class references that and modifies (add functions, etc)
+-> start app with a main.py in the main folder
