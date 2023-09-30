@@ -5,6 +5,7 @@
 ## V: 1.0.0
 ##
 ################################################################################
+from turtle import Vec2D
 from PyQt5.QtCore import QPropertyAnimation
 from PyQt5 import QtCore
 
@@ -14,7 +15,10 @@ from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
 
 ## Functions
 from Application.Imports.import_dicom_structure import read_cylinder_file
-from Application.Imports.import_dicom_planning import read_needles_file
+from Application.Imports.import_dicom_planning import Rotate_Cloud, read_needles_file
+from Application.BRep.channel import *
+
+import numpy as np
 
 class UIFunctions(MainWindow):
 
@@ -71,15 +75,36 @@ class UIFunctions(MainWindow):
 
         UIFunctions.setPage(self, 1)
         self.display.EraseAll()
-        self.display.DisplayShape(self.brachyCylinder.shape, update=True)
+        UIFunctions.update_display(self)
 
     def add_rp_file(self, filepath: str) -> None:
         self.ui.lineedit_dicom_rp.setText(filepath)
         
-        self.needles = NeedlesModel(channels= read_needles_file(filepath))
-        self.needles.layoutChanged.emit()
-        for needle in self.needles.channels:
-            print(needle)
+        # get data from dicom
+        channels =  read_needles_file(filepath)
+        
+        # offset each point
+        V2 = np.array([0,0,1])
+        cyl_vec = np.array(self.brachyCylinder.tip) - np.array(self.brachyCylinder.base)
+        for i, c in enumerate(channels):
+            newpoints = np.array(c.rawPoints) - self.brachyCylinder.base
+            newpoints = Rotate_Cloud(newpoints, cyl_vec, V2)
+            channels[i].points = list(list(points) for points in newpoints)
+        self.needles = NeedlesModel(channels=channels)
+        self.ui.channelsListView.setModel(self.needles)
+
+        UIFunctions.setPage(self, 2)
+        UIFunctions.update_display(self)
         
     def add_tandem_file(self, filepath: str) -> None:
         self.ui.lineedit_tandem.setText(filepath)
+
+    def update_display(self) -> None:
+        self.display.EraseAll()
+        if self.brachyCylinder:
+            self.display.DisplayShape(self.brachyCylinder.shape)
+        if self.needles:
+            for needle in self.needles.channels:
+                shape = generate_stacked_fused(needle.points)
+                self.display.DisplayShape(shape)
+        self.display.FitAll()

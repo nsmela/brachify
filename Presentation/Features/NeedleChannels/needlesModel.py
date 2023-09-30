@@ -8,8 +8,8 @@ class NeedlesModel(QtCore.QAbstractListModel):
 
     def data(self, index, role):
         if role == QtCore.Qt.DisplayRole:
-            number, id, points = self.channels[index.row()]
-            return id
+            channel = self.channels[index.row()]
+            return channel.channelId
     
     def rowCount(self, index):
         return len(self.channels)

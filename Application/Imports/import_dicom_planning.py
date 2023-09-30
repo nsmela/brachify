@@ -1,6 +1,8 @@
 import numpy as np
 import pydicom
 
+from Core.Models.NeedleChannel import NeedleChannel
+
 def _convert_control_point(brachyControlPoint):
     position = brachyControlPoint.ControlPoint3DPosition
     point = [position[0], position[1], position[2]]
@@ -26,7 +28,8 @@ def read_needles_file(filepath: str):
         # removing duplicate points
         del points[::2]
 
-        needle = (channelNumber, channelID, points)
+        # needle = (channelNumber, channelID, points)
+        needle = NeedleChannel(number=channelNumber, id=channelID, points=points)
             # "Channel Number": channelNumber,
             # "Channel ID": channelID,
             # "Points": points,

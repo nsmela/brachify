@@ -318,7 +318,7 @@ class Ui_MainWindow(object):
         self.groupBox = QtWidgets.QGroupBox(self.page_3)
         self.groupBox.setObjectName("groupBox")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.groupBox)
-        self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_6.setContentsMargins(0, 0, 0, 4)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.frame_7 = QtWidgets.QFrame(self.groupBox)
         self.frame_7.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -436,7 +436,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -460,7 +460,7 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "Length (mm)"))
         self.label_3.setText(_translate("MainWindow", "channels"))
         self.label_7.setText(_translate("MainWindow", "Loaded Channels"))
-        self.groupBox.setTitle(_translate("MainWindow", "GroupBox"))
+        self.groupBox.setTitle(_translate("MainWindow", "Channel Settings"))
         self.label_8.setText(_translate("MainWindow", "Radius (mm):"))
         self.label_9.setText(_translate("MainWindow", "Entend"))
         self.btn_channel_disable.setText(_translate("MainWindow", "Disable/Remove"))
