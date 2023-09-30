@@ -32,7 +32,7 @@ def add_base(shape: TopoDS_Solid, radius1: float, radius2: float):
     #cylinder references
     cylinder_axis = gp_Dir(0, 0, 1)
     cylinder_vector = gp_Ax2(gp_Pnt(0, 0, 0), cylinder_axis)
-    cylinder = BRepPrimAPI_MakeCylinder(cylinder_vector, radius1+radius2, 5.0).Shape()
+    cylinder = BRepPrimAPI_MakeCylinder(cylinder_vector, radius1+radius2, radius2).Shape()
     torus = BRepPrimAPI_MakeTorus(radius1 + radius2, radius2).Shape()
     torus = translate_shp(torus, gp_Vec(0.0, 0.0, radius2))
     result = BRepAlgoAPI_Cut(cylinder, torus).Shape()
