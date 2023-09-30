@@ -10,6 +10,7 @@ from PyQt5 import QtCore
 
 ## ==> GUI FILE
 from Presentation.MainWindow.core import MainWindow
+from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
 
 ## Functions
 from Application.Imports.import_dicom_structure import read_cylinder_file
@@ -68,14 +69,17 @@ class UIFunctions(MainWindow):
         self.ui.cylinderLengthSpinBox.setValue(self.brachyCylinder.length)
         self.ui.cylinderRadiusSpinBox.setValue(self.brachyCylinder.radius)
 
+        UIFunctions.setPage(self, 1)
         self.display.EraseAll()
         self.display.DisplayShape(self.brachyCylinder.shape, update=True)
 
     def add_rp_file(self, filepath: str) -> None:
         self.ui.lineedit_dicom_rp.setText(filepath)
         
-        needles = read_needles_file(filepath)
-        print(needles)
+        self.needles = NeedlesModel(channels= read_needles_file(filepath))
+        self.needles.layoutChanged.emit()
+        for needle in self.needles.channels:
+            print(needle)
         
     def add_tandem_file(self, filepath: str) -> None:
         self.ui.lineedit_tandem.setText(filepath)

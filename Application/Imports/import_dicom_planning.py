@@ -26,11 +26,10 @@ def read_needles_file(filepath: str):
         # removing duplicate points
         del points[::2]
 
-        needle = {
-            "Channel Number": channelNumber,
-            "Channel ID": channelID,
-            "Points": points
-        }
+        needle = (channelNumber, channelID, points)
+            # "Channel Number": channelNumber,
+            # "Channel ID": channelID,
+            # "Points": points,
         channels.append(needle)
     return channels
 

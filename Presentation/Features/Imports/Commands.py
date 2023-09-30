@@ -12,7 +12,6 @@ class ImportFunctions(MainWindow):
     # https://srinikom.github.io/pyside-docs/PySide/QtGui/QFileDialog.html?highlight=qstringlist
     def get_dicom_rs_file(self) -> None:
         filename = QFileDialog.getOpenFileName(self, 'Open Patient RS File', '', "DICOM files (*.dcm)")[0]
-
         UIFunctions.add_rs_file(self, filename)
 
     def get_dicom_rp_file(self) -> None:

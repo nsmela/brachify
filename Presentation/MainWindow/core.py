@@ -19,6 +19,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         from Presentation.MainWindow.ui_functions import UIFunctions
+        from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
         ## TOGGLE/BURGUER MENU
         ########################################################################
         self.ui.Btn_Toggle.clicked.connect(lambda: UIFunctions.toggleMenu(self, 250, True))
@@ -74,6 +75,11 @@ class MainWindow(QMainWindow):
         ## Cylinder Stuff
         ########################################################################
         self.brachyCylinder = BrachyCylinder(tip = [0, 0, 200], base = [0, 0, 0], radius = 10, expand_base= False)        
+
+        ## Needle Channel Stuff
+        ########################################################################
+        self.needles = NeedlesModel()
+        self.ui.channelsListView.setModel(self.needles)
 
     def eventFilter(self, widget, event):
         from Presentation.Features.Imports.Commands import ImportFunctions
