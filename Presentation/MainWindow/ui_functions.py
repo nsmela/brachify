@@ -6,6 +6,7 @@
 ##
 ################################################################################
 from turtle import Vec2D
+from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut
 from PyQt5.QtCore import QPropertyAnimation
 from PyQt5 import QtCore
 
@@ -65,6 +66,8 @@ class UIFunctions(MainWindow):
             self.ui.btn_page_5.setStyleSheet(stylesheet)
 
         self.ui.stackedWidget.setCurrentIndex(index)
+        if index == 4:
+            UIFunctions.update_export(self)
         
     def add_rs_file(self, filepath: str) -> None:
         self.ui.lineedit_dicom_rs.setText(filepath)
@@ -100,11 +103,25 @@ class UIFunctions(MainWindow):
         self.ui.lineedit_tandem.setText(filepath)
 
     def update_display(self) -> None:
+        shapes = []
+        for needle in self.needles.channels:
+            shapes.append(generate_stacked_fused(needle.points))
+
         self.display.EraseAll()
         if self.brachyCylinder:
             self.display.DisplayShape(self.brachyCylinder.shape)
         if self.needles:
-            for needle in self.needles.channels:
-                shape = generate_stacked_fused(needle.points)
+            for shape in shapes:
                 self.display.DisplayShape(shape)
+        self.display.FitAll()
+
+    def update_export(self) -> None:
+        cylinder = self.brachyCylinder.shape
+        
+        for needle in self.needles.channels:
+            shape = generate_stacked_fused(needle.points)
+            cylinder = BRepAlgoAPI_Cut(cylinder, shape).Shape()
+
+        self.display.EraseAll()
+        self.display.DisplayShape(cylinder, update=True)
         self.display.FitAll()

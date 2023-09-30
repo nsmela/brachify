@@ -12,6 +12,7 @@ from OCC.Extend.ShapeFactory import translate_shp
 
 import numpy as np
 
+
 def face_is_plane(face: TopoDS_Face) -> bool:
     """
     Returns True if the TopoDS_Face is a plane, False otherwise
