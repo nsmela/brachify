@@ -66,8 +66,11 @@ class UIFunctions(MainWindow):
             self.ui.btn_page_5.setStyleSheet(stylesheet)
 
         self.ui.stackedWidget.setCurrentIndex(index)
+
         if index == 4:
             UIFunctions.update_export(self)
+        else:
+            UIFunctions.update_display(self)
         
     def add_rs_file(self, filepath: str) -> None:
         self.ui.lineedit_dicom_rs.setText(filepath)
@@ -76,8 +79,9 @@ class UIFunctions(MainWindow):
         self.ui.cylinderLengthSpinBox.setValue(self.brachyCylinder.length)
         self.ui.cylinderRadiusSpinBox.setValue(self.brachyCylinder.radius)
 
+        self.display_cylinder = self.brachyCylinder.shape
+        
         UIFunctions.setPage(self, 1)
-        self.display.EraseAll()
         UIFunctions.update_display(self)
 
     def add_rp_file(self, filepath: str) -> None:
@@ -87,14 +91,22 @@ class UIFunctions(MainWindow):
         channels =  read_needles_file(filepath)
         
         # offset each point
-        V2 = np.array([0,0,1])
-        cyl_vec = np.array(self.brachyCylinder.tip) - np.array(self.brachyCylinder.base)
-        for i, c in enumerate(channels):
-            newpoints = np.array(c.rawPoints) - self.brachyCylinder.base
-            newpoints = Rotate_Cloud(newpoints, cyl_vec, V2)
-            channels[i].points = list(list(points) for points in newpoints)
+        if self.brachyCylinder:
+            V2 = np.array([0,0,1])
+            cyl_vec = np.array(self.brachyCylinder.tip) - np.array(self.brachyCylinder.base)
+            for i, c in enumerate(channels):
+                newpoints = np.array(c.rawPoints) - self.brachyCylinder.base
+                newpoints = Rotate_Cloud(newpoints, cyl_vec, V2)
+                channels[i].points = list(list(points) for points in newpoints)
         self.needles = NeedlesModel(channels=channels)
         self.ui.channelsListView.setModel(self.needles)
+
+        self.display_needles = []
+        for channel in self.needles.channels:
+            if self.display_needles:
+                self.display_needles = BRepAlgoAPI_Fuse(self.display_needles, generate_stacked_fused(channel.points)).Shape()
+            else:
+                self.display_needles = generate_stacked_fused(channel.points)
 
         UIFunctions.setPage(self, 2)
         UIFunctions.update_display(self)
@@ -103,24 +115,26 @@ class UIFunctions(MainWindow):
         self.ui.lineedit_tandem.setText(filepath)
 
     def update_display(self) -> None:
-        shapes = []
-        for needle in self.needles.channels:
-            shapes.append(generate_stacked_fused(needle.points))
-
-        self.display.EraseAll()
-        if self.brachyCylinder:
-            self.display.DisplayShape(self.brachyCylinder.shape)
-        if self.needles:
-            for shape in shapes:
-                self.display.DisplayShape(shape)
-        self.display.FitAll()
-
-    def update_export(self) -> None:
-        cylinder = self.brachyCylinder.shape
+        # shapes = []
+        # for needle in self.needles.channels:
+        #     shapes.append(generate_stacked_fused(needle.points))
+        try:
+            self.display.EraseAll()
+            if self.brachyCylinder:
+                self.display.DisplayShape(self.display_cylinder)
+            if self.needles:
+                self.display.DisplayShape(self.display_needles)
+            self.display.FitAll()
+        except:
+            pass
         
-        for needle in self.needles.channels:
-            shape = generate_stacked_fused(needle.points)
-            cylinder = BRepAlgoAPI_Cut(cylinder, shape).Shape()
+    def update_export(self) -> None:
+        cylinder = self.display_cylinder
+        
+        #for needle in self.needles.channels:
+        #    shape = generate_stacked_fused(needle.points)
+        if self.display_needles:
+            cylinder = BRepAlgoAPI_Cut(cylinder, self.display_needles).Shape()
 
         self.display.EraseAll()
         self.display.DisplayShape(cylinder, update=True)

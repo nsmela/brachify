@@ -81,6 +81,13 @@ class MainWindow(QMainWindow):
         self.needles = NeedlesModel()
         self.ui.channelsListView.setModel(self.needles)
 
+        ## Display variables
+        ########################################################################
+        self.display_cylinder = None
+        self.display_needles = []
+        self.display_tandem = None
+        self.display_export = None
+
     def eventFilter(self, widget, event):
         from Presentation.Features.Imports.Commands import ImportFunctions
         
