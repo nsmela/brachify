@@ -82,7 +82,7 @@
         <widget class="QFrame" name="frame_toggle">
          <property name="maximumSize">
           <size>
-           <width>70</width>
+           <width>78</width>
            <height>40</height>
           </size>
          </property>
@@ -111,23 +111,22 @@
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <item>
-           <widget class="QPushButton" name="Btn_Toggle">
-            <property name="enabled">
-             <bool>true</bool>
+          <item alignment="Qt::AlignVCenter">
+           <widget class="QLabel" name="label_14">
+            <property name="minimumSize">
+             <size>
+              <width>78</width>
+              <height>48</height>
+             </size>
             </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">color: rgb(255, 255, 255);
-border: 0px solid;</string>
+            <property name="maximumSize">
+             <size>
+              <width>78</width>
+              <height>48</height>
+             </size>
             </property>
             <property name="text">
-             <string>TOGGLE</string>
+             <string>&lt;strong&gt; BRACHY&lt;/strong&gt;APP</string>
             </property>
            </widget>
           </item>
@@ -394,7 +393,7 @@ QPushButton:hover {
              <bool>false</bool>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>4</number>
             </property>
             <widget class="QWidget" name="page_1">
              <property name="acceptDrops">
@@ -708,6 +707,41 @@ QPushButton:hover {
                </widget>
               </item>
               <item>
+               <widget class="QFrame" name="frame_12">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_16">
+                 <item>
+                  <widget class="QLabel" name="label_15">
+                   <property name="text">
+                    <string>Add Base</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item alignment="Qt::AlignRight">
+                  <widget class="QCheckBox" name="checkbox_cylinder_base">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
                <spacer name="verticalSpacer">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
@@ -800,6 +834,44 @@ QPushButton:hover {
                     </item>
                     <item>
                      <widget class="QDoubleSpinBox" name="channelRadiusSpinBox"/>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame_11">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_15">
+                    <item>
+                     <widget class="QLabel" name="label_13">
+                      <property name="text">
+                       <string>Interior Extension</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QSlider" name="slider_needle_extension">
+                      <property name="maximum">
+                       <number>15</number>
+                      </property>
+                      <property name="sliderPosition">
+                       <number>0</number>
+                      </property>
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="tickPosition">
+                       <enum>QSlider::TicksBothSides</enum>
+                      </property>
+                      <property name="tickInterval">
+                       <number>1</number>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </widget>
@@ -1013,6 +1085,13 @@ QPushButton:hover {
                <widget class="QLabel" name="label_12">
                 <property name="text">
                  <string>Info</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_16">
+                <property name="text">
+                 <string>Data</string>
                 </property>
                </widget>
               </item>

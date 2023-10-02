@@ -22,7 +22,7 @@ class MainWindow(QMainWindow):
         from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
         ## TOGGLE/BURGUER MENU
         ########################################################################
-        self.ui.Btn_Toggle.clicked.connect(lambda: UIFunctions.toggleMenu(self, 250, True))
+        #self.ui.Btn_Toggle.clicked.connect(lambda: UIFunctions.toggleMenu(self, 250, True))
         self.button_style = self.ui.btn_page_1.styleSheet()
         
         ## PAGES

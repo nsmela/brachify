@@ -115,9 +115,6 @@ class UIFunctions(MainWindow):
         self.ui.lineedit_tandem.setText(filepath)
 
     def update_display(self) -> None:
-        # shapes = []
-        # for needle in self.needles.channels:
-        #     shapes.append(generate_stacked_fused(needle.points))
         try:
             self.display.EraseAll()
             if self.brachyCylinder:
@@ -131,8 +128,6 @@ class UIFunctions(MainWindow):
     def update_export(self) -> None:
         cylinder = self.display_cylinder
         
-        #for needle in self.needles.channels:
-        #    shape = generate_stacked_fused(needle.points)
         if self.display_needles:
             cylinder = BRepAlgoAPI_Cut(cylinder, self.display_needles).Shape()
 
