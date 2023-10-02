@@ -21,29 +21,9 @@ from Application.BRep.channel import *
 
 import numpy as np
 
+from Presentation.MainWindow.display_functions import DisplayFunctions
+
 class UIFunctions(MainWindow):
-
-    def toggleMenu(self, maxWidth, enable):
-        if enable:
-
-            # GET WIDTH
-            width = self.ui.frame_left_menu.width()
-            maxExtend = maxWidth
-            standard = 80
-
-            # SET MAX WIDTH
-            if width == 80:
-                widthExtended = maxExtend
-            else:
-                widthExtended = standard
-
-            # ANIMATION
-            self.animation = QtCore.QPropertyAnimation(self.ui.frame_left_menu, b"minimumWidth")
-            self.animation.setDuration(200)
-            self.animation.setStartValue(width)
-            self.animation.setEndValue(widthExtended)
-            self.animation.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-            self.animation.start()
 
     def setPage(self, index: int):
         oldStyle = self.button_style
@@ -65,10 +45,12 @@ class UIFunctions(MainWindow):
         elif index == 4:
             self.ui.btn_page_5.setStyleSheet(stylesheet)
 
-        self.ui.stackedWidget.setCurrentIndex(index)
-
         if index == 4:
             UIFunctions.update_export(self)
+        elif index == 0:
+            DisplayFunctions.navigate_to_imports(self)
+        elif index == 1:
+            DisplayFunctions.navigate_to_cylinder(self)
         else:
             UIFunctions.update_display(self)
         
