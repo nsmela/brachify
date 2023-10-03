@@ -1,0 +1,5 @@
+pythonocc-core==7.7.0==
+pyqt5-tools==5.15.9.3.3
+pydicom==2.4.3
+numpy==1.26.0
+pyinstaller==6.0.0
