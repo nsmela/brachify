@@ -6,6 +6,7 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
 
+
 from Presentation.MainWindow.core import MainWindow
 
 class DisplayFunctions(MainWindow):
@@ -97,12 +98,17 @@ class DisplayFunctions(MainWindow):
 
     ## NEEDLE CHANNELS
     def navigate_to_channels(self):
+        from Presentation.Features.needle_functions import NeedleFunctions
         # variables
 
         # set page
         self.ui.stackedWidget.setCurrentIndex(2)
         
         # set display
+        self.display.SetSelectionModeShape()
+        self.display._select_callbacks = []
+        self.display.register_select_callback(NeedleFunctions.selectChannel)
+
         try:
             self.display.EraseAll()
 
@@ -121,6 +127,11 @@ class DisplayFunctions(MainWindow):
                 for needle in self.display_needles_list:
                     self.display.DisplayColoredShape(shapes=needle, color=color)
 
+                if self.needles_active_index >= 0:
+                    color = Quantity_Color(0.1, 0.4, 0.4, Quantity_TOC_RGB)
+                    shape = self.display_needles_list[self.needles_active_index]
+                    self.display.DisplayColoredShape(shapes=shape, color=color)
+                    
         except Exception as error_message:
             print(error_message)
 

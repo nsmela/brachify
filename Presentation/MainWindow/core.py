@@ -1,5 +1,6 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QAbstractItemView, QMainWindow
+
 
 
 from Presentation.MainWindow.ui_main import Ui_MainWindow
@@ -58,6 +59,7 @@ class MainWindow(QMainWindow):
         
         a_box = BRepPrimAPI_MakeBox(10.0, 20.0, 30.0).Shape()
         self.ais_box = self.display.DisplayShape(a_box)[0]
+        self.display.display_triedron()
         self.display.ResetView()
         self.display.FitAll()
         
@@ -84,9 +86,12 @@ class MainWindow(QMainWindow):
 
         ## Needle Channel Stuff
         ########################################################################
+        from Presentation.Features.needle_functions import NeedleFunctions
         self.needles = NeedlesModel()
         self.display_needles_list = []
-        self.ui.channelsListView.setModel(self.needles)
+        self.needles_active_index = -1
+        #self.ui.channelsListView.setModel(self.needles)
+        self.ui.channelsListWidget.itemSelectionChanged.connect(lambda: NeedleFunctions.channelSelectionChanged(self))
 
         ## Display variables
         ########################################################################

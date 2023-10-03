@@ -312,9 +312,13 @@ class Ui_MainWindow(object):
         self.label_7 = QtWidgets.QLabel(self.page_3)
         self.label_7.setObjectName("label_7")
         self.verticalLayout_8.addWidget(self.label_7)
-        self.channelsListView = QtWidgets.QListView(self.page_3)
-        self.channelsListView.setObjectName("channelsListView")
-        self.verticalLayout_8.addWidget(self.channelsListView)
+        self.channelsListWidget = QtWidgets.QListWidget(self.page_3)
+        self.channelsListWidget.setMinimumSize(QtCore.QSize(200, 0))
+        self.channelsListWidget.setFlow(QtWidgets.QListView.TopToBottom)
+        self.channelsListWidget.setViewMode(QtWidgets.QListView.IconMode)
+        self.channelsListWidget.setUniformItemSizes(True)
+        self.channelsListWidget.setObjectName("channelsListWidget")
+        self.verticalLayout_8.addWidget(self.channelsListWidget, 0, QtCore.Qt.AlignLeft)
         self.groupBox = QtWidgets.QGroupBox(self.page_3)
         self.groupBox.setObjectName("groupBox")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.groupBox)
@@ -457,7 +461,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

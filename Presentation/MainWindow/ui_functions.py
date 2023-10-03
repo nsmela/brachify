@@ -84,7 +84,9 @@ class UIFunctions(MainWindow):
                 newpoints = Rotate_Cloud(newpoints, cyl_vec, V2)
                 channels[i].points = list(list(points) for points in newpoints)
         self.needles = NeedlesModel(channels=channels)
-        self.ui.channelsListView.setModel(self.needles)
+        #self.ui.channelsListView.setModel(self.needles)
+        for needle in self.needles.channels:
+            self.ui.channelsListWidget.addItem(needle.channelId)
 
         self.display_needles = []
         for channel in self.needles.channels:
