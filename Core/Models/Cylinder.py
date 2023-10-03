@@ -47,9 +47,8 @@ class BrachyCylinder:
         self.base = base
         self.radius = radius
         self.expand_base = expand_base
-        self.shape = self._generate()       
 
-    def _generate(self):
+    def shape(self) -> TopoDS_Shape:
         # cylinder references
         cylinder_axis = gp_Dir(0, 0, 1)
         cylinder_vector = gp_Ax2(gp_Pnt(0, 0, 0), cylinder_axis)

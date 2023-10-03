@@ -13,6 +13,7 @@ from PyQt5 import QtCore
 ## ==> GUI FILE
 from Presentation.MainWindow.core import MainWindow
 from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
+from Presentation.MainWindow.display_functions import DisplayFunctions
 
 ## Functions
 from Application.Imports.import_dicom_structure import read_cylinder_file
@@ -23,7 +24,6 @@ from OCC.Extend.DataExchange import read_step_file
 import numpy as np
 import os
 
-from Presentation.MainWindow.display_functions import DisplayFunctions
 
 class UIFunctions(MainWindow):
 
@@ -57,12 +57,16 @@ class UIFunctions(MainWindow):
         self.ui.lineedit_dicom_rs.setText(filepath)
         self.brachyCylinder = read_cylinder_file(filepath=filepath)
         
+        self.ui.cylinderRadiusSpinBox.setValue(self.brachyCylinder.radius * 2)
         self.ui.cylinderLengthSpinBox.setValue(self.brachyCylinder.length)
-        self.ui.cylinderRadiusSpinBox.setValue(self.brachyCylinder.radius)
+        self.ui.checkbox_cylinder_base.setChecked(self.brachyCylinder.expand_base)
 
-        self.display_cylinder = self.brachyCylinder.shape
+        self.display_cylinder = self.brachyCylinder.shape()
+        
+        # cylinder view ui values
         
         UIFunctions.setPage(self, 1)
+
 
     def add_rp_file(self, filepath: str) -> None:
         self.ui.lineedit_dicom_rp.setText(filepath)

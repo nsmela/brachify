@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow
 
+
 from Presentation.MainWindow.ui_main import Ui_MainWindow
 from Core.Models.Cylinder import BrachyCylinder
 
@@ -13,6 +14,7 @@ from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 import os
 
 class MainWindow(QMainWindow):
+    '''Populates the UI file's functions to avoid needing to re-write a file each time the ui file is saved'''
     def __init__(self):
         QMainWindow.__init__(self)
         self.ui = Ui_MainWindow()
@@ -73,7 +75,12 @@ class MainWindow(QMainWindow):
         
         ## Cylinder Stuff
         ########################################################################
-        self.brachyCylinder = BrachyCylinder(tip = [0, 0, 200], base = [0, 0, 0], radius = 10, expand_base= False)        
+        from Presentation.Features.cylinder_functions import CylinderFunctions
+        self.brachyCylinder = BrachyCylinder(tip = [0, 0, 200], base = [0, 0, 0], radius = 10, expand_base= False)   
+        
+        self.ui.cylinderRadiusSpinBox.valueChanged.connect(lambda: CylinderFunctions.setRadius(self))
+        self.ui.cylinderLengthSpinBox.valueChanged.connect(lambda: CylinderFunctions.setLength(self))
+        self.ui.checkbox_cylinder_base.toggled.connect(lambda: CylinderFunctions.setBase(self))
 
         ## Needle Channel Stuff
         ########################################################################

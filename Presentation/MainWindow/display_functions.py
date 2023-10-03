@@ -22,7 +22,7 @@ class DisplayFunctions(MainWindow):
 
             # cylinder shown
             if self.brachyCylinder:
-                shape = self.brachyCylinder.shape
+                shape = self.display_cylinder
                 color = Quantity_Color(0.25, 0.25, 0.25, Quantity_TOC_RGB)
                 self.display.DisplayColoredShape(shapes=shape, color=color)
 
@@ -65,7 +65,7 @@ class DisplayFunctions(MainWindow):
 
             # cylinder shown
             if self.brachyCylinder:
-                shape = self.brachyCylinder.shape
+                shape = self.display_cylinder
                 color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
                 self.display.DisplayColoredShape(shapes=shape, color=color)
 
@@ -108,7 +108,7 @@ class DisplayFunctions(MainWindow):
 
             # cylinder shown
             if self.brachyCylinder:
-                shape = self.brachyCylinder.shape
+                shape = self.display_cylinder
                 self.display.DisplayShape(shapes=shape, material=Graphic3d_NOM_TRANSPARENT)
 
         except Exception as error_message:
@@ -149,7 +149,7 @@ class DisplayFunctions(MainWindow):
 
             # cylinder shown
             if self.brachyCylinder:
-                shape = self.brachyCylinder.shape
+                shape = self.display_cylinder
                 self.display.DisplayShape(shapes=shape, material=Graphic3d_NOM_TRANSPARENT)
 
         except Exception as error_message:
@@ -192,7 +192,7 @@ class DisplayFunctions(MainWindow):
 
             # cylinder shown
             if self.brachyCylinder:
-                shape = self.brachyCylinder.shape
+                shape = self.display_cylinder
 
         except Exception as error_message:
             print(error_message)
@@ -214,7 +214,7 @@ class DisplayFunctions(MainWindow):
             print(error_message)
 
         try:
-            color = Quantity_Color(0.1, 0.8, 0.1, Quantity_TOC_RGB)
+            color = Quantity_Color(0.8, 0.1, 0.1, Quantity_TOC_RGB)
             self.display.DisplayColoredShape(shapes=shape, color=color)
             self.display.FitAll()
         except Exception as error_message:

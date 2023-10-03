@@ -368,7 +368,7 @@ QPushButton:hover {
              <bool>false</bool>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="page_1">
              <property name="acceptDrops">
@@ -676,7 +676,17 @@ QPushButton:hover {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QDoubleSpinBox" name="cylinderLengthSpinBox"/>
+                  <widget class="QDoubleSpinBox" name="cylinderLengthSpinBox">
+                   <property name="decimals">
+                    <number>1</number>
+                   </property>
+                   <property name="minimum">
+                    <double>30.000000000000000</double>
+                   </property>
+                   <property name="maximum">
+                    <double>350.000000000000000</double>
+                   </property>
+                  </widget>
                  </item>
                 </layout>
                </widget>
