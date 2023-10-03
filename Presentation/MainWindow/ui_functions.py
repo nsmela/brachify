@@ -9,6 +9,7 @@ from turtle import Vec2D
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut
 from PyQt5.QtCore import QPropertyAnimation
 from PyQt5 import QtCore
+from Presentation.Features.needle_functions import NeedleFunctions
 
 ## ==> GUI FILE
 from Presentation.MainWindow.core import MainWindow
@@ -91,7 +92,8 @@ class UIFunctions(MainWindow):
                 self.display_needles = BRepAlgoAPI_Fuse(self.display_needles, generate_stacked_fused(channel.points)).Shape()
             else:
                 self.display_needles = generate_stacked_fused(channel.points)
-
+        
+        NeedleFunctions.__recalculate__(self)
         UIFunctions.setPage(self, 2)
         
     def add_tandem_file(self, filepath: str) -> None:

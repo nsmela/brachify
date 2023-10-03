@@ -118,7 +118,8 @@ class DisplayFunctions(MainWindow):
             # needles shown
             if self.needles:
                 color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
-                self.display.DisplayColoredShape(shapes=self.display_needles, color=color)
+                for needle in self.display_needles_list:
+                    self.display.DisplayColoredShape(shapes=needle, color=color)
 
         except Exception as error_message:
             print(error_message)

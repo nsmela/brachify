@@ -85,6 +85,7 @@ class MainWindow(QMainWindow):
         ## Needle Channel Stuff
         ########################################################################
         self.needles = NeedlesModel()
+        self.display_needles_list = []
         self.ui.channelsListView.setModel(self.needles)
 
         ## Display variables
