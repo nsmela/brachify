@@ -22,26 +22,25 @@ class MainWindow(QMainWindow):
         from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
         ## TOGGLE/BURGUER MENU
         ########################################################################
-        #self.ui.Btn_Toggle.clicked.connect(lambda: UIFunctions.toggleMenu(self, 250, True))
-        self.button_style = self.ui.btn_page_1.styleSheet()
+        self.button_style = self.ui.btn_views_imports.styleSheet()
         
         ## PAGES
         ########################################################################
         from Presentation.MainWindow.ui_functions import UIFunctions
         # PAGE 1
-        self.ui.btn_page_1.clicked.connect(lambda: UIFunctions.setPage(self, 0))
+        self.ui.btn_views_imports.clicked.connect(lambda: UIFunctions.setPage(self, 0))
 
         # PAGE 2
-        self.ui.btn_page_2.clicked.connect(lambda: UIFunctions.setPage(self, 1))
+        self.ui.btn_views_cylinder.clicked.connect(lambda: UIFunctions.setPage(self, 1))
 
         # PAGE 3
-        self.ui.btn_page_3.clicked.connect(lambda: UIFunctions.setPage(self, 2))
+        self.ui.btn_views_channels.clicked.connect(lambda: UIFunctions.setPage(self, 2))
         
         # PAGE 4
-        self.ui.btn_page_4.clicked.connect(lambda: UIFunctions.setPage(self, 3))
+        self.ui.btn_views_tandem.clicked.connect(lambda: UIFunctions.setPage(self, 3))
         
         # PAGE 5
-        self.ui.btn_page_5.clicked.connect(lambda: UIFunctions.setPage(self, 4))
+        self.ui.btn_views_exports.clicked.connect(lambda: UIFunctions.setPage(self, 4))
         
         UIFunctions.setPage(self, 0)
         

@@ -55,7 +55,75 @@ class Ui_MainWindow(object):
         self.frame_top.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_top.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_top.setObjectName("frame_top")
-        self.horizontalLayout.addWidget(self.frame_top)
+        self.horizontalLayout_17 = QtWidgets.QHBoxLayout(self.frame_top)
+        self.horizontalLayout_17.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_17.setObjectName("horizontalLayout_17")
+        self.btn_views_imports = QtWidgets.QPushButton(self.frame_top)
+        self.btn_views_imports.setMinimumSize(QtCore.QSize(86, 0))
+        self.btn_views_imports.setMaximumSize(QtCore.QSize(86, 48))
+        self.btn_views_imports.setStyleSheet("QPushButton {\n"
+"    color: rgb(255, 255, 255);\n"
+"    background-color: rgb(35, 35, 35);\n"
+"    border: 0px solid;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(85, 170, 255);\n"
+"}")
+        self.btn_views_imports.setObjectName("btn_views_imports")
+        self.horizontalLayout_17.addWidget(self.btn_views_imports)
+        self.btn_views_cylinder = QtWidgets.QPushButton(self.frame_top)
+        self.btn_views_cylinder.setMinimumSize(QtCore.QSize(86, 0))
+        self.btn_views_cylinder.setMaximumSize(QtCore.QSize(86, 48))
+        self.btn_views_cylinder.setStyleSheet("QPushButton {\n"
+"    color: rgb(255, 255, 255);\n"
+"    background-color: rgb(35, 35, 35);\n"
+"    border: 0px solid;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(85, 170, 255);\n"
+"}")
+        self.btn_views_cylinder.setObjectName("btn_views_cylinder")
+        self.horizontalLayout_17.addWidget(self.btn_views_cylinder)
+        self.btn_views_channels = QtWidgets.QPushButton(self.frame_top)
+        self.btn_views_channels.setMinimumSize(QtCore.QSize(86, 0))
+        self.btn_views_channels.setMaximumSize(QtCore.QSize(86, 48))
+        self.btn_views_channels.setStyleSheet("QPushButton {\n"
+"    color: rgb(255, 255, 255);\n"
+"    background-color: rgb(35, 35, 35);\n"
+"    border: 0px solid;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(85, 170, 255);\n"
+"}")
+        self.btn_views_channels.setObjectName("btn_views_channels")
+        self.horizontalLayout_17.addWidget(self.btn_views_channels)
+        self.btn_views_tandem = QtWidgets.QPushButton(self.frame_top)
+        self.btn_views_tandem.setMinimumSize(QtCore.QSize(86, 0))
+        self.btn_views_tandem.setMaximumSize(QtCore.QSize(86, 48))
+        self.btn_views_tandem.setStyleSheet("QPushButton {\n"
+"    color: rgb(255, 255, 255);\n"
+"    background-color: rgb(35, 35, 35);\n"
+"    border: 0px solid;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(85, 170, 255);\n"
+"}")
+        self.btn_views_tandem.setObjectName("btn_views_tandem")
+        self.horizontalLayout_17.addWidget(self.btn_views_tandem)
+        self.btn_views_exports = QtWidgets.QPushButton(self.frame_top)
+        self.btn_views_exports.setMinimumSize(QtCore.QSize(86, 0))
+        self.btn_views_exports.setMaximumSize(QtCore.QSize(86, 48))
+        self.btn_views_exports.setStyleSheet("QPushButton {\n"
+"    color: rgb(255, 255, 255);\n"
+"    background-color: rgb(35, 35, 35);\n"
+"    border: 0px solid;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: rgb(85, 170, 255);\n"
+"}")
+        self.btn_views_exports.setObjectName("btn_views_exports")
+        self.horizontalLayout_17.addWidget(self.btn_views_exports)
+        self.horizontalLayout.addWidget(self.frame_top, 0, QtCore.Qt.AlignHCenter)
         self.verticalLayout.addWidget(self.Top_Bar)
         self.Content = QtWidgets.QFrame(self.centralwidget)
         self.Content.setAcceptDrops(False)
@@ -66,87 +134,6 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.frame_left_menu = QtWidgets.QFrame(self.Content)
-        self.frame_left_menu.setMinimumSize(QtCore.QSize(80, 0))
-        self.frame_left_menu.setMaximumSize(QtCore.QSize(70, 16777215))
-        self.frame_left_menu.setStyleSheet("background-color: rgb(35, 35, 35);")
-        self.frame_left_menu.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_left_menu.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_left_menu.setObjectName("frame_left_menu")
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_left_menu)
-        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_3.setSpacing(0)
-        self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.frame_top_menus = QtWidgets.QFrame(self.frame_left_menu)
-        self.frame_top_menus.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.frame_top_menus.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_top_menus.setObjectName("frame_top_menus")
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.frame_top_menus)
-        self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_4.setSpacing(0)
-        self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.btn_page_1 = QtWidgets.QPushButton(self.frame_top_menus)
-        self.btn_page_1.setMinimumSize(QtCore.QSize(0, 40))
-        self.btn_page_1.setStyleSheet("QPushButton {\n"
-"    color: rgb(255, 255, 255);\n"
-"    background-color: rgb(35, 35, 35);\n"
-"    border: 0px solid;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(85, 170, 255);\n"
-"}")
-        self.btn_page_1.setObjectName("btn_page_1")
-        self.verticalLayout_4.addWidget(self.btn_page_1)
-        self.btn_page_2 = QtWidgets.QPushButton(self.frame_top_menus)
-        self.btn_page_2.setMinimumSize(QtCore.QSize(0, 40))
-        self.btn_page_2.setStyleSheet("QPushButton {\n"
-"    color: rgb(255, 255, 255);\n"
-"    background-color: rgb(35, 35, 35);\n"
-"    border: 0px solid;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(85, 170, 255);\n"
-"}")
-        self.btn_page_2.setObjectName("btn_page_2")
-        self.verticalLayout_4.addWidget(self.btn_page_2)
-        self.btn_page_3 = QtWidgets.QPushButton(self.frame_top_menus)
-        self.btn_page_3.setMinimumSize(QtCore.QSize(0, 40))
-        self.btn_page_3.setStyleSheet("QPushButton {\n"
-"    color: rgb(255, 255, 255);\n"
-"    background-color: rgb(35, 35, 35);\n"
-"    border: 0px solid;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(85, 170, 255);\n"
-"}")
-        self.btn_page_3.setObjectName("btn_page_3")
-        self.verticalLayout_4.addWidget(self.btn_page_3)
-        self.btn_page_4 = QtWidgets.QPushButton(self.frame_top_menus)
-        self.btn_page_4.setMinimumSize(QtCore.QSize(0, 40))
-        self.btn_page_4.setStyleSheet("QPushButton {\n"
-"    color: rgb(255, 255, 255);\n"
-"    background-color: rgb(35, 35, 35);\n"
-"    border: 0px solid;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(85, 170, 255);\n"
-"}")
-        self.btn_page_4.setObjectName("btn_page_4")
-        self.verticalLayout_4.addWidget(self.btn_page_4)
-        self.btn_page_5 = QtWidgets.QPushButton(self.frame_top_menus)
-        self.btn_page_5.setMinimumSize(QtCore.QSize(0, 40))
-        self.btn_page_5.setStyleSheet("QPushButton {\n"
-"    color: rgb(255, 255, 255);\n"
-"    background-color: rgb(35, 35, 35);\n"
-"    border: 0px solid;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgb(85, 170, 255);\n"
-"}")
-        self.btn_page_5.setObjectName("btn_page_5")
-        self.verticalLayout_4.addWidget(self.btn_page_5)
-        self.verticalLayout_3.addWidget(self.frame_top_menus, 0, QtCore.Qt.AlignTop)
-        self.horizontalLayout_2.addWidget(self.frame_left_menu)
         self.frame_pages = QtWidgets.QFrame(self.Content)
         self.frame_pages.setAcceptDrops(False)
         self.frame_pages.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -467,18 +454,18 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(4)
+        self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Brachy App"))
         self.label_14.setText(_translate("MainWindow", "<strong> BRACHY</strong>APP"))
-        self.btn_page_1.setText(_translate("MainWindow", "imports"))
-        self.btn_page_2.setText(_translate("MainWindow", "cylinder"))
-        self.btn_page_3.setText(_translate("MainWindow", "channels"))
-        self.btn_page_4.setText(_translate("MainWindow", "tandem"))
-        self.btn_page_5.setText(_translate("MainWindow", "export"))
+        self.btn_views_imports.setText(_translate("MainWindow", "imports"))
+        self.btn_views_cylinder.setText(_translate("MainWindow", "cylinder"))
+        self.btn_views_channels.setText(_translate("MainWindow", "channels"))
+        self.btn_views_tandem.setText(_translate("MainWindow", "tandem"))
+        self.btn_views_exports.setText(_translate("MainWindow", "exports"))
         self.label_1.setText(_translate("MainWindow", "imports"))
         self.groupBox_2.setTitle(_translate("MainWindow", "cylinder file"))
         self.btn_import_dicom_rs.setText(_translate("MainWindow", "import dicom rs"))

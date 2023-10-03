@@ -28,22 +28,17 @@ class UIFunctions(MainWindow):
     def setPage(self, index: int):
         oldStyle = self.button_style
         stylesheet = "QPushButton{background-color: rgb(85, 170, 255);}"
-        self.ui.btn_page_1.setStyleSheet(oldStyle)
-        self.ui.btn_page_2.setStyleSheet(oldStyle)
-        self.ui.btn_page_3.setStyleSheet(oldStyle)
-        self.ui.btn_page_4.setStyleSheet(oldStyle)
-        self.ui.btn_page_5.setStyleSheet(oldStyle)
+        buttons = [
+            self.ui.btn_views_imports,
+            self.ui.btn_views_cylinder,
+            self.ui.btn_views_channels,
+            self.ui.btn_views_tandem,
+            self.ui.btn_views_exports]
         
-        if index == 0:
-            self.ui.btn_page_1.setStyleSheet(stylesheet)
-        elif index == 1:
-            self.ui.btn_page_2.setStyleSheet(stylesheet)
-        elif index == 2:
-            self.ui.btn_page_3.setStyleSheet(stylesheet)
-        elif index == 3:
-            self.ui.btn_page_4.setStyleSheet(stylesheet)
-        elif index == 4:
-            self.ui.btn_page_5.setStyleSheet(stylesheet)
+        for button in buttons:
+            button.setStyleSheet(oldStyle)
+        
+        buttons[index].setStyleSheet(stylesheet)
 
         if index == 0:
             DisplayFunctions.navigate_to_imports(self)
