@@ -85,7 +85,7 @@ class DisplayFunctions(MainWindow):
             # tandem
             if self.display_tandem:
                 color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
-                self.display.DisplayColoredShape(shapes=self.display_tandem, color=color)
+                self.display.DisplayShape(shapes=self.display_tandem, material=Graphic3d_NOM_TRANSPARENT)
 
         except Exception as error_message:
             print(error_message)
@@ -126,8 +126,7 @@ class DisplayFunctions(MainWindow):
         try: 
             # tandem
             if self.display_tandem:
-                color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
-                self.display.DisplayColoredShape(shapes=self.display_tandem, color=color)
+                self.display.DisplayShape(shapes=self.display_tandem, material=Graphic3d_NOM_TRANSPARENT)
 
         except Exception as error_message:
             print(error_message)
@@ -209,7 +208,7 @@ class DisplayFunctions(MainWindow):
         try: 
             # tandem
             if self.display_tandem:
-                shape = BRepAlgoAPI_Cut(shape, self.display_tandem)
+                shape = BRepAlgoAPI_Cut(shape, self.display_tandem).Shape()
 
         except Exception as error_message:
             print(error_message)

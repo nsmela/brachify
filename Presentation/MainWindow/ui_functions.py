@@ -18,8 +18,10 @@ from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
 from Application.Imports.import_dicom_structure import read_cylinder_file
 from Application.Imports.import_dicom_planning import Rotate_Cloud, read_needles_file
 from Application.BRep.channel import *
+from OCC.Extend.DataExchange import read_step_file
 
 import numpy as np
+import os
 
 from Presentation.MainWindow.display_functions import DisplayFunctions
 
@@ -90,3 +92,11 @@ class UIFunctions(MainWindow):
         
     def add_tandem_file(self, filepath: str) -> None:
         self.ui.lineedit_tandem.setText(filepath)
+
+        # make sure the path exists otherwise OCE get confused
+        if not os.path.exists(filepath):
+            raise AssertionError(f"file does not exist: {filepath}")
+
+        self.display_tandem = read_step_file(filepath)
+        
+        UIFunctions.setPage(self, 3)
