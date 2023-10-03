@@ -60,7 +60,8 @@ class MainWindow(QMainWindow):
         a_box = BRepPrimAPI_MakeBox(10.0, 20.0, 30.0).Shape()
         self.ais_box = self.display.DisplayShape(a_box)[0]
         self.display.display_triedron()
-        self.display.ResetView()
+        #self.display.ResetView()
+        #self.display.View.MustBeResized()
         self.display.FitAll()
         
         
