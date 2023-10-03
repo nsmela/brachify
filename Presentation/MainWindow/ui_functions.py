@@ -45,14 +45,16 @@ class UIFunctions(MainWindow):
         elif index == 4:
             self.ui.btn_page_5.setStyleSheet(stylesheet)
 
-        if index == 4:
-            UIFunctions.update_export(self)
-        elif index == 0:
+        if index == 0:
             DisplayFunctions.navigate_to_imports(self)
         elif index == 1:
             DisplayFunctions.navigate_to_cylinder(self)
-        else:
-            UIFunctions.update_display(self)
+        elif index == 2:
+            DisplayFunctions.navigate_to_channels(self)
+        elif index == 3:
+            DisplayFunctions.navigate_to_tandem(self)
+        elif index == 4:
+            DisplayFunctions.navigate_to_exports(self)
         
     def add_rs_file(self, filepath: str) -> None:
         self.ui.lineedit_dicom_rs.setText(filepath)
@@ -64,7 +66,6 @@ class UIFunctions(MainWindow):
         self.display_cylinder = self.brachyCylinder.shape
         
         UIFunctions.setPage(self, 1)
-        UIFunctions.update_display(self)
 
     def add_rp_file(self, filepath: str) -> None:
         self.ui.lineedit_dicom_rp.setText(filepath)
@@ -91,28 +92,6 @@ class UIFunctions(MainWindow):
                 self.display_needles = generate_stacked_fused(channel.points)
 
         UIFunctions.setPage(self, 2)
-        UIFunctions.update_display(self)
         
     def add_tandem_file(self, filepath: str) -> None:
         self.ui.lineedit_tandem.setText(filepath)
-
-    def update_display(self) -> None:
-        try:
-            self.display.EraseAll()
-            if self.brachyCylinder:
-                self.display.DisplayShape(self.display_cylinder)
-            if self.needles:
-                self.display.DisplayShape(self.display_needles)
-            self.display.FitAll()
-        except:
-            pass
-        
-    def update_export(self) -> None:
-        cylinder = self.display_cylinder
-        
-        if self.display_needles:
-            cylinder = BRepAlgoAPI_Cut(cylinder, self.display_needles).Shape()
-
-        self.display.EraseAll()
-        self.display.DisplayShape(cylinder, update=True)
-        self.display.FitAll()
