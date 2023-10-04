@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtGui
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QGraphicsDropShadowEffect, QSplashScreen
 
@@ -30,6 +31,12 @@ class SplashScreen(QSplashScreen):
         self.shadow.setColor(QColor(0, 0, 0, 60))
         self.ui.dropShadowFrame.setGraphicsEffect(self.shadow)
 
+        # centre screen
+        qr = self.frameGeometry()
+        centre_point = QtGui.QGuiApplication.primaryScreen().availableGeometry().center()
+        qr.moveCenter(centre_point)
+        self.move(qr.topLeft())
+        
         # start
         global counter
         self.ui.progressBar.setValue(counter)
