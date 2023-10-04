@@ -18,7 +18,11 @@ class DisplayFunctions(MainWindow):
         self.ui.stackedWidget.setCurrentIndex(0)
         
         # set display
+        
         try:
+            self.display._select_callbacks = []
+            self.display.SetSelectionModeNeutral()
+            
             self.display.EraseAll()
 
             # cylinder shown
@@ -61,6 +65,9 @@ class DisplayFunctions(MainWindow):
         self.ui.stackedWidget.setCurrentIndex(1)
         
         # set display
+        self.display._select_callbacks = []
+        self.display.SetSelectionModeShape()
+        
         try:
             self.display.EraseAll()
 
@@ -156,6 +163,9 @@ class DisplayFunctions(MainWindow):
         self.ui.stackedWidget.setCurrentIndex(3)
         
         # set display
+        self.display._select_callbacks = []
+        self.display.SetSelectionModeShape()
+        
         try:
             self.display.EraseAll()
 
@@ -199,6 +209,9 @@ class DisplayFunctions(MainWindow):
         shape = None
         
         # set display
+        self.display._select_callbacks = []
+        self.display.SetSelectionModeNeutral()
+        
         try:
             self.display.EraseAll()
 

@@ -1,8 +1,6 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QAbstractItemView, QMainWindow
 
-
-
 from Presentation.MainWindow.ui_main import Ui_MainWindow
 from Core.Models.Cylinder import BrachyCylinder
 
@@ -13,6 +11,7 @@ import OCC.Display.qtDisplay as qtDisplay
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 import os
+
 
 class MainWindow(QMainWindow):
     '''Populates the UI file's functions to avoid needing to re-write a file each time the ui file is saved'''
@@ -83,18 +82,19 @@ class MainWindow(QMainWindow):
         ########################################################################
         from Presentation.Features.needle_functions import NeedleFunctions
         self.needles = NeedlesModel()
-        self.display_needles_list = []
-        self.needles_active_index = -1
         #self.ui.channelsListView.setModel(self.needles)
         self.ui.channelsListWidget.itemSelectionChanged.connect(lambda: NeedleFunctions.channelSelectionChanged(self))
 
         ## Display variables
         ########################################################################
         self.display_cylinder = None
-        self.display_needles = []
+        self.display_needles = None
+        self.display_needles_list = []
+        self.needles_active_index = -1
         self.display_tandem = None
         self.display_export = None
 
+    # https://github.com/tpaviot/pythonocc-demos/issues/72#event-10551747046
     def showProperly(self):
         size = [self.size().width(), self.size().height()]
         self.resize(size[0]-1, size[1]-1)
