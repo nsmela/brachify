@@ -1,7 +1,15 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Core",
+    "\\Core\\Models",
+    "\\notes",
+    "\\Presentation",
+    "\\Presentation\\Features",
+    "\\Presentation\\Features\\Imports",
+    "\\Presentation\\Features\\NeedleChannels",
+    "\\Presentation\\MainWindow"
   ],
-  "SelectedNode": "\\C:\\Users\\nsmel\\Documents\\Programming\\nsmela\\Modern-GUI-PyQt5",
+  "SelectedNode": "\\notes\\display.txt",
   "PreviewInSolutionExplorer": false
 }
