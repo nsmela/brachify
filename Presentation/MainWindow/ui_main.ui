@@ -774,35 +774,9 @@ QPushButton:hover {
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_7">
-                <property name="text">
-                 <string>Loaded Channels</string>
-                </property>
-               </widget>
-              </item>
-              <item alignment="Qt::AlignLeft">
-               <widget class="QListWidget" name="channelsListWidget">
-                <property name="minimumSize">
-                 <size>
-                  <width>200</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="flow">
-                 <enum>QListView::TopToBottom</enum>
-                </property>
-                <property name="viewMode">
-                 <enum>QListView::IconMode</enum>
-                </property>
-                <property name="uniformItemSizes">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QGroupBox" name="groupBox">
                 <property name="title">
-                 <string>Channel Settings</string>
+                 <string>Universal Channel Settings</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_6">
                  <property name="leftMargin">
@@ -839,6 +813,67 @@ QPushButton:hover {
                    </layout>
                   </widget>
                  </item>
+                 <item>
+                  <widget class="QFrame" name="frame_13">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QHBoxLayout" name="horizontalLayout_18">
+                    <item>
+                     <widget class="QLabel" name="label_17">
+                      <property name="text">
+                       <string>Hide Cylinder?</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QCheckBox" name="checkBox_hide_cylinder">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_7">
+                <property name="text">
+                 <string>Loaded Channels</string>
+                </property>
+               </widget>
+              </item>
+              <item alignment="Qt::AlignLeft">
+               <widget class="QListWidget" name="channelsListWidget">
+                <property name="minimumSize">
+                 <size>
+                  <width>200</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="flow">
+                 <enum>QListView::TopToBottom</enum>
+                </property>
+                <property name="viewMode">
+                 <enum>QListView::IconMode</enum>
+                </property>
+                <property name="uniformItemSizes">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_5">
+                <property name="title">
+                 <string>Individual Settings</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_3">
                  <item>
                   <widget class="QFrame" name="frame_11">
                    <property name="frameShape">

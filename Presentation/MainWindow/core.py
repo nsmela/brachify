@@ -100,6 +100,7 @@ class MainWindow(QMainWindow):
         self.show()
         self.resize(size[0], size[1])
 
+    # for dragging events
     def eventFilter(self, widget, event):
         from Presentation.Features.Imports.Commands import ImportFunctions
         
