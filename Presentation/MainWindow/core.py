@@ -51,19 +51,13 @@ class MainWindow(QMainWindow):
         ########################################################################
         self.canvas = qtDisplay.qtViewer3d(self)
         self.ui.model_frame.layout().addWidget(self.canvas)
-        size = self.ui.model_frame.size()
-        print(size)
-        self.canvas.resize(640, 640)
         self.canvas.InitDriver()
         self.display = self.canvas._display
         
         a_box = BRepPrimAPI_MakeBox(10.0, 20.0, 30.0).Shape()
         self.ais_box = self.display.DisplayShape(a_box)[0]
         self.display.display_triedron()
-        #self.display.ResetView()
-        #self.display.View.MustBeResized()
         self.display.FitAll()
-        
         
         ## Imports Functions
         ########################################################################
@@ -100,6 +94,12 @@ class MainWindow(QMainWindow):
         self.display_needles = []
         self.display_tandem = None
         self.display_export = None
+
+    def showProperly(self):
+        size = [self.size().width(), self.size().height()]
+        self.resize(size[0]-1, size[1]-1)
+        self.show()
+        self.resize(size[0], size[1])
 
     def eventFilter(self, widget, event):
         from Presentation.Features.Imports.Commands import ImportFunctions
