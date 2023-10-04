@@ -20,19 +20,12 @@ def read_needles_file(filepath: str):
         channelID = channel.SourceApplicatorID
         sequence = channel.BrachyControlPointSequence
 
-        # points = []
-        # for p in sequence:
-        #    points.append(_convert_control_point(p))
         points = [_convert_control_point(p) for p in sequence]
 
         # removing duplicate points
         del points[::2]
 
-        # needle = (channelNumber, channelID, points)
         needle = NeedleChannel(number=channelNumber, id=channelID, points=points)
-            # "Channel Number": channelNumber,
-            # "Channel ID": channelID,
-            # "Points": points,
         channels.append(needle)
     return channels
 

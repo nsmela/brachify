@@ -13,13 +13,6 @@ class NeedleFunctions(MainWindow):
     self.display_needle_list: a list of the needle channels
     self.needles_active_index: the current active needle channel
     '''
-    
-    def setActiveNeedleChannelWithList(self, indexes):
-        index = -1
-        if indexes:
-            index = indexes[0]
-        NeedleFunctions.setActiveNeedleChannel(self, index)
-
 
     def setActiveNeedleChannel(self, index:int = -1) -> None:
         self.needles_active_index = index
@@ -28,6 +21,10 @@ class NeedleFunctions(MainWindow):
             self.ui.channelsListWidget.setCurrentRow(index)
         DisplayFunctions.navigate_to_channels(self)
     
+    def setCylinderVisibility(self):
+        self.isCylinderHidden = self.ui.checkBox_hide_cylinder.isChecked()
+        DisplayFunctions.navigate_to_channels(self)
+
     def setNeedleRadiusAll(self):
         needles = []
         for needle in self.needles.channels:

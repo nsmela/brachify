@@ -77,11 +77,16 @@ class UIFunctions(MainWindow):
         
         # offset each point
         if self.brachyCylinder:
-            V2 = np.array([0,0,1])
-            cyl_vec = np.array(self.brachyCylinder.tip) - np.array(self.brachyCylinder.base)
+            V2 = np.array([0,0,1]) # z axis reference, the direction we want the cylinder and needles to go
+            tip = np.array(self.brachyCylinder.tip)
+            base = np.array(self.brachyCylinder.base)
+            cyl_vec =  tip - base # the cylinder's original vector
+            cyl_length = np.linalg.norm(cyl_vec)
+            offset_vector = np.array([0,0, - cyl_length]) # normalized direction from tip to base
             for i, c in enumerate(channels):
-                newpoints = np.array(c.rawPoints) - self.brachyCylinder.base
+                newpoints = np.array(c.rawPoints) - base
                 newpoints = Rotate_Cloud(newpoints, cyl_vec, V2)
+                newpoints = newpoints - offset_vector
                 channels[i].points = list(list(points) for points in newpoints)
         self.needles = NeedlesModel(channels=channels)
         #self.ui.channelsListView.setModel(self.needles)

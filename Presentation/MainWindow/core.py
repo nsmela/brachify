@@ -82,8 +82,11 @@ class MainWindow(QMainWindow):
         ########################################################################
         from Presentation.Features.needle_functions import NeedleFunctions
         self.needles = NeedlesModel()
+        self.isCylinderHidden = False;
+        self.ui.checkBox_hide_cylinder.stateChanged.connect(lambda: NeedleFunctions.setCylinderVisibility(self))
         self.ui.channelsListWidget.itemSelectionChanged.connect( 
             lambda: NeedleFunctions.setActiveNeedleChannel(self, self.ui.channelsListWidget.currentRow()))
+        
 
         ## Display variables
         ########################################################################

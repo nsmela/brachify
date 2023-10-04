@@ -122,7 +122,7 @@ class DisplayFunctions(MainWindow):
             self.display.EraseAll()
 
             # cylinder shown
-            if self.brachyCylinder:
+            if not self.isCylinderHidden and self.brachyCylinder:
                 shape = self.display_cylinder
                 self.display.DisplayShape(shapes=shape, material=Graphic3d_NOM_TRANSPARENT)
 
