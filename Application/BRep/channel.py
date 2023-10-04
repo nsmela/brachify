@@ -127,5 +127,16 @@ def generate_stacked_fused(points, diameter: float = 3.00):
 
     return pipe
 
-def generate_curved_channel(channel: NeedleChannel, diameter: float = 3.0) -> TopoDS_Shape:
-    pass
+def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diameter: float = 3.0) -> TopoDS_Shape:
+    # offset points using z axis and cylinder's offset
+    
+    # convert [x, y, z] to gp_Pnt(x, y, z)
+    array = []
+    for point in channel.points:
+        array.append(gp_Pnt(point[0], point[1], point[2]))
+    
+    # generate starting point on top (cone?)
+    # for each (after the first), create a sphere and cylinder to next point to join
+    # add a curved pipe downwards using offset length and direction of last two points
+    # add a cylinder from pipe to past bottom of cylinder 
+    
