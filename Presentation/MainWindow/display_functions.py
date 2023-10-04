@@ -116,7 +116,7 @@ class DisplayFunctions(MainWindow):
         # set display
         self.display.SetSelectionModeShape()
         self.display._select_callbacks = []
-        self.display.register_select_callback(lambda shape, *args: DisplayFunctions.selectShape(self, shape, args))
+        self.display.register_select_callback(lambda shape, *args: DisplayFunctions.selectNeedle(self, shape))
 
         try:
             self.display.EraseAll()
@@ -264,3 +264,11 @@ class DisplayFunctions(MainWindow):
                             self.needles_active_index = i
                         print("needle single!")
                         DisplayFunctions.navigate_to_channels(self)
+    
+    def selectNeedle(self, shapes):
+        from Presentation.Features.needle_functions import NeedleFunctions
+        index = -1
+        if len(shapes) > 0:
+            index  = NeedleFunctions.get_clicked_needle_index(self, shapes[0])
+        self.needles_active_index = index
+        DisplayFunctions.navigate_to_channels(self)

@@ -82,7 +82,8 @@ class MainWindow(QMainWindow):
         ########################################################################
         from Presentation.Features.needle_functions import NeedleFunctions
         self.needles = NeedlesModel()
-        self.ui.channelsListWidget.itemSelectionChanged.connect(lambda: NeedleFunctions.channelSelectionChanged(self))
+        self.ui.channelsListWidget.itemSelectionChanged.connect( 
+            lambda: NeedleFunctions.setActiveNeedleChannel(self, self.ui.channelsListWidget.currentRow()))
 
         ## Display variables
         ########################################################################

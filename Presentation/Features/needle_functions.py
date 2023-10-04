@@ -14,8 +14,19 @@ class NeedleFunctions(MainWindow):
     self.needles_active_index: the current active needle channel
     '''
     
-    def setActiveNeedleChannel(self):
-        pass
+    def setActiveNeedleChannelWithList(self, indexes):
+        index = -1
+        if indexes:
+            index = indexes[0]
+        NeedleFunctions.setActiveNeedleChannel(self, index)
+
+
+    def setActiveNeedleChannel(self, index:int = -1) -> None:
+        self.needles_active_index = index
+        if len(self.ui.channelsListWidget.selectedIndexes()) < 1 or \
+            index != self.ui.channelsListWidget.selectedIndexes()[0].row():
+            self.ui.channelsListWidget.setCurrentRow(index)
+        DisplayFunctions.navigate_to_channels(self)
     
     def setNeedleRadiusAll(self):
         needles = []
@@ -25,34 +36,13 @@ class NeedleFunctions(MainWindow):
         self.needles.channels = needles
         NeedleFunctions.__recalculate__(self)
 
-    def setActiveNeedleIndex(self):
-        index = self.ui.channelsListView.selectedIndexes()[0].row()
-        self.needles_active_index = index
-        NeedleFunctions.__recalculate__(self)
+    def get_clicked_needle_index(self, shape) -> int:
+        for i, needle in enumerate(self.display_needles_list):
+            if shape == needle:
+                return i
 
-    def selectChannel(self):
-        context = self.display.Context
-        shape = context.SelectedShape()
-
-
-        print(shape)
-        if shape == self.display_cylinder:
-            print("cylinder!")
-        
-
-        
-    def channelSelected(item: QListWidgetItem):
-        print("Needle selected in needle channel list view!")
-        print(item.text())
-        print("Row: " + item.row())
-        
-    def channelSelectionChanged(self):
-        index = self.ui.channelsListWidget.selectedIndexes()[0].row()
-        label = self.ui.channelsListWidget.selectedItems()[0].text()
-        print(label + ": " + str(index))
-        self.needles_active_index = index 
-        DisplayFunctions.navigate_to_channels(self)
-        
+        return -1
+    
     def __recalculate__(self):
         '''
         Called after the Needle Channels are changed.
