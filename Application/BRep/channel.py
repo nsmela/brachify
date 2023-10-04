@@ -84,7 +84,7 @@ def generate_fused(points):
     return BRepAlgoAPI_Fuse(result, pipe2).Shape()
 
 
-def generate_stacked_fused(points):
+def generate_stacked_fused(points, diameter: float = 3.00):
     # ref: https://stackoverflow.com/questions/47163841/pythonocc-opencascade-create-pipe-along-straight-lines-through-points-profile
     # using the cylinders for the tube and spheres for the connections
     from OCC.Core.gp import gp_Pnt, gp_Circ, gp_Ax2, gp_Dir
@@ -100,7 +100,6 @@ def generate_stacked_fused(points):
     array.append(gp_Pnt(points[-1][0], points[-1][1], -1.0))
 
     # generate cylinders
-    radius = 1.60
     pipes = []
     for i in range(len(array) - 1):
         edge = BRepBuilderAPI_MakeEdge(array[i], array[i + 1]).Edge()
@@ -113,7 +112,7 @@ def generate_stacked_fused(points):
             array[i + 1].Y() - array[i].Y(),
             array[i + 1].Z() - array[i].Z()
         )
-        circle = gp_Circ(gp_Ax2(array[i], direction), radius)
+        circle = gp_Circ(gp_Ax2(array[i], direction), diameter / 2)
         profile_edge = BRepBuilderAPI_MakeEdge(circle).Edge()
         profile_wire = BRepBuilderAPI_MakeWire(profile_edge).Wire()
         profile_face = BRepBuilderAPI_MakeFace(profile_wire).Face()
@@ -122,7 +121,7 @@ def generate_stacked_fused(points):
     # fuse pipes with a sphere at each joining point
     pipe = pipes[0]
     for i in range(len(array) - 1):
-        sphere = BRepPrimAPI_MakeSphere(array[i], radius).Shape()
+        sphere = BRepPrimAPI_MakeSphere(array[i], diameter / 2).Shape()
         pipe = BRepAlgoAPI_Fuse(pipe, sphere).Shape()
         pipe = BRepAlgoAPI_Fuse(pipe, pipes[i]).Shape()
 

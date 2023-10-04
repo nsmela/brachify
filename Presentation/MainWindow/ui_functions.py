@@ -6,6 +6,7 @@
 ##
 ################################################################################
 from turtle import Vec2D
+from typing import Self
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut
 from PyQt5.QtCore import QPropertyAnimation
 from PyQt5 import QtCore
@@ -89,17 +90,18 @@ class UIFunctions(MainWindow):
                 newpoints = newpoints - offset_vector
                 channels[i].points = list(list(points) for points in newpoints)
         self.needles = NeedlesModel(channels=channels)
-        #self.ui.channelsListView.setModel(self.needles)
         for needle in self.needles.channels:
             self.ui.channelsListWidget.addItem(needle.channelId)
 
-        self.display_needles = []
-        for channel in self.needles.channels:
-            if self.display_needles:
-                self.display_needles = BRepAlgoAPI_Fuse(self.display_needles, generate_stacked_fused(channel.points)).Shape()
-            else:
-                self.display_needles = generate_stacked_fused(channel.points)
+        diameter = 3.00
+        #self.display_needles = []
+        #for channel in self.needles.channels:
+        #    if self.display_needles:
+        #        self.display_needles = BRepAlgoAPI_Fuse(self.display_needles, generate_stacked_fused(channel.points, radius)).Shape()
+        #    else:
+        #        self.display_needles = generate_stacked_fused(channel.points, radius)
         
+        self.ui.channelDiameterSpinBox.setValue(diameter)
         NeedleFunctions.__recalculate__(self)
         UIFunctions.setPage(self, 2)
         

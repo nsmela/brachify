@@ -25,14 +25,6 @@ class NeedleFunctions(MainWindow):
         self.isCylinderHidden = self.ui.checkBox_hide_cylinder.isChecked()
         DisplayFunctions.navigate_to_channels(self)
 
-    def setNeedleRadiusAll(self):
-        needles = []
-        for needle in self.needles.channels:
-            needles.append(NeedleChannel(
-                number=needle.channelNumber, id=needle.channelID, points=needle.points, diameter=self.ui.channelRadiusSpinBox.value()))
-        self.needles.channels = needles
-        NeedleFunctions.__recalculate__(self)
-
     def get_clicked_needle_index(self, shape) -> int:
         for i, needle in enumerate(self.display_needles_list):
             if shape == needle:
@@ -49,11 +41,11 @@ class NeedleFunctions(MainWindow):
         the needles list is used only for channels view
         the fused model is used in all other views and to boolean subtract
         '''
-        
+        diameter = self.ui.channelDiameterSpinBox.value()
         self.display_needles_list = []
         self.display_needles = None
         for needle in self.needles.channels:
-            shape = generate_stacked_fused(needle.points)
+            shape = generate_stacked_fused(needle.points, diameter)
             self.display_needles_list.append(shape)
             if self.display_needles:
                 self.display_needles = BRepAlgoAPI_Fuse(self.display_needles, shape).Shape()
