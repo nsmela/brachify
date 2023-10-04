@@ -102,7 +102,7 @@ class UIFunctions(MainWindow):
         #        self.display_needles = generate_stacked_fused(channel.points, radius)
         
         self.ui.channelDiameterSpinBox.setValue(diameter)
-        NeedleFunctions.__recalculate__(self)
+        NeedleFunctions.recalculate(self)
         UIFunctions.setPage(self, 2)
         
     def add_tandem_file(self, filepath: str) -> None:

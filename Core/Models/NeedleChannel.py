@@ -5,6 +5,8 @@ class NeedleChannel:
         self.channelId = id
         self.points = points
         self.rawPoints = points
+        self.isExtended = False
+        self.curve_downwards = 0
 
     def toDict(self):
         return {"Channel Number": self.channelNumber, "Channel ID": self.channelId, "Points": self.points}

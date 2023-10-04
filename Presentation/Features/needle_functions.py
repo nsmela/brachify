@@ -32,7 +32,7 @@ class NeedleFunctions(MainWindow):
 
         return -1
     
-    def __recalculate__(self):
+    def recalculate(self):
         '''
         Called after the Needle Channels are changed.
         Generates each channel's shape and saves them in self.display_needles_list

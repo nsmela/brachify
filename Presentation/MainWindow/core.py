@@ -84,7 +84,7 @@ class MainWindow(QMainWindow):
         self.needles = NeedlesModel()
         self.isCylinderHidden = False;
         self.ui.checkBox_hide_cylinder.stateChanged.connect(lambda: NeedleFunctions.setCylinderVisibility(self))
-        self.ui.channelDiameterSpinBox.valueChanged.connect(lambda: NeedleFunctions.__recalculate__(self))
+        self.ui.channelDiameterSpinBox.valueChanged.connect(lambda: NeedleFunctions.recalculate(self))
         self.ui.channelsListWidget.itemSelectionChanged.connect( 
             lambda: NeedleFunctions.setActiveNeedleChannel(self, self.ui.channelsListWidget.currentRow()))
         

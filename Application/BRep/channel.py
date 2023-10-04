@@ -4,7 +4,13 @@ from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakePipe
 from OCC.Core.Geom import Geom_BezierCurve
 from OCC.Core.TColgp import TColgp_Array1OfPnt
 from OCC.Core.gp import gp_Pnt, gp_Pln, gp_Dir, gp_Circ, gp_Ax2
-
+from OCC.Core.gp import gp_Pnt, gp_Circ, gp_Ax2, gp_Dir
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeSphere
+from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakePipe
+from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
+from OCC.Core.TopoDS import TopoDS_Shape
+from Core.Models.NeedleChannel import NeedleChannel
 
 def generate_fused(points):
     # creates three solids and fuses them together:
@@ -87,12 +93,6 @@ def generate_fused(points):
 def generate_stacked_fused(points, diameter: float = 3.00):
     # ref: https://stackoverflow.com/questions/47163841/pythonocc-opencascade-create-pipe-along-straight-lines-through-points-profile
     # using the cylinders for the tube and spheres for the connections
-    from OCC.Core.gp import gp_Pnt, gp_Circ, gp_Ax2, gp_Dir
-    from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace
-    from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeSphere
-    from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakePipe
-    from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
-
     # convert [x, y, z] to gp_Pnt(x, y, z)
     array = []
     for point in points:
@@ -126,3 +126,6 @@ def generate_stacked_fused(points, diameter: float = 3.00):
         pipe = BRepAlgoAPI_Fuse(pipe, pipes[i]).Shape()
 
     return pipe
+
+def generate_curved_channel(channel: NeedleChannel, diameter: float = 3.0) -> TopoDS_Shape:
+    pass
