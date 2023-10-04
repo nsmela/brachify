@@ -57,7 +57,7 @@ class MainWindow(QMainWindow):
         self.ais_box = self.display.DisplayShape(a_box)[0]
         self.display.display_triedron()
         self.display.FitAll()
-        
+
         ## Imports Functions
         ########################################################################
         from Presentation.Features.Imports.Commands import  ImportFunctions
@@ -82,7 +82,6 @@ class MainWindow(QMainWindow):
         ########################################################################
         from Presentation.Features.needle_functions import NeedleFunctions
         self.needles = NeedlesModel()
-        #self.ui.channelsListView.setModel(self.needles)
         self.ui.channelsListWidget.itemSelectionChanged.connect(lambda: NeedleFunctions.channelSelectionChanged(self))
 
         ## Display variables

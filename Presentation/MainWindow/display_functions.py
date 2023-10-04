@@ -5,6 +5,7 @@
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
+from OCC.Core.TopoDS import TopoDS_Shape
 
 
 from Presentation.MainWindow.core import MainWindow
@@ -107,6 +108,7 @@ class DisplayFunctions(MainWindow):
     def navigate_to_channels(self):
         from Presentation.Features.needle_functions import NeedleFunctions
         # variables
+        self.ui.channelsListWidget.setCurrentRow(self.needles_active_index)
 
         # set page
         self.ui.stackedWidget.setCurrentIndex(2)
@@ -114,7 +116,7 @@ class DisplayFunctions(MainWindow):
         # set display
         self.display.SetSelectionModeShape()
         self.display._select_callbacks = []
-        self.display.register_select_callback(NeedleFunctions.selectChannel)
+        self.display.register_select_callback(lambda shape, *args: DisplayFunctions.selectShape(self, shape, args))
 
         try:
             self.display.EraseAll()
@@ -151,7 +153,8 @@ class DisplayFunctions(MainWindow):
             print(error_message)
 
         try:
-            self.display.FitAll()
+            #self.display.FitAll()
+            self.display.Repaint()
         except Exception as error_message:
             print(error_message)
 
@@ -244,3 +247,20 @@ class DisplayFunctions(MainWindow):
             self.display.FitAll()
         except Exception as error_message:
             print(error_message)
+            
+    def selectShape(self, shape, *kwargs) -> None:
+        print(kwargs) # x and y of mouse click
+        for s in shape:
+            if s == self.display_cylinder:
+                print("cylinder!")
+            elif s == self.display_needles:
+                print("needle group!")
+            else:
+                for i, needle in enumerate(self.display_needles_list):
+                    if s == needle:
+                        if i == self.needles_active_index:
+                            self.needles_active_index = -1
+                        else:
+                            self.needles_active_index = i
+                        print("needle single!")
+                        DisplayFunctions.navigate_to_channels(self)

@@ -1,0 +1,5 @@
+# customize the display
+https://github.com/tpaviot/pythonocc-demos/blob/master/examples/core_display_customize_prs3d.py
+
+# materials:
+https://github.com/tpaviot/pythonocc-demos/blob/master/examples/core_display_material_shape.py
