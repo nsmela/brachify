@@ -1,2 +1,2 @@
-# Modern-GUI-PyQt5
-boilderplate for a modern python app
+# BrachyApp-PyQt5
+DICOM goes in, brachy applicator comes out.
