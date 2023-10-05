@@ -253,6 +253,7 @@ class DisplayFunctions(MainWindow):
             color = Quantity_Color(0.8, 0.1, 0.1, Quantity_TOC_RGB)
             self.display.DisplayShape(shapes=shape, color=color, material=Graphic3d_NOM_TRANSPARENT)
             self.display.FitAll()
+            self.display_export = shape
         except Exception as error_message:
             print(error_message)
             

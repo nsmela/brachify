@@ -356,6 +356,7 @@ class Ui_MainWindow(object):
         self.channelsListWidget.setObjectName("channelsListWidget")
         self.verticalLayout_8.addWidget(self.channelsListWidget, 0, QtCore.Qt.AlignLeft)
         self.groupBox_5 = QtWidgets.QGroupBox(self.page_3)
+        self.groupBox_5.setEnabled(True)
         self.groupBox_5.setObjectName("groupBox_5")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.groupBox_5)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -463,9 +464,9 @@ class Ui_MainWindow(object):
         self.label_16 = QtWidgets.QLabel(self.page_5)
         self.label_16.setObjectName("label_16")
         self.verticalLayout_9.addWidget(self.label_16)
-        self.btn_export_file = QtWidgets.QPushButton(self.page_5)
-        self.btn_export_file.setObjectName("btn_export_file")
-        self.verticalLayout_9.addWidget(self.btn_export_file)
+        self.btn_export_stl = QtWidgets.QPushButton(self.page_5)
+        self.btn_export_stl.setObjectName("btn_export_stl")
+        self.verticalLayout_9.addWidget(self.btn_export_stl)
         spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_9.addItem(spacerItem4)
         self.stackedWidget.addWidget(self.page_5)
@@ -483,7 +484,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -521,7 +522,7 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "export"))
         self.label_12.setText(_translate("MainWindow", "Info"))
         self.label_16.setText(_translate("MainWindow", "Data"))
-        self.btn_export_file.setText(_translate("MainWindow", "export file"))
+        self.btn_export_stl.setText(_translate("MainWindow", "export STL"))
 
 
 if __name__ == "__main__":

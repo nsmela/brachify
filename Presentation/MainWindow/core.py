@@ -1,3 +1,4 @@
+from email.mime import application
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QAbstractItemView, QMainWindow
 
@@ -100,6 +101,11 @@ class MainWindow(QMainWindow):
         self.needles_active_index = -1
         self.display_tandem = None
         self.display_export = None
+        
+        ## Exports
+        ########################################################################
+        from Presentation.Features.Exports.Commands import ExportFunctions
+        self.ui.btn_export_stl.clicked.connect(lambda: ExportFunctions.export_stl(self))
 
     # https://github.com/tpaviot/pythonocc-demos/issues/72#event-10551747046
     def showProperly(self):

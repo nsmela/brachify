@@ -368,7 +368,7 @@ QPushButton:hover {
              <bool>false</bool>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>4</number>
             </property>
             <widget class="QWidget" name="page_1">
              <property name="acceptDrops">
@@ -880,6 +880,9 @@ QPushButton:hover {
               </item>
               <item>
                <widget class="QGroupBox" name="groupBox_5">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
                 <property name="title">
                  <string>Individual Settings</string>
                 </property>
@@ -1142,9 +1145,9 @@ QPushButton:hover {
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="btn_export_file">
+               <widget class="QPushButton" name="btn_export_stl">
                 <property name="text">
-                 <string>export file</string>
+                 <string>export STL</string>
                 </property>
                </widget>
               </item>
