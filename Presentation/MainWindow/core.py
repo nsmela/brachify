@@ -75,11 +75,12 @@ class MainWindow(QMainWindow):
         ## Cylinder Stuff
         ########################################################################
         from Presentation.Features.cylinder_functions import CylinderFunctions
+        import Presentation.Features.Cylinder.CylinderCommands as cylinder
         self.brachyCylinder = None  
         
-        self.ui.cylinderRadiusSpinBox.valueChanged.connect(lambda: CylinderFunctions.setRadius(self))
-        self.ui.cylinderLengthSpinBox.valueChanged.connect(lambda: CylinderFunctions.setLength(self))
-        self.ui.checkbox_cylinder_base.toggled.connect(lambda: CylinderFunctions.setBase(self))
+        self.ui.cylinderRadiusSpinBox.valueChanged.connect(lambda: cylinder.setRadius(self))
+        self.ui.cylinderLengthSpinBox.valueChanged.connect(lambda: cylinder.setLength(self))
+        self.ui.checkbox_cylinder_base.toggled.connect(lambda: cylinder.setBase(self))
 
         ## Needle Channel Stuff
         ########################################################################
