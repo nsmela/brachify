@@ -251,7 +251,7 @@ class DisplayFunctions(MainWindow):
 
         try:
             color = Quantity_Color(0.8, 0.1, 0.1, Quantity_TOC_RGB)
-            self.display.DisplayColoredShape(shapes=shape, color=color)
+            self.display.DisplayShape(shapes=shape, color=color, material=Graphic3d_NOM_TRANSPARENT)
             self.display.FitAll()
         except Exception as error_message:
             print(error_message)
