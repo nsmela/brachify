@@ -190,8 +190,17 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
     pipe_bend = BRepOffsetAPI_MakePipe(wire, face).Shape()
     pipe = BRepAlgoAPI_Fuse(pipe, pipe_bend).Shape()
     
-    return pipe
     # add a cylinder from pipe to past bottom of cylinder 
+    base_point = gp_Pnt(p3.X(), p3.Y(), -0.01)
+    face = helper.get_lowest_face(pipe_bend)
+    edge = BRepBuilderAPI_MakeEdge(p3, base_point).Edge()
+    makeWire = BRepBuilderAPI_MakeWire(edge)
+    makeWire.Build()
+    wire = makeWire.Wire()
+    cylinder = BRepOffsetAPI_MakePipe(wire, face).Shape()
+    pipe = BRepAlgoAPI_Fuse(pipe, cylinder).Shape()
+
+    return pipe
     
 # def generate_fused(points):
 #     # creates three solids and fuses them together:
