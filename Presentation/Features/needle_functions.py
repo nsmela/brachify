@@ -1,7 +1,7 @@
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.TopoDS import TopoDS_Shape
 from PyQt5.QtWidgets import QListWidgetItem
-from Application.BRep.channel import generate_stacked_fused
+from Application.BRep.channel import generate_stacked_fused, generate_curved_channel
 from Presentation.MainWindow.core import MainWindow
 from Presentation.MainWindow.display_functions import DisplayFunctions
 from Core.Models.NeedleChannel import NeedleChannel
@@ -46,6 +46,10 @@ class NeedleFunctions(MainWindow):
         self.display_needles = None
         for needle in self.needles.channels:
             shape = generate_stacked_fused(needle.points, diameter)
+            shape = generate_curved_channel(
+                channel=needle, 
+                cylinder_offset= self.ui.cylinderLengthSpinBox.value() - 200.0,
+                diameter=self.ui.channelDiameterSpinBox.value())
             self.display_needles_list.append(shape)
             if self.display_needles:
                 self.display_needles = BRepAlgoAPI_Fuse(self.display_needles, shape).Shape()
