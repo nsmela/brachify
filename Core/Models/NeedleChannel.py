@@ -10,5 +10,8 @@ class NeedleChannel:
 
     def toDict(self):
         return {"Channel Number": self.channelNumber, "Channel ID": self.channelId, "Points": self.points}
+    
+    def toString(self):
+        return f"Channel {self.channelId} ({self.channelId}: Offset: {self.curve_downwards})"
 
         

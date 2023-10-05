@@ -1,7 +1,7 @@
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.TopoDS import TopoDS_Shape
 from PyQt5.QtWidgets import QListWidgetItem
-from Application.BRep.channel import generate_stacked_fused, generate_curved_channel
+from Application.BRep.channel import generate_curved_channel
 from Presentation.MainWindow.core import MainWindow
 from Presentation.MainWindow.display_functions import DisplayFunctions
 from Core.Models.NeedleChannel import NeedleChannel
@@ -21,7 +21,7 @@ class NeedleFunctions(MainWindow):
             self.ui.channelsListWidget.setCurrentRow(index)
         DisplayFunctions.navigate_to_channels(self)
     
-    def setCylinderVisibility(self):
+    def setCylinderVisibility(self) -> None:
         self.isCylinderHidden = self.ui.checkBox_hide_cylinder.isChecked()
         DisplayFunctions.navigate_to_channels(self)
 
@@ -32,6 +32,22 @@ class NeedleFunctions(MainWindow):
 
         return -1
     
+    def setChannelOffset(self, offset:int) -> None:
+        index = self.needles_active_index
+        if index < 0:
+            return
+        
+        old_value = self.ui.slider_needle_extension.value()
+        if old_value != offset:
+            self.ui.slider_needle_extension.setValue(offset)
+            
+        channel = self.needles.channels[self.needles_active_index]
+        channel.curve_downwards = offset
+        for channel in self.needles.channels:
+            print(channel.toString())
+        
+        NeedleFunctions.recalculate(self)
+
     def recalculate(self):
         '''
         Called after the Needle Channels are changed.
@@ -45,7 +61,6 @@ class NeedleFunctions(MainWindow):
         self.display_needles_list = []
         self.display_needles = None
         for needle in self.needles.channels:
-            shape = generate_stacked_fused(needle.points, diameter)
             shape = generate_curved_channel(
                 channel=needle, 
                 cylinder_offset= self.ui.cylinderLengthSpinBox.value() - 200.0,

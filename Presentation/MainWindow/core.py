@@ -87,7 +87,9 @@ class MainWindow(QMainWindow):
         self.ui.channelDiameterSpinBox.valueChanged.connect(lambda: NeedleFunctions.recalculate(self))
         self.ui.channelsListWidget.itemSelectionChanged.connect( 
             lambda: NeedleFunctions.setActiveNeedleChannel(self, self.ui.channelsListWidget.currentRow()))
-        
+        self.ui.groupBox_5.setEnabled(False)
+        self.ui.slider_needle_extension.valueChanged.connect(lambda: NeedleFunctions.setChannelOffset(self, 
+                                           self.ui.slider_needle_extension.value()))
 
         ## Display variables
         ########################################################################

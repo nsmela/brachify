@@ -111,6 +111,14 @@ class DisplayFunctions(MainWindow):
         self.ui.channelsListWidget.setCurrentRow(self.needles_active_index)
 
         # set page
+        if self.needles_active_index >= 0:
+            self.ui.groupBox_5.setEnabled(True) 
+            channel = self.needles.channels[self.needles_active_index]
+            self.ui.slider_needle_extension.setValue(channel.curve_downwards)
+        else:
+            self.ui.groupBox_5.setEnabled(False) 
+            self.ui.slider_needle_extension.setValue(0)
+            
         self.ui.stackedWidget.setCurrentIndex(2)
         
         # set display
