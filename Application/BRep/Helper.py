@@ -42,9 +42,7 @@ def get_faces(shape: TopoDS_Shape) -> list[TopoDS_Face]:
             a_plane = geom_plane_from_face(face)
             faces.append([face, a_plane.Location().Z()]) # face with it's z height
         explorer.Next()
-    print(faces)
     faces.sort(key=sortByZ)
-    print(faces)
     return faces
 
 

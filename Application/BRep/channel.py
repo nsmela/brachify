@@ -145,7 +145,7 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
     
     radius = diameter /2 
     
-    # generate starting point on top (cone?)
+    # generate starting point on top (cone)
     p1 = points[0]
     p2 = points[1]
     vector = np.array([channel.points[1][0], channel.points[1][1], channel.points[1][2]]) \
@@ -170,8 +170,25 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
         face = helper.get_lowest_face(cylinder)
 
     # add a curved pipe downwards using offset length and direction of last two points
+    vector = helper.get_vector(points[-2], points[-1], length)
+    p1 = points[-1]
+    p2 = gp_Pnt(p1.X() + vector.X(), p1.Y() + vector.Y(), p1.Z() + vector.Z())
+    p3 = gp_Pnt(p2.X(), p2.Y(), p2.Z() - length)
     
+    # curve joining two straight paths
+    array = TColgp_Array1OfPnt(1, 3)
+    array.SetValue(1, p1)
+    array.SetValue(2, p2)
+    array.SetValue(3, p3)
+    bz_curve = Geom_BezierCurve(array)
+    bend_edge = BRepBuilderAPI_MakeEdge(bz_curve).Edge()
     
+    # assembling the path
+    wire = BRepBuilderAPI_MakeWire(bend_edge).Wire()
+    
+    # shape using last face
+    pipe_bend = BRepOffsetAPI_MakePipe(wire, face).Shape()
+    pipe = BRepAlgoAPI_Fuse(pipe, pipe_bend).Shape()
     
     return pipe
     # add a cylinder from pipe to past bottom of cylinder 
