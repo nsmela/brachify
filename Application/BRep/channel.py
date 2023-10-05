@@ -140,3 +140,81 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
     # add a curved pipe downwards using offset length and direction of last two points
     # add a cylinder from pipe to past bottom of cylinder 
     
+# def generate_fused(points):
+#     # creates three solids and fuses them together:
+#     # tip of channel to where the curve will begin
+#     # curved section
+#     # path to outside the channel
+
+#     from OCC.Core.gp import gp_Pnt, gp_Pln, gp_Dir, gp_Circ, gp_Ax2
+
+#     # converting points array into gp_Pnt array
+#     p1 = gp_Pnt(points[0][0], points[0][1], points[0][2])
+#     p2 = gp_Pnt(points[-2][0], points[-2][1], points[-2][2])  # end of first straight path, start of curve
+#     p3 = gp_Pnt(points[-1][0], points[-1][1], points[-1][2])  # middle of curve
+#     p4 = gp_Pnt(points[-1][0], points[-1][1], points[-1][2] - 3.0)  # end of curve, start of second straight path
+#     p5 = gp_Pnt(points[-1][0], points[-1][1], -1.0)  # end of second straight path directly downwards
+
+#     # pipe 1
+#     radius = 1.60
+#     edge = BRepBuilderAPI_MakeEdge(p1, p2).Edge()
+#     makeWire = BRepBuilderAPI_MakeWire(edge)
+#     makeWire.Build()
+#     wire = makeWire.Wire()
+
+#     direction = gp_Dir(
+#         p2.X() - p1.X(),
+#         p2.Y() - p1.Y(),
+#         p2.Z() - p1.Z()
+#     )
+#     circle = gp_Circ(gp_Ax2(p1, direction), radius)
+#     profile_edge = BRepBuilderAPI_MakeEdge(circle).Edge()
+#     profile_wire = BRepBuilderAPI_MakeWire(profile_edge).Wire()
+#     profile_face = BRepBuilderAPI_MakeFace(profile_wire).Face()
+#     pipe1 = BRepOffsetAPI_MakePipe(wire, profile_face).Shape()
+
+#     # pipe bend
+#     # curve joining two straight paths
+#     array = TColgp_Array1OfPnt(1, 3)
+#     array.SetValue(1, p2)
+#     array.SetValue(2, p3)
+#     array.SetValue(3, p4)
+#     bz_curve = Geom_BezierCurve(array)
+#     bend_edge = BRepBuilderAPI_MakeEdge(bz_curve).Edge()
+
+#     # assembling the path
+#     wire = BRepBuilderAPI_MakeWire(bend_edge).Wire()
+
+#     # profile
+#     direction = gp_Dir(
+#         p3.X() - p2.X(),
+#         p3.Y() - p2.Y(),
+#         p3.Z() - p2.Z()
+#     )
+#     circle = gp_Circ(gp_Ax2(p2, direction), radius)
+#     profile_edge = BRepBuilderAPI_MakeEdge(circle).Edge()
+#     profile_wire = BRepBuilderAPI_MakeWire(profile_edge).Wire()
+#     profile_face = BRepBuilderAPI_MakeFace(profile_wire).Face()
+
+#     pipe_bend = BRepOffsetAPI_MakePipe(wire, profile_face).Shape()
+
+#     # pipe 2
+#     edge = BRepBuilderAPI_MakeEdge(p4, p5).Edge()
+#     makeWire = BRepBuilderAPI_MakeWire(edge)
+#     makeWire.Build()
+#     wire = makeWire.Wire()
+
+#     direction = gp_Dir(
+#         p5.X() - p4.X(),
+#         p5.Y() - p4.Y(),
+#         p5.Z() - p4.Z()
+#     )
+#     circle = gp_Circ(gp_Ax2(p4, direction), radius)
+#     profile_edge = BRepBuilderAPI_MakeEdge(circle).Edge()
+#     profile_wire = BRepBuilderAPI_MakeWire(profile_edge).Wire()
+#     profile_face = BRepBuilderAPI_MakeFace(profile_wire).Face()
+#     pipe2 = BRepOffsetAPI_MakePipe(wire, profile_face).Shape()
+
+#     # result
+#     result = BRepAlgoAPI_Fuse(pipe1, pipe_bend).Shape()
+#     return BRepAlgoAPI_Fuse(result, pipe2).Shape()

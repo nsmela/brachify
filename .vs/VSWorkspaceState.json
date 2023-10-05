@@ -1,15 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Core",
-    "\\Core\\Models",
-    "\\notes",
-    "\\Presentation",
-    "\\Presentation\\Features",
-    "\\Presentation\\Features\\Imports",
-    "\\Presentation\\Features\\NeedleChannels",
-    "\\Presentation\\MainWindow"
+    ""
   ],
-  "SelectedNode": "\\notes\\display.txt",
   "PreviewInSolutionExplorer": false
 }
