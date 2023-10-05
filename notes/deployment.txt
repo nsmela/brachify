@@ -1,2 +1,5 @@
 # Youtube
 https://www.youtube.com/watch?v=p3tSLatmGvU
+
+# course
+https://www.classcentral.com/classroom/youtube-pyqt5-pyqt6-tutorial-create-gui-with-python-92283/6299980b13eb4
