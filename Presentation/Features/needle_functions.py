@@ -48,6 +48,15 @@ class NeedleFunctions(MainWindow):
         
         NeedleFunctions.recalculate(self)
 
+    def setNeedleDisabled(self):
+        index = self.needles_active_index
+        if index < 0:
+            return
+        
+        channel = self.needles.channels[self.needles_active_index]
+        channel.disabled = not channel.disabled
+        NeedleFunctions.recalculate(self)
+
     def recalculate(self):
         '''
         Called after the Needle Channels are changed.
@@ -61,6 +70,8 @@ class NeedleFunctions(MainWindow):
         self.display_needles_list = []
         self.display_needles = None
         for needle in self.needles.channels:
+            if needle.disabled:
+                continue
             shape = generate_curved_channel(
                 channel=needle, 
                 cylinder_offset= self.ui.cylinderLengthSpinBox.value() - 200.0,

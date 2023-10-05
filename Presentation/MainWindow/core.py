@@ -90,6 +90,7 @@ class MainWindow(QMainWindow):
         self.ui.groupBox_5.setEnabled(False)
         self.ui.slider_needle_extension.valueChanged.connect(lambda: NeedleFunctions.setChannelOffset(self, 
                                            self.ui.slider_needle_extension.value()))
+        self.ui.btn_channel_disable.clicked.connect(lambda: NeedleFunctions.setNeedleDisabled(self))
 
         ## Display variables
         ########################################################################
