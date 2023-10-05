@@ -79,7 +79,7 @@ class DisplayFunctions(MainWindow):
                 self.display.DisplayColoredShape(shapes=shape, color=color)
 
         except Exception as error_message:
-            print(error_message)
+            print(f"ImportView: Cylinder load error: {error_message}")
 
         try: 
             # needles shown
@@ -88,7 +88,7 @@ class DisplayFunctions(MainWindow):
                 self.display.DisplayShape(shapes=self.display_needles, material=Graphic3d_NOM_TRANSPARENT)
 
         except Exception as error_message:
-            print(error_message)
+            print(f"ImportView: Channels load error: {error_message}")
 
         try: 
             # tandem
@@ -97,7 +97,7 @@ class DisplayFunctions(MainWindow):
                 self.display.DisplayShape(shapes=self.display_tandem, material=Graphic3d_NOM_TRANSPARENT)
 
         except Exception as error_message:
-            print(error_message)
+            print(f"ImportView: Tandem load error: {error_message}")
 
         try:
             self.display.FitAll()

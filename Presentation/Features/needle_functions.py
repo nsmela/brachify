@@ -66,6 +66,7 @@ class NeedleFunctions(MainWindow):
         the needles list is used only for channels view
         the fused model is used in all other views and to boolean subtract
         '''
+        print("Recalculating cchannels!")
         diameter = self.ui.channelDiameterSpinBox.value()
         self.display_needles_list = []
         self.display_needles = None

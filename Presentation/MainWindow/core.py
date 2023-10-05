@@ -59,13 +59,15 @@ class MainWindow(QMainWindow):
         self.display.display_triedron()
         self.display.FitAll()
 
+        self.isLocked = False # used to prevent recalculating during variable assignments
+        
         ## Imports Functions
         ########################################################################
-        from Presentation.Features.Imports.Commands import  ImportFunctions
+        import Presentation.Features.Imports.ImportCommands as imports
 
-        self.ui.btn_import_dicom_rs.clicked.connect(lambda: ImportFunctions.get_dicom_rs_file(self))
-        self.ui.btn_import_dicom_rp.clicked.connect(lambda: ImportFunctions.get_dicom_rp_file(self))
-        self.ui.btn_import_tandem.clicked.connect(lambda: ImportFunctions.get_tandem_file(self))
+        self.ui.btn_import_dicom_rs.clicked.connect(lambda: imports.get_dicom_rs_file(self))
+        self.ui.btn_import_dicom_rp.clicked.connect(lambda: imports.get_dicom_rp_file(self))
+        self.ui.btn_import_tandem.clicked.connect(lambda: imports.get_tandem_file(self))
         
         # drag and drop      
         self.ui.centralwidget.installEventFilter(self)
@@ -73,7 +75,7 @@ class MainWindow(QMainWindow):
         ## Cylinder Stuff
         ########################################################################
         from Presentation.Features.cylinder_functions import CylinderFunctions
-        self.brachyCylinder = BrachyCylinder(tip = [0, 0, 200], base = [0, 0, 0], radius = 10, expand_base= False)   
+        self.brachyCylinder = None  
         
         self.ui.cylinderRadiusSpinBox.valueChanged.connect(lambda: CylinderFunctions.setRadius(self))
         self.ui.cylinderLengthSpinBox.valueChanged.connect(lambda: CylinderFunctions.setLength(self))
@@ -82,7 +84,7 @@ class MainWindow(QMainWindow):
         ## Needle Channel Stuff
         ########################################################################
         from Presentation.Features.needle_functions import NeedleFunctions
-        self.needles = NeedlesModel()
+        self.needles = None
         self.isCylinderHidden = False;
         self.ui.checkBox_hide_cylinder.stateChanged.connect(lambda: NeedleFunctions.setCylinderVisibility(self))
         self.ui.channelDiameterSpinBox.valueChanged.connect(lambda: NeedleFunctions.recalculate(self))
@@ -104,8 +106,8 @@ class MainWindow(QMainWindow):
         
         ## Exports
         ########################################################################
-        from Presentation.Features.Exports.Commands import ExportFunctions
-        self.ui.btn_export_stl.clicked.connect(lambda: ExportFunctions.export_stl(self))
+        import Presentation.Features.Exports.ExportCommands as exports
+        self.ui.btn_export_stl.clicked.connect(lambda: exports.export_stl(self))
 
     # https://github.com/tpaviot/pythonocc-demos/issues/72#event-10551747046
     def showProperly(self):
@@ -116,7 +118,7 @@ class MainWindow(QMainWindow):
 
     # for dragging events
     def eventFilter(self, widget, event):
-        from Presentation.Features.Imports.Commands import ImportFunctions
+        import Presentation.Features.Imports.ImportCommands as imports
         
         if event.type() == QtCore.QEvent.Type.DragEnter:
             event.acceptProposedAction()
@@ -127,6 +129,6 @@ class MainWindow(QMainWindow):
         elif event.type() == QtCore.QEvent.Type.Drop:
             for url in event.mimeData().urls():
                 filepath = url.url().replace("file:///", "")
-                result = ImportFunctions.process_file(self, filepath)
+                result = imports.process_file(self, filepath)
             return True
         return False
