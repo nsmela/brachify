@@ -63,7 +63,7 @@ class MainWindow(QMainWindow):
         
         ## Imports Functions
         ########################################################################
-        import Presentation.Features.Imports.ImportCommands as imports
+        import Presentation.Features.Imports.ImportFunctions as imports
 
         self.ui.btn_import_dicom_rs.clicked.connect(lambda: imports.get_dicom_rs_file(self))
         self.ui.btn_import_dicom_rp.clicked.connect(lambda: imports.get_dicom_rp_file(self))
@@ -74,8 +74,7 @@ class MainWindow(QMainWindow):
         
         ## Cylinder Stuff
         ########################################################################
-        from Presentation.Features.cylinder_functions import CylinderFunctions
-        import Presentation.Features.Cylinder.CylinderCommands as cylinder
+        import Presentation.Features.Cylinder.CylinderFunctions as cylinder
         self.brachyCylinder = None  
         
         self.ui.cylinderRadiusSpinBox.valueChanged.connect(lambda: cylinder.setRadius(self))
@@ -119,7 +118,7 @@ class MainWindow(QMainWindow):
 
     # for dragging events
     def eventFilter(self, widget, event):
-        import Presentation.Features.Imports.ImportCommands as imports
+        import Presentation.Features.Imports.ImportFunctions as imports
         
         if event.type() == QtCore.QEvent.Type.DragEnter:
             event.acceptProposedAction()

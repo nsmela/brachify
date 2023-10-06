@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QFileDialog, QListWidget, QMainWindow
 
 from Presentation.MainWindow.core import MainWindow
 from Presentation.MainWindow.ui_functions import UIFunctions
-from Presentation.Features.cylinder_functions import CylinderFunctions
+import Presentation.Features.Cylinder.CylinderFunctions as cylinder
 from Presentation.Features.needle_functions import NeedleFunctions
 from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
 
@@ -74,7 +74,7 @@ def add_rs_file(window: MainWindow, filepath: str) -> None:
 
     window.display_cylinder = window.brachyCylinder.shape()
     window.isLocked = False
-    CylinderFunctions.recalculate(window)
+    cylinder.recalculate(window)
     UIFunctions.setPage(window, 1)
 
 
