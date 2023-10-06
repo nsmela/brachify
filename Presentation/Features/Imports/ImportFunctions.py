@@ -104,9 +104,9 @@ def add_rp_file(window: MainWindow, filepath: str) -> None:
     diameter = 3.00
         
     window.ui.channelDiameterSpinBox.setValue(diameter)
-    needles.recalculate(window)
     UIFunctions.setPage(window, 2)
-        
+
+
 def add_tandem_file(window: MainWindow, filepath: str) -> None:
     window.ui.lineedit_tandem.setText(filepath)
 

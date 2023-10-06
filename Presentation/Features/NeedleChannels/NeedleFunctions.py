@@ -42,10 +42,8 @@ def setChannelOffset(window: MainWindow, offset:int) -> None:
             
     channel = window.needles.channels[window.needles_active_index]
     channel.curve_downwards = offset
-    for channel in window.needles.channels:
-        print(channel.toString())
         
-    recalculate(window)
+    reshape(window, channel)
 
 def setNeedleDisabled(window: MainWindow):
     index = window.needles_active_index
@@ -72,14 +70,29 @@ def recalculate(window: MainWindow):
     for needle in window.needles.channels:
         if needle.disabled:
             continue
-        shape = generate_curved_channel(
+        needle.shape = generate_curved_channel(
             channel=needle, 
             cylinder_offset= window.ui.cylinderLengthSpinBox.value() - 200.0,
             diameter=window.ui.channelDiameterSpinBox.value())
-        window.display_needles_list.append(shape)
+        window.display_needles_list.append(needle.shape)
         if window.display_needles:
-            window.display_needles = BRepAlgoAPI_Fuse(window.display_needles, shape).Shape()
+            window.display_needles = BRepAlgoAPI_Fuse(window.display_needles, needle.shape).Shape()
         else:
-            window.display_needles = shape
+            window.display_needles = needle.shape
                 
     needlesDisplay.view(window)
+    
+def reshape(window: MainWindow, channel: NeedleChannel):
+    '''
+    Needle Channel shapes are saved within the NeedleChannel class
+    '''
+    
+    print("reshaping channels")
+    diameter = window.ui.channelDiameterSpinBox.value()
+    cylinder_offset= window.ui.cylinderLengthSpinBox.value() - 200.0
+    window.display_needles = None # can be recalulated later when needed
+    if channel.disabled:
+        channel.shape = None
+    else:
+        channel.shape = generate_curved_channel(channel=channel, cylinder_offset=cylinder_offset, diameter=diameter)
+    needlesDisplay.update(window)

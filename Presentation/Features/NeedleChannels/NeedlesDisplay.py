@@ -6,6 +6,11 @@ from Presentation.MainWindow.display_functions import DisplayFunctions
 from Presentation.MainWindow.core import MainWindow
 
 
+# def startView
+# def updateView
+# def endView
+
+
 ## NEEDLE CHANNELS
 def view(window: MainWindow) -> None:
     # variables
@@ -62,11 +67,53 @@ def view(window: MainWindow) -> None:
         print(error_message)
 
     try:
-        #self.display.FitAll()
+        window.display.FitAll()
         window.display.Repaint()
     except Exception as error_message:
         print(error_message)
 
+
+def update(window: MainWindow):
+    print("NeedlesDisplay: update!!")
+    # update view UI
+    if window.needles_active_index >= 0:
+        window.ui.groupBox_5.setEnabled(True) 
+        channel = window.needles.channels[window.needles_active_index]
+        window.ui.slider_needle_extension.setValue(channel.curve_downwards)
+    else:
+        window.ui.groupBox_5.setEnabled(False) 
+        window.ui.slider_needle_extension.setValue(0)
+    
+    try:
+        window.display.EraseAll()
+
+        # cylinder shown
+        if not window.isCylinderHidden and window.brachyCylinder:
+            shape = window.display_cylinder
+            window.display.DisplayShape(shapes=shape, material=Graphic3d_NOM_TRANSPARENT)
+
+    except Exception as error_message:
+        print(f"Needle Display _cylinder error: \n {error_message}")
+        
+    try: 
+        # needles shown
+        if window.needles is not None:
+            color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
+            selected_color = Quantity_Color(0.1, 0.4, 0.4, Quantity_TOC_RGB)
+            for i, channel in enumerate(window.needles.channels):
+                if i == window.needles_active_index:
+                    window.display.DisplayColoredShape(shapes=channel.shape, color=selected_color)
+                else:
+                    window.display.DisplayColoredShape(shapes=channel.shape, color=color)
+                    
+    except Exception as error_message:
+        print(f"Needle Display _needles error: \n {error_message}")
+        
+    try:
+        window.display.FitAll()
+        window.display.Repaint()
+    except Exception as error_message:
+        print(error_message)
 
 def selectNeedle(window: MainWindow, shapes):
     index = -1
