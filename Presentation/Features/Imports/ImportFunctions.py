@@ -1,15 +1,18 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QFileDialog, QListWidget, QMainWindow
 
+from OCC.Core.TopoDS import TopoDS_Shape
+
 from Presentation.MainWindow.core import MainWindow
 from Presentation.MainWindow.ui_functions import UIFunctions
-import Presentation.Features.Cylinder.CylinderFunctions as cylinder
-import Presentation.Features.NeedleChannels.NeedleFunctions as needles
+
 from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
 
 import Application.Imports.import_dicom_structure as dicom_structure
 import Application.Imports.import_dicom_planning as dicom_planning
 import Application.Imports.import_dicom as dicom
+
+from Core.Models.Tandem import Tandem
 
 import numpy as np
 
@@ -74,7 +77,7 @@ def add_rs_file(window: MainWindow, filepath: str) -> None:
 
     window.display_cylinder = window.brachyCylinder.shape()
     window.isLocked = False
-    cylinder.recalculate(window)
+    #cylinder.recalculate(window)
     UIFunctions.setPage(window, 1)
 
 
@@ -108,12 +111,34 @@ def add_rp_file(window: MainWindow, filepath: str) -> None:
 
 
 def add_tandem_file(window: MainWindow, filepath: str) -> None:
-    window.ui.lineedit_tandem.setText(filepath)
 
     # make sure the path exists otherwise OCE get confused
     if not os.path.exists(filepath):
         raise AssertionError(f"file does not exist: {filepath}")
 
-    window.display_tandem = read_step_file(filepath)
-        
+    filepath = filepath.lower()
+    file_dir, file_type = os.path.splitext(filepath)
+    shape = None
+    if file_type == ".stl":
+        shape = import_stl(filepath)
+    elif file_type == ".step" or file_type == ".stp":
+        shape = import_step(filepath)
+    else:
+        print(f"Invalid tandem file! {filepath}")
+        return
+    
+    # global Tandem class
+    window.tandem = Tandem()
+    window.tandem.shape = shape
+    
+    window.ui.lineedit_tandem.setText(filepath)
     UIFunctions.setPage(window, 3)
+
+def import_stl(filepath:str) -> TopoDS_Shape:
+    from OCC.Extend.DataExchange import read_stl_file
+    
+    return read_stl_file(filepath)
+
+def import_step(filepath:str) -> TopoDS_Shape:
+    from OCC.Extend.DataExchange import read_step_file
+    return read_step_file(filepath)

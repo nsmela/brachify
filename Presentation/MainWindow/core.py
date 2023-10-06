@@ -95,6 +95,16 @@ class MainWindow(QMainWindow):
                                            self.ui.slider_needle_extension.value()))
         self.ui.btn_channel_disable.clicked.connect(lambda: needles.setNeedleDisabled(self))
 
+        ## Tandem
+        ########################################################################
+        import Presentation.Features.Tandem.TandemFunctions as tandemFunctions
+        self.tandem = None
+        
+        ## Exports
+        ########################################################################
+        import Presentation.Features.Exports.ExportCommands as exports
+        self.ui.btn_export_stl.clicked.connect(lambda: exports.export_stl(self))
+        
         ## Display variables
         ########################################################################
         self.display_cylinder = None
@@ -104,10 +114,6 @@ class MainWindow(QMainWindow):
         self.display_tandem = None
         self.display_export = None
         
-        ## Exports
-        ########################################################################
-        import Presentation.Features.Exports.ExportCommands as exports
-        self.ui.btn_export_stl.clicked.connect(lambda: exports.export_stl(self))
 
     # https://github.com/tpaviot/pythonocc-demos/issues/72#event-10551747046
     def showProperly(self):
