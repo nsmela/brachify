@@ -38,7 +38,7 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
     pipe = BRepPrimAPI_MakeCone(axis, 0.0, radius, length).Shape()
     face = helper.get_lowest_face(pipe)
     
-    # for each (after the first), create a sphere and cylinder to next point to join
+    # for each (after the first), create a cylinder to next point to join
     for i in range(1, len(points) - 1):
         p1 = points[i]
         p2 = points[i + 1]
@@ -55,7 +55,7 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
     vector = helper.get_vector(points[-2], points[-1], length + channel.curve_downwards)
     p1 = points[-1]
     p2 = gp_Pnt(p1.X() + vector.X(), p1.Y() + vector.Y(), p1.Z() + vector.Z())
-    p3 = gp_Pnt(p2.X(), p2.Y(), p2.Z() - length - channel.curve_downwards)
+    p3 = gp_Pnt(p2.X(), p2.Y(), p2.Z() - length)
     
     # curve joining two straight paths
     array = TColgp_Array1OfPnt(1, 3)
