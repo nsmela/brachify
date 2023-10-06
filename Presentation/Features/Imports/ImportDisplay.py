@@ -7,7 +7,7 @@ from Presentation.MainWindow.core import MainWindow
 
 
 ## IMPORTS
-def navigate_to_imports(window: MainWindow):
+def view(window: MainWindow):
     # variables
 
     # set page

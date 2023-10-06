@@ -83,17 +83,17 @@ class MainWindow(QMainWindow):
 
         ## Needle Channel Stuff
         ########################################################################
-        from Presentation.Features.needle_functions import NeedleFunctions
+        import Presentation.Features.NeedleChannels.NeedleFunctions as needles
         self.needles = None
         self.isCylinderHidden = False;
-        self.ui.checkBox_hide_cylinder.stateChanged.connect(lambda: NeedleFunctions.setCylinderVisibility(self))
-        self.ui.channelDiameterSpinBox.valueChanged.connect(lambda: NeedleFunctions.recalculate(self))
+        self.ui.checkBox_hide_cylinder.stateChanged.connect(lambda: needles.setCylinderVisibility(self))
+        self.ui.channelDiameterSpinBox.valueChanged.connect(lambda: needles.recalculate(self))
         self.ui.channelsListWidget.itemSelectionChanged.connect( 
-            lambda: NeedleFunctions.setActiveNeedleChannel(self, self.ui.channelsListWidget.currentRow()))
+            lambda: needles.setActiveNeedleChannel(self, self.ui.channelsListWidget.currentRow()))
         self.ui.groupBox_5.setEnabled(False)
-        self.ui.slider_needle_extension.valueChanged.connect(lambda: NeedleFunctions.setChannelOffset(self, 
+        self.ui.slider_needle_extension.valueChanged.connect(lambda: needles.setChannelOffset(self, 
                                            self.ui.slider_needle_extension.value()))
-        self.ui.btn_channel_disable.clicked.connect(lambda: NeedleFunctions.setNeedleDisabled(self))
+        self.ui.btn_channel_disable.clicked.connect(lambda: needles.setNeedleDisabled(self))
 
         ## Display variables
         ########################################################################

@@ -7,7 +7,7 @@ from Presentation.MainWindow.core import MainWindow
 
 
 ## CYLINDER
-def navigate_to_cylinder(window: MainWindow):
+def view(window: MainWindow):
     print("switched to cylinder view!")
     # variables
 

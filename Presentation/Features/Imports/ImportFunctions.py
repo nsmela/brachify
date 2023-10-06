@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QFileDialog, QListWidget, QMainWindow
 from Presentation.MainWindow.core import MainWindow
 from Presentation.MainWindow.ui_functions import UIFunctions
 import Presentation.Features.Cylinder.CylinderFunctions as cylinder
-from Presentation.Features.needle_functions import NeedleFunctions
+import Presentation.Features.NeedleChannels.NeedleFunctions as needles
 from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
 
 import Application.Imports.import_dicom_structure as dicom_structure
@@ -104,7 +104,7 @@ def add_rp_file(window: MainWindow, filepath: str) -> None:
     diameter = 3.00
         
     window.ui.channelDiameterSpinBox.setValue(diameter)
-    NeedleFunctions.recalculate(window)
+    needles.recalculate(window)
     UIFunctions.setPage(window, 2)
         
 def add_tandem_file(window: MainWindow, filepath: str) -> None:

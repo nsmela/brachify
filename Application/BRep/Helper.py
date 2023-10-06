@@ -63,6 +63,7 @@ def get_vector(p1: gp_Pnt, p2: gp_Pnt, length: float = 1.0) -> gp_Vec:
         p2.Z() - p1.Z())
     return vector.Normalized() * length
 
+
 def get_direction(p1: gp_Pnt, p2: gp_Pnt) -> gp_Dir:
     vector = get_vector(p1, p2)
     return gp_Dir(vector.X(), vector.Y(), vector.Z())

@@ -14,6 +14,7 @@ from Presentation.MainWindow.core import MainWindow
 from Presentation.MainWindow.display_functions import DisplayFunctions
 import Presentation.Features.Imports.ImportDisplay as importDisplay 
 import Presentation.Features.Cylinder.CylinderDisplay as cylDisplay 
+import Presentation.Features.NeedleChannels.NeedlesDisplay as needleDisplay
 
 ## Functions
 
@@ -39,11 +40,11 @@ class UIFunctions(MainWindow):
         buttons[index].setStyleSheet(stylesheet)
 
         if index == 0:
-            importDisplay.navigate_to_imports(self)
+            importDisplay.view(self)
         elif index == 1:
-            cylDisplay.navigate_to_cylinder(self)
+            cylDisplay.view(self)
         elif index == 2:
-            DisplayFunctions.navigate_to_channels(self)
+            needleDisplay.view(self)
         elif index == 3:
             DisplayFunctions.navigate_to_tandem(self)
         elif index == 4:
