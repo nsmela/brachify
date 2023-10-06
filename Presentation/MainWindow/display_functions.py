@@ -181,8 +181,8 @@ class DisplayFunctions(MainWindow):
 
         try: 
             # tandem
-            if self.display_tandem:
-                shape = BRepAlgoAPI_Cut(shape, self.display_tandem).Shape()
+            if self.tandem:
+                shape = BRepAlgoAPI_Cut(shape, self.tandem.shape).Shape()
 
         except Exception as error_message:
             print(error_message)
