@@ -77,7 +77,6 @@ def add_rs_file(window: MainWindow, filepath: str) -> None:
 
     window.display_cylinder = window.brachyCylinder.shape()
     window.isLocked = False
-    #cylinder.recalculate(window)
     UIFunctions.setPage(window, 1)
 
 

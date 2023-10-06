@@ -1,5 +1,5 @@
 from Presentation.MainWindow.core import MainWindow
-from Presentation.MainWindow.display_functions import DisplayFunctions
+import Presentation.Features.Cylinder.CylinderDisplay as cylinderDisplay
 
 
 def setRadius(window: MainWindow) -> None:
@@ -21,4 +21,4 @@ def recalculate(window: MainWindow) -> None:
         return
         
     window.display_cylinder = window.brachyCylinder.shape()
-    DisplayFunctions.navigate_to_cylinder(window)
+    cylinderDisplay.view(window)
