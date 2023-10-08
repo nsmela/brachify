@@ -1,9 +1,19 @@
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
+
 import Presentation.Features.Tandem.TandemFunctions as tandem
+from Presentation.MainWindow.core import MainWindow
 from Core.Models.Tandem import Tandem 
 
-from Presentation.MainWindow.core import MainWindow
+
+
+def init(window: MainWindow):
+    try:
+        window.ui.btn_tandem_importDisplayModel.clicked.connect(lambda: tandem.load_tandem_display_model(window))
+        window.ui.btn_tandem_importToolModel.clicked.connect(lambda: tandem.load_tandem_tool_model(window))
+        window.ui.btn_tandem_clear.clicked.connect(lambda: tandem.clear_tandem_settings(window))
+    except:
+        pass
 
 
 ## TANDEM

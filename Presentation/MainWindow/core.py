@@ -97,13 +97,13 @@ class MainWindow(QMainWindow):
 
         ## Tandem
         ########################################################################
-        import Presentation.Features.Tandem.TandemFunctions as tandemFunctions
-        tandemFunctions.init_GUI(self)
+        import Presentation.Features.Tandem.TandemDisplay as tandem
+        tandem.init(self)
         self.tandem = None
         
         ## Exports
         ########################################################################
-        import Presentation.Features.Exports.ExportCommands as exports
+        import Presentation.Features.Exports.ExportFunctions as exports
         self.ui.btn_export_stl.clicked.connect(lambda: exports.export_stl(self))
         
         ## Display variables
