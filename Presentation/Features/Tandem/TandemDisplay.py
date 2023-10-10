@@ -66,8 +66,12 @@ def update(window:MainWindow):
             # debugging
             import Application.BRep.Helper as brep
             color = Quantity_Color(0.0, 1.0, 0.0, Quantity_TOC_RGB)
-            face = brep.get_lowest_face(window.tandem.tool_shape)
-            window.display.DisplayShape(face, color=color)
+
+            faces = brep.get_faces(window.tandem.tool_shape)
+            print(faces)
+            for face in faces:
+                if brep.face_is_plane(face[0]) and face[1] < 25.0 and face[1] > 15.0:
+                    window.display.DisplayShape(shapes=face[0], color=color)
 
     except Exception as error_message:
         print(f"TandemView: Tandem load error: \n{error_message}")
