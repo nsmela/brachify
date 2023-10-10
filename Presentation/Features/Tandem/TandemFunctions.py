@@ -1,9 +1,13 @@
 from PyQt5.QtWidgets import QFileDialog
+
 from OCC.Extend.ShapeFactory import translate_shp, rotate_shp_3_axis
 from OCC.Core.gp import gp_Vec
+
+
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.Imports.ImportFunctions as imports 
 import Presentation.Features.Tandem.TandemDisplay as tandemDisplay
+import Application.BRep.Helper as brep
 from Core.Models.Tandem import TandemModel
 
 import os
@@ -31,7 +35,7 @@ def load_tandems(window: MainWindow) -> None:
     for tandem in window.tandems:
         window.ui.listWidget_savedTandems.addItem(tandem)
         
-    set_tandem(window.ui.listWidget_savedTandems.currentRow())
+    set_tandem(window)
 
 
 def save_tandem(window: MainWindow) -> bool:
@@ -163,6 +167,18 @@ def apply_tandem_offsets(tandem: TandemModel) -> TandemModel:
     offset = gp_Vec(tandem.offsets[0], tandem.offsets[1], tandem.offsets[2])
     tandem.shape = translate_shp(tandem.shape, offset)
     tandem.tool_shape = translate_shp(tandem.tool_shape, offset)
+
+    tandem = extend(tandem)
+
+    return tandem
+
+
+def extend(tandem: TandemModel) -> TandemModel:
+    try:
+        tandem.shape = brep.extend_bottom_face(tandem.shape)
+        #tandem.tool_shape = brep.extend_bottom_face(tandem.tool_shape)
+    except Exception as error_message:
+        print(f"Lower face extension failed! {error_message}")
         
     return tandem
 
@@ -213,6 +229,6 @@ def update_tandem_settings(window: MainWindow, tandem: TandemModel) -> None:
     window.ui.spinBox_tandem_yOffset.setValue(tandem.offsets[1])
     window.ui.spinBox_tandem_zOffset.setValue(tandem.offsets[2])
     window.ui.tandem_spinBox_xAngle.setValue(tandem.rotation[0])
-    window.ui.tandem_spinBox_xAngle.setValue(tandem.rotation[1])
-    window.ui.tandem_spinBox_xAngle.setValue(tandem.rotation[2])
+    window.ui.tandem_spinBox_yAngle.setValue(tandem.rotation[1])
+    window.ui.tandem_spinBox_zAngle.setValue(tandem.rotation[2])
     window.ui.btn_tandem_add_update.setObjectName("Update")

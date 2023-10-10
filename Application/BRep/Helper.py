@@ -1,7 +1,8 @@
+from tkinter import EXTENDED
 from OCC.Core.BRepAdaptor import BRepAdaptor_Surface
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut, BRepAlgoAPI_Fuse
 from OCC.Core.BRepFilletAPI import BRepFilletAPI_MakeFillet
-from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeTorus
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeTorus, BRepPrimAPI_MakePrism
 from OCC.Core.GeomAbs import GeomAbs_Plane
 from OCC.Core.TopAbs import TopAbs_FACE
 from OCC.Core.TopExp import TopExp_Explorer
@@ -67,3 +68,11 @@ def get_vector(p1: gp_Pnt, p2: gp_Pnt, length: float = 1.0) -> gp_Vec:
 def get_direction(p1: gp_Pnt, p2: gp_Pnt) -> gp_Dir:
     vector = get_vector(p1, p2)
     return gp_Dir(vector.X(), vector.Y(), vector.Z())
+
+
+def extend_bottom_face(shape:TopoDS_Shape) -> TopoDS_Shape:
+    face = get_lowest_face(shape)
+    z = geom_plane_from_face(face).Location().Z()
+    direction = gp_Vec(0,0, -z - 0.1)
+    extended_geometry = BRepPrimAPI_MakePrism(face, direction).Shape()
+    return BRepAlgoAPI_Fuse(shape, extended_geometry).Shape()
