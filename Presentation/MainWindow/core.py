@@ -67,7 +67,6 @@ class MainWindow(QMainWindow):
 
         self.ui.btn_import_dicom_rs.clicked.connect(lambda: imports.get_dicom_rs_file(self))
         self.ui.btn_import_dicom_rp.clicked.connect(lambda: imports.get_dicom_rp_file(self))
-        self.ui.btn_import_tandem.clicked.connect(lambda: imports.get_tandem_file(self))
         
         # drag and drop      
         self.ui.centralwidget.installEventFilter(self)

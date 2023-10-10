@@ -127,8 +127,8 @@ def load_tandem_models(window: MainWindow, tandem: TandemModel) -> None:
         print(f"Tandem {tandem.name} tool model is referencing an invalid filepath: {tandem.tool_filepath}")
         return
     
-    tandem.shape = imports.import_step(tandem.shape_filepath)
-    tandem.tool_shape = imports.import_step(tandem.tool_filepath)
+    tandem.shape = imports.get_file_shape(tandem.shape_filepath)
+    tandem.tool_shape = imports.get_file_shape(tandem.tool_filepath)
     
     from Presentation.MainWindow.ui_functions import UIFunctions
     UIFunctions.setPage(window, 3)

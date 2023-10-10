@@ -1,30 +1,20 @@
 {
-    "example": {
-        "Tandem Name": "example",
-        "Display Model File": ".\\files\\tandem\\example_display.stp",
-        "Tool Model File": ".\\files\\tandem\\example_tool.stp",
-        "Offsets": [
-            2.0,
-            0.0,
-            0.0
-        ]
-    },
-    "example2": {
-        "Tandem Name": "example2",
-        "Display Model File": ".\\files\\tandem\\example2_display.stp",
-        "Tool Model File": ".\\files\\tandem\\example2_tool.stp",
+    "VMS 60deg BCCK Modified Tandem": {
+        "Tandem Name": "VMS 60deg BCCK Modified Tandem",
+        "Display Model File": ".\\files\\tandem\\VMS 60deg BCCK Modified Tandem_display.STEP",
+        "Tool Model File": ".\\files\\tandem\\VMS 60deg BCCK Modified Tandem_tool.STEP",
         "Offsets": [
             0.0,
             0.0,
             0.0
         ]
     },
-    "example3": {
-        "Tandem Name": "example3",
-        "Display Model File": ".\\files\\tandem\\example3_display.stp",
-        "Tool Model File": ".\\files\\tandem\\example3_tool.stp",
+    "Basic Example Tandem": {
+        "Tandem Name": "Basic Example Tandem",
+        "Display Model File": ".\\files\\tandem\\Basic Example Tandem_display.stp",
+        "Tool Model File": ".\\files\\tandem\\Basic Example Tandem_tool.stp",
         "Offsets": [
-            2.0,
+            0.0,
             0.0,
             0.0
         ]
