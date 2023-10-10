@@ -14,8 +14,8 @@
         "Display Model File": ".\\files\\tandem\\Basic Example Tandem_display.stp",
         "Tool Model File": ".\\files\\tandem\\Basic Example Tandem_tool.stp",
         "Offsets": [
-            16.0,
-            -6.0,
+            0.0,
+            0.0,
             6.0
         ]
     }

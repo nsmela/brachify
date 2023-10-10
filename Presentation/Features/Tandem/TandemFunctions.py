@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QFileDialog
-
+from OCC.Extend.ShapeFactory import translate_shp
+from OCC.Core.gp import gp_Vec
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.Imports.ImportFunctions as imports 
 from Core.Models.Tandem import TandemModel
@@ -110,9 +111,10 @@ def set_tandem(window: MainWindow, index:int) -> None:
     tandem = TandemModel()
     tandem.fromDict(selection)
     
-    window.tandem = tandem
     update_tandem_settings(window, tandem)
     load_tandem_models(window, tandem)
+    tandem = offset_translate_tandem(tandem)
+    window.tandem = tandem
 
 
 def load_tandem_models(window: MainWindow, tandem: TandemModel) -> None:
@@ -132,6 +134,16 @@ def load_tandem_models(window: MainWindow, tandem: TandemModel) -> None:
     
     from Presentation.MainWindow.ui_functions import UIFunctions
     UIFunctions.setPage(window, 3)
+
+
+def offset_translate_tandem(tandem: TandemModel) -> TandemModel:
+    if not tandem:
+        return None
+    
+    offset = gp_Vec(tandem.offsets[0], tandem.offsets[1], tandem.offsets[2])
+    tandem.shape = translate_shp(tandem.shape, offset)
+    tandem.tool_shape = translate_shp(tandem.tool_shape, offset)
+    return tandem
 
 
 def load_tandem_display_model(window: MainWindow) -> None:
