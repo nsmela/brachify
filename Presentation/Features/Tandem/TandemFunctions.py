@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QFileDialog
-from OCC.Extend.ShapeFactory import translate_shp
+from OCC.Extend.ShapeFactory import translate_shp, rotate_shp_3_axis
 from OCC.Core.gp import gp_Vec
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.Imports.ImportFunctions as imports 
@@ -32,8 +32,6 @@ def load_tandems(window: MainWindow) -> None:
         window.ui.listWidget_savedTandems.addItem(tandem)
         
     set_tandem(window.ui.listWidget_savedTandems.currentRow())
-    
-    
 
 
 def save_tandem(window: MainWindow) -> bool:
@@ -126,7 +124,7 @@ def set_tandem(window: MainWindow, index:int = None) -> None:
     window.tandem = tandem
     update_tandem_settings(window, tandem)
     load_tandem_models(window, tandem)
-    window.tandem = offset_translate_tandem(tandem)
+    window.tandem = apply_tandem_offsets(tandem)
     tandemDisplay.update(window)
 
 
@@ -149,13 +147,23 @@ def load_tandem_models(window: MainWindow, tandem: TandemModel) -> None:
     UIFunctions.setPage(window, 3)
 
 
-def offset_translate_tandem(tandem: TandemModel) -> TandemModel:
+def apply_tandem_offsets(tandem: TandemModel) -> TandemModel:
     if not tandem:
         return None
     
+    # rotation first ot make the translate values make sense
+    x = tandem.rotation[0]
+    y = tandem.rotation[1]
+    z = tandem.rotation[2]
+    
+    tandem.shape = rotate_shp_3_axis(shape=tandem.shape, rx=x, ry=y, rz=z)
+    tandem.tool_shape = rotate_shp_3_axis(shape=tandem.tool_shape, rx=x, ry=y, rz=z)
+    
+    # translating the model
     offset = gp_Vec(tandem.offsets[0], tandem.offsets[1], tandem.offsets[2])
     tandem.shape = translate_shp(tandem.shape, offset)
     tandem.tool_shape = translate_shp(tandem.tool_shape, offset)
+        
     return tandem
 
 
@@ -182,6 +190,9 @@ def clear_tandem_settings(window: MainWindow) -> None:
     window.ui.spinBox_tandem_xOffset.setValue(0.0)
     window.ui.spinBox_tandem_yOffset.setValue(0.0)
     window.ui.spinBox_tandem_zOffset.setValue(0.0)
+    window.ui.tandem_spinBox_xAngle.setValue(0.0)
+    window.ui.tandem_spinBox_xAngle.setValue(0.0)
+    window.ui.tandem_spinBox_xAngle.setValue(0.0)
     window.ui.btn_tandem_add_update.setObjectName("Add")
     window.ui.listWidget_savedTandems.clearSelection()
     window.tandem = None
@@ -201,4 +212,7 @@ def update_tandem_settings(window: MainWindow, tandem: TandemModel) -> None:
     window.ui.spinBox_tandem_xOffset.setValue(tandem.offsets[0])
     window.ui.spinBox_tandem_yOffset.setValue(tandem.offsets[1])
     window.ui.spinBox_tandem_zOffset.setValue(tandem.offsets[2])
+    window.ui.tandem_spinBox_xAngle.setValue(tandem.rotation[0])
+    window.ui.tandem_spinBox_xAngle.setValue(tandem.rotation[1])
+    window.ui.tandem_spinBox_xAngle.setValue(tandem.rotation[2])
     window.ui.btn_tandem_add_update.setObjectName("Update")
