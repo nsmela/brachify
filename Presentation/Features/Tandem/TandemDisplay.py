@@ -63,6 +63,12 @@ def update(window:MainWindow):
             color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
             window.display.DisplayShape(shapes=window.tandem.tool_shape, color=color, material=Graphic3d_NOM_TRANSPARENT)
             
+            # debugging
+            import Application.BRep.Helper as brep
+            color = Quantity_Color(0.0, 1.0, 0.0, Quantity_TOC_RGB)
+            face = brep.get_lowest_face(window.tandem.tool_shape)
+            window.display.DisplayShape(face, color=color)
+
     except Exception as error_message:
         print(f"TandemView: Tandem load error: \n{error_message}")
 
