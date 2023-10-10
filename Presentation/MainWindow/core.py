@@ -97,8 +97,10 @@ class MainWindow(QMainWindow):
         ## Tandem
         ########################################################################
         import Presentation.Features.Tandem.TandemDisplay as tandem
-        tandem.init(self)
         self.tandem = None
+        self.tandems = {}
+        self.tandem_index = -1;
+        tandem.init(self)
         
         ## Exports
         ########################################################################

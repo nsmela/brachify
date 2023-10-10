@@ -7,12 +7,12 @@ class TandemModel:
         self.tool_shape = None # used to boolean cut from the final product
         self.tool_filepath = ""
         self.offsets = [0.0, 0.0, 0.0] # translate offsets 
-        self.rotation = [0.0, 0, 0, 1] # rotation (0.0) on the positive z axis [0, 0, 1]
+        self.rotation = [0.0, 0.0, 0.0] # rotation (0.0) along each axis xyz
     
     def fromDict(self, data:dict) -> None:
         self.name = data["Tandem Name"]
         self.offsets = data["Offsets"] # translate offsets 
-        self.rotation = [0.0, 0, 0, 1] # rotation (0.0) on the positive z axis [0, 0, 1]
+        self.rotation = data["Rotation"] # rotation (0.0) along each axis xyz
         
         # shapes
         self.shape_filepath = data["Display Model File"]
@@ -25,4 +25,5 @@ class TandemModel:
             "Tandem Name": self.name,
             "Display Model File": self.shape_filepath,
             "Tool Model File": self.tool_filepath, 
-            "Offsets": self.offsets}}
+            "Offsets": self.offsets,
+            "Rotation": self.rotation}}

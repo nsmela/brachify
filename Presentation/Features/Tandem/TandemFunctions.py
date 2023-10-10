@@ -20,15 +20,17 @@ def load_tandems(window: MainWindow) -> None:
     
     try:
         with open(data_filepath, "r") as data_file:
-            data = json.load(data_file)
+            window.tandems = json.load(data_file)
     except FileNotFoundError as error_message:
         print(f"File {data_filepath} was not found! \n {error_message}")
 
-    if data is None: 
+    if window.tandems is None: 
         return
 
-    for tandem in data:
+    for tandem in window.tandems:
         window.ui.listWidget_savedTandems.addItem(tandem)
+        
+    set_tandem(window.ui.listWidget_savedTandems.currentRow())
     
 
 
@@ -41,6 +43,11 @@ def save_tandem(window: MainWindow) -> bool:
             window.ui.spinBox_tandem_xOffset.value(),
             window.ui.spinBox_tandem_yOffset.value(),
             window.ui.spinBox_tandem_zOffset.value()]
+    tandem_rotation = [
+        window.ui.tandem_spinBox_xAngle.value(),
+        window.ui.tandem_spinBox_yAngle.value(),
+        window.ui.tandem_spinBox_zAngle.value()]
+    index = window.ui.listWidget_savedTandems.currentRow()
     
     # check if info is enough to proceed
     if not tandem_name:
@@ -56,6 +63,7 @@ def save_tandem(window: MainWindow) -> bool:
     tandem.shape_filepath = os.path.join(tandem_dir, f"{tandem_name}_display{os.path.splitext(tandem_display_model)[1]}")
     tandem.tool_filepath = os.path.join(tandem_dir, f"{tandem_name}_tool{os.path.splitext(tandem_tool_model)[1]}")
     tandem.offsets = tandem_offsets
+    tandem.rotation = tandem_rotation
     
     # check if file exists, if not create a blank one
     try:
@@ -98,23 +106,25 @@ def save_tandem(window: MainWindow) -> bool:
         load_tandems(window)
 
 
-def set_tandem(window: MainWindow, index:int) -> None:
-    # load the json containing all tandems info
-    with open(data_filepath, "r") as data_file:
-        data = json.load(data_file)
+def set_tandem(window: MainWindow, index:int = None) -> None:
+    if index is None:
+        return
+
+    tandems = list(window.tandems)
+    if len(tandems) <= index:
+        return
     
     # using an index to select the dictioanry to use
-    selection = list(data)[index]
-    selection = data[selection]
+    selection = window.tandems[tandems[index]]
 
     # building the Tandem Model
     tandem = TandemModel()
     tandem.fromDict(selection)
     
+    window.tandem = tandem
     update_tandem_settings(window, tandem)
     load_tandem_models(window, tandem)
-    tandem = offset_translate_tandem(tandem)
-    window.tandem = tandem
+    window.tandem = offset_translate_tandem(tandem)
 
 
 def load_tandem_models(window: MainWindow, tandem: TandemModel) -> None:

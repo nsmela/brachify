@@ -7,16 +7,26 @@
             0.0,
             0.0,
             0.0
+        ],
+        "Rotation": [
+            0.0,
+            0.0,
+            0.0
         ]
     },
-    "Basic Example Tandem": {
-        "Tandem Name": "Basic Example Tandem",
-        "Display Model File": ".\\files\\tandem\\Basic Example Tandem_display.stp",
-        "Tool Model File": ".\\files\\tandem\\Basic Example Tandem_tool.stp",
+    "Basic Example": {
+        "Tandem Name": "Basic Example",
+        "Display Model File": ".\\files\\tandem\\Basic Example_display.stp",
+        "Tool Model File": ".\\files\\tandem\\Basic Example_tool.stp",
         "Offsets": [
             0.0,
             0.0,
-            6.0
+            10.0
+        ],
+        "Rotation": [
+            0.0,
+            0.0,
+            0.0
         ]
     }
 }
