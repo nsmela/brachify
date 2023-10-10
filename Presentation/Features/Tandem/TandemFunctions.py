@@ -3,6 +3,7 @@ from OCC.Extend.ShapeFactory import translate_shp
 from OCC.Core.gp import gp_Vec
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.Imports.ImportFunctions as imports 
+import Presentation.Features.Tandem.TandemDisplay as tandemDisplay
 from Core.Models.Tandem import TandemModel
 
 import os
@@ -31,6 +32,7 @@ def load_tandems(window: MainWindow) -> None:
         window.ui.listWidget_savedTandems.addItem(tandem)
         
     set_tandem(window.ui.listWidget_savedTandems.currentRow())
+    
     
 
 
@@ -125,6 +127,7 @@ def set_tandem(window: MainWindow, index:int = None) -> None:
     update_tandem_settings(window, tandem)
     load_tandem_models(window, tandem)
     window.tandem = offset_translate_tandem(tandem)
+    tandemDisplay.update(window)
 
 
 def load_tandem_models(window: MainWindow, tandem: TandemModel) -> None:

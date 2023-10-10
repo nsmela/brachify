@@ -31,6 +31,10 @@ def view(window: MainWindow):
     window.display._select_callbacks = []
     window.display.SetSelectionModeShape()
         
+    update(window)
+
+
+def update(window:MainWindow):
     try:
         window.display.EraseAll()
 
@@ -55,7 +59,10 @@ def view(window: MainWindow):
         if window.tandem is not None:
             color = Quantity_Color(0.2, 0.2, 0.55, Quantity_TOC_RGB)
             window.display.DisplayColoredShape(shapes=window.tandem.shape, color=color)
-
+            
+            color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
+            window.display.DisplayShape(shapes=window.tandem.tool_shape, color=color, material=Graphic3d_NOM_TRANSPARENT)
+            
     except Exception as error_message:
         print(f"TandemView: Tandem load error: \n{error_message}")
 
@@ -63,7 +70,3 @@ def view(window: MainWindow):
         window.display.FitAll()
     except Exception as error_message:
         print(error_message)
-
-
-def update(window:MainWindow, tandem: TandemModel):
-    pass
