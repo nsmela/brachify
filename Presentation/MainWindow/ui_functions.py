@@ -16,6 +16,7 @@ import Presentation.Features.Imports.ImportDisplay as importDisplay
 import Presentation.Features.Cylinder.CylinderDisplay as cylDisplay 
 import Presentation.Features.NeedleChannels.NeedlesDisplay as needleDisplay
 import Presentation.Features.Tandem.TandemDisplay as tandemDisplay
+import Presentation.Features.Exports.ExportDisplay as exportsDisplay
 
 ## Functions
 
@@ -49,5 +50,5 @@ class UIFunctions(MainWindow):
         elif index == 3:
             tandemDisplay.view(self)
         elif index == 4:
-            DisplayFunctions.navigate_to_exports(self)
+            exportsDisplay.view(self)
         

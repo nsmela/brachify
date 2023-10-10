@@ -43,7 +43,7 @@ def view(window: MainWindow):
         # tandem
         if window.tandem is not None:
             color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
-            window.display.DisplayColoredShape(shapes=window.tandem.shape, color=color)
+            window.display.DisplayColoredShape(shapes=window.tandem.tool_shape, color=color)
 
     except Exception as error_message:
         print(f"ImportView: Tandem load error: {error_message}")
