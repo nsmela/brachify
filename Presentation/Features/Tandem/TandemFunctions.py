@@ -78,11 +78,17 @@ def save_tandem(window: MainWindow) -> bool:
         return
     else:
         # copy model files to the tandem directory
-        result = shutil.copy(tandem_display_model, tandem.shape_filepath)
-        print(f"diaply model copied to {result}")
+        try:
+            result = shutil.copy(tandem_display_model, tandem.shape_filepath)
+            print(f"diaply model copied to {result}")
+        except shutil.SameFileError as error_message:
+            print(f"File {tandem.shape_filepath} already exists!")
 
-        result = shutil.copy(tandem_tool_model, tandem.tool_filepath)
-        print(f"tool model copied to {result}")
+        try:
+            result = shutil.copy(tandem_tool_model, tandem.tool_filepath)
+            print(f"tool model copied to {result}")
+        except shutil.SameFileError as error_message:
+            print(f"File {tandem.tool_filepath} already exists!")
         
         data.update(tandem.toDict())
         with open(data_filepath, "w") as data_file:
@@ -92,20 +98,40 @@ def save_tandem(window: MainWindow) -> bool:
 
 
 def set_tandem(window: MainWindow, index:int) -> None:
+    # load the json containing all tandems info
     with open(data_filepath, "r") as data_file:
         data = json.load(data_file)
     
-    print(data)
+    # using an index to select the dictioanry to use
     selection = list(data)[index]
     selection = data[selection]
-    print(selection)
 
+    # building the Tandem Model
     tandem = TandemModel()
     tandem.fromDict(selection)
     
-    print(tandem.toDict())
     window.tandem = tandem
-    load_tandem_models(window)
+    update_tandem_settings(window, tandem)
+    load_tandem_models(window, tandem)
+
+
+def load_tandem_models(window: MainWindow, tandem: TandemModel) -> None:
+    if not tandem:
+        return
+    
+    if not os.path.exists(tandem.shape_filepath):
+        print(f"Tandem {tandem.name} display model is referencing an invalid filepath: {tandem.shape_filepath}")
+        return
+
+    if not os.path.exists(tandem.tool_filepath):
+        print(f"Tandem {tandem.name} tool model is referencing an invalid filepath: {tandem.tool_filepath}")
+        return
+    
+    tandem.shape = imports.import_step(tandem.shape_filepath)
+    tandem.tool_shape = imports.import_step(tandem.tool_filepath)
+    
+    from Presentation.MainWindow.ui_functions import UIFunctions
+    UIFunctions.setPage(window, 3)
 
 
 def load_tandem_display_model(window: MainWindow) -> None:
@@ -132,24 +158,22 @@ def clear_tandem_settings(window: MainWindow) -> None:
     window.ui.spinBox_tandem_yOffset.setValue(0.0)
     window.ui.spinBox_tandem_zOffset.setValue(0.0)
     window.ui.btn_tandem_add_update.setObjectName("Add")
+    window.ui.listWidget_savedTandems.clearSelection()
+    window.tandem = None
 
-
-def load_tandem_models(window: MainWindow) -> None:
-    tandem = window.tandem
-    
-    if not tandem:
-        return
-    
-    if not os.path.exists(tandem.shape_filepath):
-        print(f"Tandem {tandem.name} display model is referencing an invalid filepath: {tandem.shape_filepath}")
-        return
-
-    if not os.path.exists(tandem.tool_filepath):
-        print(f"Tandem {tandem.name} tool model is referencing an invalid filepath: {tandem.tool_filepath}")
-        return
-    
-    tandem.shape = imports.import_step(tandem.shape_filepath)
-    tandem.tool_shape = imports.import_step(tandem.tool_filepath)
-    
     from Presentation.MainWindow.ui_functions import UIFunctions
     UIFunctions.setPage(window, 3)
+
+
+def update_tandem_settings(window: MainWindow, tandem: TandemModel) -> None:  
+    if tandem is None:
+        clear_tandem_settings
+        return
+        
+    window.ui.tandem_lineEdit_displayModel.setText(tandem.shape_filepath)
+    window.ui.tandem_lineEdit_toolModel.setText(tandem.tool_filepath)
+    window.ui.lineEdit_tandemName.setText(tandem.name)
+    window.ui.spinBox_tandem_xOffset.setValue(tandem.offsets[0])
+    window.ui.spinBox_tandem_yOffset.setValue(tandem.offsets[1])
+    window.ui.spinBox_tandem_zOffset.setValue(tandem.offsets[2])
+    window.ui.btn_tandem_add_update.setObjectName("Update")

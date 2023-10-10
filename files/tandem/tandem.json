@@ -4,7 +4,7 @@
         "Display Model File": ".\\files\\tandem\\example_display.stp",
         "Tool Model File": ".\\files\\tandem\\example_tool.stp",
         "Offsets": [
-            0.0,
+            2.0,
             0.0,
             0.0
         ]
@@ -15,6 +15,16 @@
         "Tool Model File": ".\\files\\tandem\\example2_tool.stp",
         "Offsets": [
             0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "example3": {
+        "Tandem Name": "example3",
+        "Display Model File": ".\\files\\tandem\\example3_display.stp",
+        "Tool Model File": ".\\files\\tandem\\example3_tool.stp",
+        "Offsets": [
+            2.0,
             0.0,
             0.0
         ]
