@@ -1236,75 +1236,24 @@ QPushButton:hover {
                       </property>
                      </widget>
                     </item>
-                    <item alignment="Qt::AlignRight">
+                    <item>
                      <widget class="QDoubleSpinBox" name="spinBox_tandem_xOffset">
-                      <property name="maximumSize">
-                       <size>
-                        <width>60</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
                       <property name="alignment">
                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                       </property>
-                      <property name="decimals">
-                       <number>1</number>
-                      </property>
-                      <property name="minimum">
-                       <double>-100.000000000000000</double>
-                      </property>
-                      <property name="maximum">
-                       <double>100.000000000000000</double>
-                      </property>
-                      <property name="singleStep">
-                       <double>0.500000000000000</double>
-                      </property>
                      </widget>
                     </item>
-                    <item alignment="Qt::AlignRight">
+                    <item>
                      <widget class="QDoubleSpinBox" name="spinBox_tandem_yOffset">
-                      <property name="maximumSize">
-                       <size>
-                        <width>60</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
                       <property name="alignment">
                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                      </property>
-                      <property name="decimals">
-                       <number>1</number>
-                      </property>
-                      <property name="minimum">
-                       <double>-100.000000000000000</double>
-                      </property>
-                      <property name="singleStep">
-                       <double>0.500000000000000</double>
                       </property>
                      </widget>
                     </item>
-                    <item alignment="Qt::AlignRight">
+                    <item>
                      <widget class="QDoubleSpinBox" name="spinBox_tandem_zOffset">
-                      <property name="maximumSize">
-                       <size>
-                        <width>60</width>
-                        <height>16777215</height>
-                       </size>
-                      </property>
                       <property name="alignment">
                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                      </property>
-                      <property name="decimals">
-                       <number>1</number>
-                      </property>
-                      <property name="minimum">
-                       <double>-100.000000000000000</double>
-                      </property>
-                      <property name="maximum">
-                       <double>100.000000000000000</double>
-                      </property>
-                      <property name="singleStep">
-                       <double>0.500000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -1317,6 +1266,9 @@ QPushButton:hover {
                        <enum>QFrame::Raised</enum>
                       </property>
                       <layout class="QHBoxLayout" name="horizontalLayout_22">
+                       <property name="spacing">
+                        <number>2</number>
+                       </property>
                        <property name="leftMargin">
                         <number>0</number>
                        </property>
@@ -1338,12 +1290,6 @@ QPushButton:hover {
                        </item>
                        <item>
                         <widget class="QPushButton" name="btn_tandem_clear">
-                         <property name="maximumSize">
-                          <size>
-                           <width>60</width>
-                           <height>16777215</height>
-                          </size>
-                         </property>
                          <property name="text">
                           <string>Clear</string>
                          </property>

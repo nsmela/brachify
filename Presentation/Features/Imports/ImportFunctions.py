@@ -12,7 +12,7 @@ import Application.Imports.import_dicom_structure as dicom_structure
 import Application.Imports.import_dicom_planning as dicom_planning
 import Application.Imports.import_dicom as dicom
 
-from Core.Models.Tandem import Tandem
+from Core.Models.Tandem import TandemModel
 
 import numpy as np
 

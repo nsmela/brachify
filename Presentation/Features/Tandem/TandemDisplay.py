@@ -3,7 +3,7 @@ from OCC.Core.Graphic3d import *
 
 import Presentation.Features.Tandem.TandemFunctions as tandem
 from Presentation.MainWindow.core import MainWindow
-from Core.Models.Tandem import Tandem 
+from Core.Models.Tandem import TandemModel
 
 
 
@@ -12,6 +12,10 @@ def init(window: MainWindow):
         window.ui.btn_tandem_importDisplayModel.clicked.connect(lambda: tandem.load_tandem_display_model(window))
         window.ui.btn_tandem_importToolModel.clicked.connect(lambda: tandem.load_tandem_tool_model(window))
         window.ui.btn_tandem_clear.clicked.connect(lambda: tandem.clear_tandem_settings(window))
+        window.ui.btn_tandem_add_update.clicked.connect(lambda: tandem.save_tandem(window))
+        window.ui.listWidget_savedTandems.itemSelectionChanged.connect( 
+            lambda: tandem.set_tandem(window, window.ui.listWidget_savedTandems.currentRow()))
+        tandem.load_tandems(window)
     except:
         pass
 
@@ -60,5 +64,6 @@ def view(window: MainWindow):
     except Exception as error_message:
         print(error_message)
 
-def update(window:MainWindow, tandem: Tandem):
+
+def update(window:MainWindow, tandem: TandemModel):
     pass

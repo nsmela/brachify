@@ -116,6 +116,7 @@ def update(window: MainWindow):
     except Exception as error_message:
         print(error_message)
 
+
 def selectNeedle(window: MainWindow, shapes):
     index = -1
     if len(shapes) > 0:
