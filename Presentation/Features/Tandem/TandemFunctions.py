@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QFileDialog
 
 from Presentation.MainWindow.core import MainWindow
+import Presentation.Features.Imports.ImportFunctions as imports 
 from Core.Models.Tandem import TandemModel
 
 import os
@@ -73,16 +74,15 @@ def save_tandem(window: MainWindow) -> bool:
         with open(data_filepath, "x") as data_file:
             json.dump(data, data_file, indent=4)
     except:
+        print("Tandem save failed!")
         return
     else:
         # copy model files to the tandem directory
-        display_filepath = os.path.join(tandem_dir, f"{tandem_name}_display{os.path.splitext(tandem_display_model)[1]}")
-        result = shutil.copy(tandem_display_model, display_filepath)
-        print(f"diaply model copied: {result}")
+        result = shutil.copy(tandem_display_model, tandem.shape_filepath)
+        print(f"diaply model copied to {result}")
 
-        tool_filepath = os.path.join(tandem_dir, f"{tandem_name}_tool{os.path.splitext(tandem_tool_model)[1]}")
-        result = shutil.copy(tandem_tool_model, tool_filepath)
-        print(f"tool model copied: {result}")
+        result = shutil.copy(tandem_tool_model, tandem.tool_filepath)
+        print(f"tool model copied to {result}")
         
         data.update(tandem.toDict())
         with open(data_filepath, "w") as data_file:
@@ -95,7 +95,17 @@ def set_tandem(window: MainWindow, index:int) -> None:
     with open(data_filepath, "r") as data_file:
         data = json.load(data_file)
     
-    window.tandem 
+    print(data)
+    selection = list(data)[index]
+    selection = data[selection]
+    print(selection)
+
+    tandem = TandemModel()
+    tandem.fromDict(selection)
+    
+    print(tandem.toDict())
+    window.tandem = tandem
+    load_tandem_models(window)
 
 
 def load_tandem_display_model(window: MainWindow) -> None:
@@ -122,3 +132,24 @@ def clear_tandem_settings(window: MainWindow) -> None:
     window.ui.spinBox_tandem_yOffset.setValue(0.0)
     window.ui.spinBox_tandem_zOffset.setValue(0.0)
     window.ui.btn_tandem_add_update.setObjectName("Add")
+
+
+def load_tandem_models(window: MainWindow) -> None:
+    tandem = window.tandem
+    
+    if not tandem:
+        return
+    
+    if not os.path.exists(tandem.shape_filepath):
+        print(f"Tandem {tandem.name} display model is referencing an invalid filepath: {tandem.shape_filepath}")
+        return
+
+    if not os.path.exists(tandem.tool_filepath):
+        print(f"Tandem {tandem.name} tool model is referencing an invalid filepath: {tandem.tool_filepath}")
+        return
+    
+    tandem.shape = imports.import_step(tandem.shape_filepath)
+    tandem.tool_shape = imports.import_step(tandem.tool_filepath)
+    
+    from Presentation.MainWindow.ui_functions import UIFunctions
+    UIFunctions.setPage(window, 3)

@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QFileDialog, QListWidget, QMainWindow
 from OCC.Core.TopoDS import TopoDS_Shape
 
 from Presentation.MainWindow.core import MainWindow
-from Presentation.MainWindow.ui_functions import UIFunctions
+
 
 from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
 
@@ -77,6 +77,8 @@ def add_rs_file(window: MainWindow, filepath: str) -> None:
 
     window.display_cylinder = window.brachyCylinder.shape()
     window.isLocked = False
+    
+    from Presentation.MainWindow.ui_functions import UIFunctions
     UIFunctions.setPage(window, 1)
 
 
@@ -106,6 +108,7 @@ def add_rp_file(window: MainWindow, filepath: str) -> None:
     diameter = 3.00
         
     window.ui.channelDiameterSpinBox.setValue(diameter)
+    from Presentation.MainWindow.ui_functions import UIFunctions
     UIFunctions.setPage(window, 2)
 
 
@@ -131,6 +134,8 @@ def add_tandem_file(window: MainWindow, filepath: str) -> None:
     window.tandem.shape = shape
     
     window.ui.lineedit_tandem.setText(filepath)
+    
+    from Presentation.MainWindow.ui_functions import UIFunctions
     UIFunctions.setPage(window, 3)
 
 def import_stl(filepath:str) -> TopoDS_Shape:

@@ -10,14 +10,19 @@ class TandemModel:
         self.rotation = [0.0, 0, 0, 1] # rotation (0.0) on the positive z axis [0, 0, 1]
     
     def fromDict(self, data:dict) -> None:
-        self.name = data
+        self.name = data["Tandem Name"]
         self.offsets = data["Offsets"] # translate offsets 
         self.rotation = [0.0, 0, 0, 1] # rotation (0.0) on the positive z axis [0, 0, 1]
         
         # shapes
+        self.shape_filepath = data["Display Model File"]
+        self.tool_filepath = data["Tool Model File"]
+        
+        # model shapes need to be loaded from elsewhere
 
     def toDict(self) -> str:
         return {self.name: {
+            "Tandem Name": self.name,
             "Display Model File": self.shape_filepath,
             "Tool Model File": self.tool_filepath, 
             "Offsets": self.offsets}}
