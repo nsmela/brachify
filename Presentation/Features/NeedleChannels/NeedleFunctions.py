@@ -16,6 +16,9 @@ self.needles_active_index: the current active needle channel
 
 
 def setActiveNeedleChannel(window: MainWindow, index:int = -1) -> None:
+    if window.needles_active_index == index:
+        return
+    
     window.needles_active_index = index
     if len(window.ui.channelsListWidget.selectedIndexes()) < 1 or \
         index != window.ui.channelsListWidget.selectedIndexes()[0].row():
@@ -42,8 +45,8 @@ def setChannelOffset(window: MainWindow, offset:int) -> None:
         return
         
     old_value = window.ui.slider_needle_extension.value()
-    if old_value != offset:
-        window.ui.slider_needle_extension.setValue(offset)
+    # if old_value != offset:
+    #     window.ui.slider_needle_extension.setValue(offset)
             
     channel = window.needles.channels[window.needles_active_index]
     channel.curve_downwards = offset
@@ -98,7 +101,7 @@ def reshape(window: MainWindow, channel: NeedleChannel):
     Needle Channel shapes are saved within the NeedleChannel class
     '''
     
-    print("reshaping channels")
+    print("reshaping channel")
     diameter = window.ui.channelDiameterSpinBox.value()
     cylinder_offset= window.ui.cylinderLengthSpinBox.value() - 200.0
     window.display_needles = None # can be recalulated later when needed
