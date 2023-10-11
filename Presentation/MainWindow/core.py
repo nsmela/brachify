@@ -8,7 +8,7 @@ from Core.Models.Cylinder import BrachyCylinder
 from OCC.Display.backend import load_backend
 load_backend("qt-pyqt5")
 import OCC.Display.qtDisplay as qtDisplay
-
+from Presentation.MainWindow.orbitDisplay import OrbitCameraViewer
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 import os
@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
         
         ## pythonOCC Display
         ########################################################################
-        self.canvas = qtDisplay.qtViewer3d(self)
+        self.canvas = OrbitCameraViewer(self)
         self.ui.model_frame.layout().addWidget(self.canvas)
         self.canvas.InitDriver()
         self.display = self.canvas._display

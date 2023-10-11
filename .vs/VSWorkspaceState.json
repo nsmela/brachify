@@ -1,6 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Application",
+    "\\Application\\Imports",
+    "\\Application\\Tandem",
+    "\\files\\tandem",
+    "\\files\\tandem\\data",
+    "\\Presentation",
+    "\\Presentation\\Features",
+    "\\Presentation\\Features\\Cylinder",
+    "\\Presentation\\Features\\Tandem"
   ],
+  "SelectedNode": "\\Presentation\\MainWindow\\orbitDisplay.py",
   "PreviewInSolutionExplorer": false
 }
