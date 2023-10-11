@@ -14,7 +14,10 @@ def view(window: MainWindow):
     window.ui.stackedWidget.setCurrentIndex(0)
         
     # set display
-        
+    try:
+        window.display.default_drawer.SetFaceBoundaryDraw(True)
+    except:
+        pass
     try:
         window.display._select_callbacks = []
         window.display.SetSelectionModeNeutral()

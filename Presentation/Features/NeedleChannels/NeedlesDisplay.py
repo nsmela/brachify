@@ -28,6 +28,7 @@ def view(window: MainWindow) -> None:
     window.ui.stackedWidget.setCurrentIndex(2)
         
     # set display
+    window.display.default_drawer.SetFaceBoundaryDraw(True)  
     window.display.SetSelectionModeShape()
     window.display._select_callbacks = []
     window.display.register_select_callback(lambda shape, *args: selectNeedle(window, shape))

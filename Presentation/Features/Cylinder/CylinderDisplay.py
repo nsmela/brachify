@@ -17,7 +17,8 @@ def view(window: MainWindow):
     # set display
     window.display._select_callbacks = []
     window.display.SetSelectionModeShape()
-        
+    window.display.default_drawer.SetFaceBoundaryDraw(True)
+    
     try:
         window.display.EraseAll()
 

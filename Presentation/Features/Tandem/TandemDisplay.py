@@ -29,6 +29,7 @@ def view(window: MainWindow):
     window.ui.stackedWidget.setCurrentIndex(3)
         
     # set display
+    window.display.default_drawer.SetFaceBoundaryDraw(True)  
     window.display._select_callbacks = []
     window.display.SetSelectionModeShape()
         
