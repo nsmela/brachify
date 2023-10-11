@@ -7,7 +7,7 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Section
 from OCC.Core.TopoDS import TopoDS_Shape
 
 
-def are_colliding(shape1:TopoDS_Shape, shape2: TopoDS_Shape) -> bool:
+def are_colliding(shape1: TopoDS_Shape, shape2: TopoDS_Shape) -> bool:
     collision_shapes = BRepAlgoAPI_Section(shape1, shape2)
     return collision_shapes.Shape().NbChildren() > 0
 
