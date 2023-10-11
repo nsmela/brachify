@@ -6,12 +6,14 @@ from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.NeedleChannels.NeedlesDisplay as needlesDisplay
 from Core.Models.NeedleChannel import NeedleChannel
 
+
 '''
 Manages the functions and display values for the Needles and the Channel View
 self.display_needles: all needle channels fused as a single model
 self.display_needle_list: a list of the needle channels
 self.needles_active_index: the current active needle channel
 '''
+
 
 def setActiveNeedleChannel(window: MainWindow, index:int = -1) -> None:
     window.needles_active_index = index
@@ -20,9 +22,11 @@ def setActiveNeedleChannel(window: MainWindow, index:int = -1) -> None:
         window.ui.channelsListWidget.setCurrentRow(index)
     needlesDisplay.view(window)
     
+
 def setCylinderVisibility(window: MainWindow) -> None:
     window.isCylinderHidden = window.ui.checkBox_hide_cylinder.isChecked()
     needlesDisplay.view(window)
+
 
 def get_clicked_needle_index(window: MainWindow, shape) -> int:
     for i, needle in enumerate(window.display_needles_list):
@@ -31,6 +35,7 @@ def get_clicked_needle_index(window: MainWindow, shape) -> int:
 
     return -1
     
+
 def setChannelOffset(window: MainWindow, offset:int) -> None:
     index = window.needles_active_index
     if index < 0:
@@ -45,6 +50,7 @@ def setChannelOffset(window: MainWindow, offset:int) -> None:
         
     reshape(window, channel)
 
+
 def setNeedleDisabled(window: MainWindow):
     index = window.needles_active_index
     if index < 0:
@@ -53,6 +59,7 @@ def setNeedleDisabled(window: MainWindow):
     channel = window.needles.channels[window.needles_active_index]
     channel.disabled = not channel.disabled
     recalculate(window)
+
 
 def recalculate(window: MainWindow):
     '''
@@ -85,6 +92,7 @@ def recalculate(window: MainWindow):
     set_tandem_offsets(window)
     needlesDisplay.view(window)
     
+
 def reshape(window: MainWindow, channel: NeedleChannel):
     '''
     Needle Channel shapes are saved within the NeedleChannel class
