@@ -60,9 +60,10 @@ def get_faces_axis(shape:TopoDS_Shape)-> list:
 
 
 def lowest_face_by_normal(shape:TopoDS_Shape) -> TopoDS_Face:
-    faces = (face for face in get_faces_axis(shape) if face[1].Z() < 0.0)
-    print(faces[0])
-    return faces[0][0]
+    for face in get_faces_axis(shape):
+        if face[1].Direction().Z() < 0.0:
+            return face
+    return None
 
 def get_highest_face(shape: TopoDS_Shape) -> TopoDS_Face:
     faces = get_faces(shape)
@@ -89,7 +90,7 @@ def get_direction(p1: gp_Pnt, p2: gp_Pnt) -> gp_Dir:
 
 def extend_bottom_face(shape:TopoDS_Shape) -> TopoDS_Shape:
     face = lowest_face_by_normal(shape) #get_lowest_face(shape)
-    z = face.Location.Z() #geom_plane_from_face(face).Location().Z()
+    z = face[2].Z() #geom_plane_from_face(face).Location().Z()
     direction = gp_Vec(0,0, -z - 0.1)
-    extended_geometry = BRepPrimAPI_MakePrism(face, direction).Shape()
+    extended_geometry = BRepPrimAPI_MakePrism(face[0], direction).Shape()
     return BRepAlgoAPI_Fuse(shape, extended_geometry).Shape()

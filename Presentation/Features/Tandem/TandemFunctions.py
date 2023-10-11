@@ -118,7 +118,7 @@ def set_tandem(window: MainWindow, index:int = None) -> None:
     window.tandem = tandem
     update_tandem_settings(window, tandem)
     load_tandem_models(window, tandem)
-    window.tandem = apply_tandem_offsets(tandem)
+    window.tandem = apply_tandem_offsets(tandem, position=window.tandem_offset_position, rotation=window.tandem_offset_rotation)
     tandemDisplay.update(window)
 
 

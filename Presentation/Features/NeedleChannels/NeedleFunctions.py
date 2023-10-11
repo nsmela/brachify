@@ -62,6 +62,8 @@ def recalculate(window: MainWindow):
         
     the needles list is used only for channels view
     the fused model is used in all other views and to boolean subtract
+    
+    also set the tandem offset from the first needle channel
     '''
     print("Recalculating channels!")
     diameter = window.ui.channelDiameterSpinBox.value()
@@ -79,7 +81,8 @@ def recalculate(window: MainWindow):
             window.display_needles = BRepAlgoAPI_Fuse(window.display_needles, needle.shape).Shape()
         else:
             window.display_needles = needle.shape
-                
+    
+    set_tandem_offsets(window)
     needlesDisplay.view(window)
     
 def reshape(window: MainWindow, channel: NeedleChannel):
@@ -95,4 +98,16 @@ def reshape(window: MainWindow, channel: NeedleChannel):
         channel.shape = None
     else:
         channel.shape = generate_curved_channel(channel=channel, cylinder_offset=cylinder_offset, diameter=diameter)
+
+    set_tandem_offsets(window)
     needlesDisplay.update(window)
+    
+
+def set_tandem_offsets(window: MainWindow) -> None:
+    tandem_channel = window.needles.channels[0]
+    
+    # position
+    window.tandem_offset_position = tandem_channel.points[0]
+    
+    # rotation
+    window.tandem_offset_rotation = 0.0 # TODO
