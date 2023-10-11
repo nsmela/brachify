@@ -100,6 +100,8 @@ class MainWindow(QMainWindow):
         self.tandem = None
         self.tandems = {}
         self.tandem_index = -1;
+        self.tandem_offset_position = [0.0, 0.0, 0.0] # set by needle channels and offset by cylinder origin
+        self.tandem_offset_rotation = 0.0 # set by the tandem channel in needle channels
         tandem.init(self)
         
         ## Exports

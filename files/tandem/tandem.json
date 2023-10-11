@@ -1,19 +1,4 @@
 {
-    "VMS 60deg BCCK Modified Tandem": {
-        "Tandem Name": "VMS 60deg BCCK Modified Tandem",
-        "Display Model File": ".\\files\\tandem\\VMS 60deg BCCK Modified Tandem_display.STEP",
-        "Tool Model File": ".\\files\\tandem\\VMS 60deg BCCK Modified Tandem_tool.STEP",
-        "Offsets": [
-            0.0,
-            0.0,
-            15.0
-        ],
-        "Rotation": [
-            90.0,
-            0.0,
-            0.0
-        ]
-    },
     "Basic Example": {
         "Tandem Name": "Basic Example",
         "Display Model File": ".\\files\\tandem\\Basic Example_display.stp",

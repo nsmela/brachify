@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QFileDialog
 
-from OCC.Extend.ShapeFactory import translate_shp, rotate_shp_3_axis
-from OCC.Core.gp import gp_Vec
+from OCC.Extend.ShapeFactory import translate_shp, rotate_shape
+from OCC.Core.gp import gp, gp_Vec
 
 
 from Presentation.MainWindow.core import MainWindow
@@ -43,14 +43,6 @@ def save_tandem(window: MainWindow) -> bool:
     tandem_name = window.ui.lineEdit_tandemName.text()
     tandem_display_model = window.ui.tandem_lineEdit_displayModel.text()
     tandem_tool_model = window.ui.tandem_lineEdit_toolModel.text()
-    tandem_offsets = [
-            window.ui.spinBox_tandem_xOffset.value(),
-            window.ui.spinBox_tandem_yOffset.value(),
-            window.ui.spinBox_tandem_zOffset.value()]
-    tandem_rotation = [
-        window.ui.tandem_spinBox_xAngle.value(),
-        window.ui.tandem_spinBox_yAngle.value(),
-        window.ui.tandem_spinBox_zAngle.value()]
     index = window.ui.listWidget_savedTandems.currentRow()
     
     # check if info is enough to proceed
@@ -66,8 +58,6 @@ def save_tandem(window: MainWindow) -> bool:
     tandem.name = tandem_name
     tandem.shape_filepath = os.path.join(tandem_dir, f"{tandem_name}_display{os.path.splitext(tandem_display_model)[1]}")
     tandem.tool_filepath = os.path.join(tandem_dir, f"{tandem_name}_tool{os.path.splitext(tandem_tool_model)[1]}")
-    tandem.offsets = tandem_offsets
-    tandem.rotation = tandem_rotation
     
     # check if file exists, if not create a blank one
     try:
@@ -151,20 +141,16 @@ def load_tandem_models(window: MainWindow, tandem: TandemModel) -> None:
     UIFunctions.setPage(window, 3)
 
 
-def apply_tandem_offsets(tandem: TandemModel) -> TandemModel:
+def apply_tandem_offsets(tandem: TandemModel, position:list = [0.0, 0.0, 0.0], rotation:float = 0.0) -> TandemModel:
     if not tandem:
         return None
     
-    # rotation first ot make the translate values make sense
-    x = tandem.rotation[0]
-    y = tandem.rotation[1]
-    z = tandem.rotation[2]
-    
-    tandem.shape = rotate_shp_3_axis(shape=tandem.shape, rx=x, ry=y, rz=z)
-    tandem.tool_shape = rotate_shp_3_axis(shape=tandem.tool_shape, rx=x, ry=y, rz=z)
+    # rotation first to make the translate values make sense
+    tandem.shape = rotate_shape(shape=tandem.shape, axis=gp.OZ(), angle=rotation)
+    tandem.tool_shape = rotate_shape(shape=tandem.tool_shape, axis=gp.OZ(), angle=rotation)
     
     # translating the model
-    offset = gp_Vec(tandem.offsets[0], tandem.offsets[1], tandem.offsets[2])
+    offset = gp_Vec(position[0], position[1], position[2])
     tandem.shape = translate_shp(tandem.shape, offset)
     tandem.tool_shape = translate_shp(tandem.tool_shape, offset)
 
@@ -176,7 +162,7 @@ def apply_tandem_offsets(tandem: TandemModel) -> TandemModel:
 def extend(tandem: TandemModel) -> TandemModel:
     try:
         tandem.shape = brep.extend_bottom_face(tandem.shape)
-        #tandem.tool_shape = brep.extend_bottom_face(tandem.tool_shape)
+        tandem.tool_shape = brep.extend_bottom_face(tandem.tool_shape)
     except Exception as error_message:
         print(f"Lower face extension failed! {error_message}")
         
@@ -203,12 +189,6 @@ def clear_tandem_settings(window: MainWindow) -> None:
     window.ui.tandem_lineEdit_displayModel.setText("")
     window.ui.tandem_lineEdit_toolModel.setText("")
     window.ui.lineEdit_tandemName.setText("")
-    window.ui.spinBox_tandem_xOffset.setValue(0.0)
-    window.ui.spinBox_tandem_yOffset.setValue(0.0)
-    window.ui.spinBox_tandem_zOffset.setValue(0.0)
-    window.ui.tandem_spinBox_xAngle.setValue(0.0)
-    window.ui.tandem_spinBox_xAngle.setValue(0.0)
-    window.ui.tandem_spinBox_xAngle.setValue(0.0)
     window.ui.btn_tandem_add_update.setObjectName("Add")
     window.ui.listWidget_savedTandems.clearSelection()
     window.tandem = None
@@ -225,10 +205,4 @@ def update_tandem_settings(window: MainWindow, tandem: TandemModel) -> None:
     window.ui.tandem_lineEdit_displayModel.setText(tandem.shape_filepath)
     window.ui.tandem_lineEdit_toolModel.setText(tandem.tool_filepath)
     window.ui.lineEdit_tandemName.setText(tandem.name)
-    window.ui.spinBox_tandem_xOffset.setValue(tandem.offsets[0])
-    window.ui.spinBox_tandem_yOffset.setValue(tandem.offsets[1])
-    window.ui.spinBox_tandem_zOffset.setValue(tandem.offsets[2])
-    window.ui.tandem_spinBox_xAngle.setValue(tandem.rotation[0])
-    window.ui.tandem_spinBox_yAngle.setValue(tandem.rotation[1])
-    window.ui.tandem_spinBox_zAngle.setValue(tandem.rotation[2])
     window.ui.btn_tandem_add_update.setObjectName("Update")

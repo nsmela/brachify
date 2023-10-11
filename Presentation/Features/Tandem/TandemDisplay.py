@@ -1,3 +1,4 @@
+from unittest import registerResult
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
 
@@ -58,7 +59,7 @@ def update(window:MainWindow):
         # tandem
         if window.tandem is not None:
             color = Quantity_Color(0.2, 0.2, 0.55, Quantity_TOC_RGB)
-            window.display.DisplayColoredShape(shapes=window.tandem.shape, color=color)
+            #window.display.DisplayColoredShape(shapes=window.tandem.shape, color=color)
             
             color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
             window.display.DisplayShape(shapes=window.tandem.tool_shape, color=color, material=Graphic3d_NOM_TRANSPARENT)
@@ -67,10 +68,14 @@ def update(window:MainWindow):
             import Application.BRep.Helper as brep
             color = Quantity_Color(0.0, 1.0, 0.0, Quantity_TOC_RGB)
 
-            faces = brep.get_faces(window.tandem.tool_shape)
-            print(faces)
-            for face in faces:
-                if brep.face_is_plane(face[0]) and face[1] < 25.0 and face[1] > 15.0:
+            faces = brep.get_faces_axis(window.tandem.tool_shape)
+
+            for i, face in enumerate(faces):
+                axis = face[1].Direction()
+                location = face[2]
+                result = axis.Z() < 0.0
+                print(f" Result: {result} face {i}: axis X:{axis.X()} Y:{axis.Y()} Z:{axis.Z()} location X:{location.X()} Y:{location.Y()} Z:{location.Z()}")
+                if result:
                     window.display.DisplayShape(shapes=face[0], color=color)
 
     except Exception as error_message:
