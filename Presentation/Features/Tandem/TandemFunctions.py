@@ -145,14 +145,15 @@ def apply_tandem_offsets(tandem: TandemModel, position:list = [0.0, 0.0, 0.0], r
     if not tandem:
         return None
     
-    # rotation first to make the translate values make sense
-    tandem.shape = rotate_shape(shape=tandem.shape, axis=gp.OZ(), angle=rotation)
-    tandem.tool_shape = rotate_shape(shape=tandem.tool_shape, axis=gp.OZ(), angle=rotation)
-    
-    # translating the model
     offset = gp_Vec(position[0], position[1], position[2])
-    tandem.shape = translate_shp(tandem.shape, offset)
-    tandem.tool_shape = translate_shp(tandem.tool_shape, offset)
+    
+    if tandem.shape:
+        tandem.shape = rotate_shape(shape=tandem.shape, axis=gp.OZ(), angle=rotation)
+        tandem.shape = translate_shp(tandem.shape, offset)
+    
+    if tandem.tool_shape:
+        tandem.tool_shape = rotate_shape(shape=tandem.tool_shape, axis=gp.OZ(), angle=rotation)
+        tandem.tool_shape = translate_shp(tandem.tool_shape, offset)
 
     tandem = extend(tandem)
 

@@ -60,10 +60,19 @@ def get_faces_axis(shape:TopoDS_Shape)-> list:
 
 
 def lowest_face_by_normal(shape:TopoDS_Shape) -> TopoDS_Face:
-    for face in get_faces_axis(shape):
+    faces = get_faces_axis(shape)
+    
+    # check for a negative normal direction
+    for face in faces:
         if face[1].Direction().Z() < 0.0:
             return face
-    return None
+        
+    # check for the lowest face
+    def sortByZ(elem):
+        return elem[2].Z()    
+    
+    faces.sort(key=sortByZ)
+    return faces[0]
 
 def get_highest_face(shape: TopoDS_Shape) -> TopoDS_Face:
     faces = get_faces(shape)
