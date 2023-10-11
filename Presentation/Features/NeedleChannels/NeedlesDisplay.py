@@ -5,6 +5,7 @@ from Presentation.MainWindow.display_functions import DisplayFunctions
 
 from Presentation.MainWindow.core import MainWindow
 
+import Application.BRep.Intersections as intersect
 
 # def startView
 # def updateView
@@ -100,13 +101,30 @@ def update(window: MainWindow):
     try: 
         # needles shown
         if window.needles is not None:
-            color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
+            # intersecting channels detection
+            channels = []
+            for channel in window.needles.channels:
+                shape = channel.shape
+                result = False
+                for otherChannel in window.needles.channels:
+                    if channel is otherChannel:
+                        continue
+                    result = intersect.are_colliding(channel.shape, otherChannel.shape)
+                    if result:
+                        break
+                channels.append([channel.shape, result]) # TopoDS_Shape, bool (is it colliding with any other channels?)
+
+            standard_color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
+            colliding_color = Quantity_Color(0.95, 0.1, 0.1, Quantity_TOC_RGB)
             selected_color = Quantity_Color(0.1, 0.4, 0.4, Quantity_TOC_RGB)
-            for i, channel in enumerate(window.needles.channels):
+            for i, channel in enumerate(channels):
                 if i == window.needles_active_index:
-                    window.display.DisplayColoredShape(shapes=channel.shape, color=selected_color)
+                    window.display.DisplayColoredShape(shapes=channel[0], color=selected_color)
                 else:
-                    window.display.DisplayColoredShape(shapes=channel.shape, color=color)
+                    color = standard_color
+                    if channel[1]:
+                        color = colliding_color
+                    window.display.DisplayColoredShape(shapes=channel[0], color=color)
                     
     except Exception as error_message:
         print(f"Needle Display _needles error: \n {error_message}")
@@ -115,7 +133,7 @@ def update(window: MainWindow):
         # tandem
          if window.tandem is not None:
             color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
-            window.display.DisplayShape(shapes=window.tandem.tools_shape, color=color, material=Graphic3d_NOM_TRANSPARENT)
+            window.display.DisplayShape(shapes=window.tandem.tool_shape, color=color, material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:
         print(error_message)
