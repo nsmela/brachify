@@ -8,11 +8,6 @@ from Presentation.MainWindow.core import MainWindow
 
 ## IMPORTS
 def view(window: MainWindow):
-    # variables
-
-    # set page
-    window.ui.stackedWidget.setCurrentIndex(0)
-        
     # set display
     try:
         window.display.default_drawer.SetFaceBoundaryDraw(True)

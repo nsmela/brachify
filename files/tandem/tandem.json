@@ -18,5 +18,10 @@
             0.0,
             0.0
         ]
+    },
+    "basic visual": {
+        "Tandem Name": "basic visual",
+        "Display Model File": ".\\files\\tandem\\basic visual_display.step",
+        "Tool Model File": ".\\files\\tandem\\basic visual_tool.step"
     }
 }

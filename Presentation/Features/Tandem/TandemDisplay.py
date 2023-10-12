@@ -9,25 +9,22 @@ from Core.Models.Tandem import TandemModel
 
 
 def init(window: MainWindow):
+    """Called when the core class is initializing"""
     try:
         window.ui.btn_tandem_importDisplayModel.clicked.connect(lambda: tandem.load_tandem_display_model(window))
         window.ui.btn_tandem_importToolModel.clicked.connect(lambda: tandem.load_tandem_tool_model(window))
         window.ui.btn_tandem_clear.clicked.connect(lambda: tandem.clear_tandem_settings(window))
         window.ui.btn_tandem_add_update.clicked.connect(lambda: tandem.save_tandem(window))
-        window.ui.listWidget_savedTandems.itemSelectionChanged.connect( 
-            lambda: tandem.set_tandem(window, window.ui.listWidget_savedTandems.currentRow()))
+        window.ui.listWidget_savedTandems.itemSelectionChanged.connect(lambda: tandem.set_tandem(window))
         tandem.load_tandems(window)
-    except:
-        pass
+    except Exception as error_message:
+        print(f"tandem display init failed: {error_message}")
 
 
 ## TANDEM
 def view(window: MainWindow):
     # variables
 
-    # set page
-    window.ui.stackedWidget.setCurrentIndex(3)
-        
     # set display
     window.display.default_drawer.SetFaceBoundaryDraw(True)  
     window.display._select_callbacks = []
@@ -36,7 +33,7 @@ def view(window: MainWindow):
     update(window)
 
 
-def update(window:MainWindow):
+def update(window: MainWindow):
     try:
         window.display.EraseAll()
 
@@ -60,7 +57,6 @@ def update(window:MainWindow):
         # tandem
         if window.tandem is not None:
             color = Quantity_Color(0.2, 0.2, 0.55, Quantity_TOC_RGB)
-            #window.display.DisplayColoredShape(shapes=window.tandem.shape, color=color)
             
             color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
             window.display.DisplayShape(shapes=window.tandem.tool_shape, color=color, material=Graphic3d_NOM_TRANSPARENT)

@@ -1,7 +1,5 @@
-from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
-from OCC.Core.TopoDS import TopoDS_Shape
 
 from Presentation.MainWindow.core import MainWindow
 
@@ -11,14 +9,11 @@ def view(window: MainWindow):
     print("switched to cylinder view!")
     # variables
 
-    # set page
-    window.ui.stackedWidget.setCurrentIndex(1)
-        
     # set display
     window.display._select_callbacks = []
     window.display.SetSelectionModeShape()
     window.display.default_drawer.SetFaceBoundaryDraw(True)
-    
+
     try:
         window.display.EraseAll()
 
@@ -31,7 +26,7 @@ def view(window: MainWindow):
     except Exception as error_message:
         print(f"CylinderView: Cylinder load error: \n{error_message}")
 
-    try: 
+    try:
         # needles shown
         if window.needles is not None:
             color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
@@ -40,11 +35,12 @@ def view(window: MainWindow):
     except Exception as error_message:
         print(f"CylinderView: Channels load error: \n{error_message}")
 
-    try: 
+    try:
         # tandem
-       if window.tandem is not None:
+        if window.tandem is not None:
             color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
-            window.display.DisplayShape(shapes=window.tandem.tool_shape, color=color, material=Graphic3d_NOM_TRANSPARENT)
+            window.display.DisplayShape(shapes=window.tandem.tool_shape, color=color,
+                                        material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:
         print(f"CylinderView: Tandem load error: \n{error_message}")

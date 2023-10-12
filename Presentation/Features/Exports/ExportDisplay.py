@@ -9,11 +9,7 @@ from Presentation.MainWindow.core import MainWindow
 
 ## EXPORT
 def view(window: MainWindow):
-    # variables
 
-    # set page
-    window.ui.stackedWidget.setCurrentIndex(4)
-        
     shape = None
         
     # set display
