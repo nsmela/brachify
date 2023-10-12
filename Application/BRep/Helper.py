@@ -1,4 +1,3 @@
-from tkinter import EXTENDED
 from OCC.Core.BRepAdaptor import BRepAdaptor_Surface
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut, BRepAlgoAPI_Fuse
 from OCC.Core.BRepFilletAPI import BRepFilletAPI_MakeFillet
@@ -10,6 +9,8 @@ from OCC.Core.TopoDS import topods, TopoDS_Face, TopoDS_Solid, TopoDS_Shape
 from OCC.Core.gp import gp_Dir, gp_Ax2, gp_Pnt, gp_Pln, gp_Vec
 from OCC.Extend.TopologyUtils import TopologyExplorer
 from OCC.Extend.ShapeFactory import translate_shp
+
+import numpy as np
 
 
 def face_is_plane(face: TopoDS_Face) -> bool:
@@ -74,6 +75,7 @@ def lowest_face_by_normal(shape:TopoDS_Shape) -> TopoDS_Face:
     faces.sort(key=sortByZ)
     return faces[0]
 
+
 def get_highest_face(shape: TopoDS_Shape) -> TopoDS_Face:
     faces = get_faces(shape)
     return faces[-1][0]
@@ -90,6 +92,13 @@ def get_vector(p1: gp_Pnt, p2: gp_Pnt, length: float = 1.0) -> gp_Vec:
         p2.Y() - p1.Y(),
         p2.Z() - p1.Z())
     return vector.Normalized() * length
+
+
+def get_magnitude(p1: gp_Pnt, p2: gp_Pnt) -> float:
+    vector = np.array([p2.X(), p2.Y(), p2.Z()]) \
+             - np.array([p1.X(), p1.Y(), p1.Z()])
+    return np.linalg.norm(vector)
+
 
 
 def get_direction(p1: gp_Pnt, p2: gp_Pnt) -> gp_Dir:

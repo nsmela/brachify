@@ -19,6 +19,11 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
     Cylinder Offset is for height offset
     diameter is the channel's diameter
     '''
+
+    if len(channel.points) < 3:
+        print(F"Needle Channel {channel.channelId}:{channel.channelNumber} Generation error! needs 2 or more points!")
+        return None
+
     # offset points using z axis and cylinder's offset
     # and convert into a gp_Pnt
     points = []
@@ -30,51 +35,32 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
     # generate starting point on top (cone)
     p1 = points[0]
     p2 = points[1]
-    vector = np.array([channel.points[1][0], channel.points[1][1], channel.points[1][2]]) \
-        - np.array([channel.points[0][0], channel.points[0][1], channel.points[0][2]])
-    length = np.linalg.norm(vector)
-    direction = helper.get_direction(p1, p2)
-    axis = gp_Ax2(p1, direction)
-    pipe = BRepPrimAPI_MakeCone(axis, 0.0, radius, length).Shape()
+    pipe = _cone_pipe(p1, p2, radius)
     face = helper.get_lowest_face(pipe)
     
     # for each (after the first), create a cylinder to next point to join
     for i in range(1, len(points) - 1):
         p1 = points[i]
         p2 = points[i + 1]
-        
-        edge = BRepBuilderAPI_MakeEdge(p1, p2).Edge()
-        makeWire = BRepBuilderAPI_MakeWire(edge)
-        makeWire.Build()
-        wire = makeWire.Wire()
-        cylinder = BRepOffsetAPI_MakePipe(wire, face).Shape()
+
+        cylinder = _straight_pipe(p1, p2, face)
         pipe = BRepAlgoAPI_Fuse(pipe, cylinder).Shape()
         face = helper.get_lowest_face(cylinder)
 
     # add a curved pipe downwards using offset length and direction of last two points
+    length = helper.get_magnitude(points[-2], points[-1])
     vector = helper.get_vector(points[-2], points[-1], length + channel.curve_downwards)
-    p1 = points[-1]
-    p2 = gp_Pnt(p1.X() + vector.X(), p1.Y() + vector.Y(), p1.Z() + vector.Z())
-    p3 = gp_Pnt(p2.X(), p2.Y(), p2.Z() - length)
+    p1 = points[-1] # last point in array
+    p2 = gp_Pnt(p1.X() + vector.X(), p1.Y() + vector.Y(), p1.Z() + vector.Z()) # middle point for bcurve
+    p3 = gp_Pnt(p2.X(), p2.Y(), p2.Z() - length) # last point, lowered towards bottom
     
-    # curve joining two straight paths
-    array = TColgp_Array1OfPnt(1, 3)
-    array.SetValue(1, p1)
-    array.SetValue(2, p2)
-    array.SetValue(3, p3)
-    bz_curve = Geom_BezierCurve(array)
-    bend_edge = BRepBuilderAPI_MakeEdge(bz_curve).Edge()
-    
-    # assembling the path
-    wire = BRepBuilderAPI_MakeWire(bend_edge).Wire()
-    
-    # shape using last face
-    pipe_bend = BRepOffsetAPI_MakePipe(wire, face).Shape()
+    # curve elbow after the points
+    pipe_bend = _curved_pipe(p1, p2, p3, face)
     pipe = BRepAlgoAPI_Fuse(pipe, pipe_bend).Shape()
     
     # add a cylinder from pipe to past bottom of cylinder 
     base_point = gp_Pnt(p3.X(), p3.Y(), -0.1)
-    face = helper.get_lowest_face(pipe_bend)
+    face = helper.get_lowest_face(pipe)
     edge = BRepBuilderAPI_MakeEdge(p3, base_point).Edge()
     makeWire = BRepBuilderAPI_MakeWire(edge)
     makeWire.Build()
@@ -83,3 +69,34 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
     pipe = BRepAlgoAPI_Fuse(pipe, cylinder).Shape()
 
     return pipe
+
+
+def _cone_pipe(p1, p2, radius: float) -> TopoDS_Shape:
+    length = helper.get_magnitude(p1, p2)
+    direction = helper.get_direction(p1, p2)
+    axis = gp_Ax2(p1, direction)
+    return BRepPrimAPI_MakeCone(axis, 0.0, radius, length).Shape()
+
+
+def _straight_pipe(p1, p2, face) -> TopoDS_Shape:
+    edge = BRepBuilderAPI_MakeEdge(p1, p2).Edge()
+    make_wire = BRepBuilderAPI_MakeWire(edge)
+    make_wire.Build()
+    wire = make_wire.Wire()
+    return BRepOffsetAPI_MakePipe(wire, face).Shape()
+
+
+def _curved_pipe(p1, p2, p3, face: TopoDS_Shape) -> TopoDS_Shape:
+    # curve joining two straight paths
+    array = TColgp_Array1OfPnt(1, 3)
+    array.SetValue(1, p1)
+    array.SetValue(2, p2)
+    array.SetValue(3, p3)
+    bz_curve = Geom_BezierCurve(array)
+    bend_edge = BRepBuilderAPI_MakeEdge(bz_curve).Edge()
+
+    # assembling the path
+    wire = BRepBuilderAPI_MakeWire(bend_edge).Wire()
+
+    # shape using last face
+    return BRepOffsetAPI_MakePipe(wire, face).Shape()
