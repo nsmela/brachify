@@ -2,8 +2,9 @@ import logging
 import os
 import sys
 
+from OCC.Core import V3d
 from OCC.Core.AIS import AIS_Manipulator
-from OCC.Core.gp import gp_Trsf
+from OCC.Core.gp import gp_Trsf, gp
 from OCC.Display import OCCViewer
 from OCC.Display.qtDisplay import qtBaseViewer
 from OCC.Display.backend import get_qt_modules
@@ -131,6 +132,7 @@ class OrbitCameraViewer(qtBaseViewer):
         ev = event.pos()
         self.dragStartPosX = ev.x()
         self.dragStartPosY = ev.y()
+        self.eyeStartPos = self._display.View.Eye()
         self._display.StartRotation(self.dragStartPosX, self.dragStartPosY)
 
     def mouseReleaseEvent(self, event):
@@ -154,5 +156,16 @@ class OrbitCameraViewer(qtBaseViewer):
         # ROTATE
         if buttons == QtCore.Qt.RightButton:
             self.cursor = "rotate"
-            self._display.Rotation(pt.x(), pt.y())
+            sensitivity = 0.10
+            #self._display.View.SetAxis(0, 0, 0, 0, 1, 1)
+            angleX = self.eyeStartPos[0] - (pt.x() + self.dragStartPosX) #pt.x() * 3.149 / 18000  # convert to radians
+            angleY = self.eyeStartPos[2] + (pt.y() - self.dragStartPosY)  #(pt.y() - self.dragStartPosY) * 3.14159 / 180
+            #self._display.Rotation(pt.x(), 0)
+            self._display.View.SetEye(angleX, self.eyeStartPos[1], angleY)
+            #self._display.View.Rotate(angleX, 0, 0)
+        if buttons == QtCore.Qt.MiddleButton:
+            dy = (self.dragStartPosY + pt.y()) * 3.14159 / 180
+            self.dragStartPosY = pt.y()
+            self.cursor = "pan"
+            self._display.View.SetEye(0, 0, dy)
 
