@@ -5,6 +5,7 @@ import sys
 from OCC.Core.AIS import AIS_Manipulator
 from OCC.Core.gp import gp_Trsf
 from OCC.Display import OCCViewer
+from OCC.Display.qtDisplay import qtBaseViewer
 from OCC.Display.backend import get_qt_modules
 
 QtCore, QtGui, QtWidgets, QtOpenGL = get_qt_modules()

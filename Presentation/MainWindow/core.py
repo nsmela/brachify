@@ -1,4 +1,3 @@
-from email.mime import application
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QAbstractItemView, QMainWindow
 

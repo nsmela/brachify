@@ -5,24 +5,14 @@
 ## V: 1.0.0
 ##
 ################################################################################
-from turtle import Vec2D
-from typing import Self
-from PyQt5 import QtCore
 
 ## ==> GUI FILE
 from Presentation.MainWindow.core import MainWindow
-from Presentation.MainWindow.display_functions import DisplayFunctions
 import Presentation.Features.Imports.ImportDisplay as importDisplay 
 import Presentation.Features.Cylinder.CylinderDisplay as cylDisplay 
 import Presentation.Features.NeedleChannels.NeedlesDisplay as needleDisplay
 import Presentation.Features.Tandem.TandemDisplay as tandemDisplay
 import Presentation.Features.Exports.ExportDisplay as exportsDisplay
-
-## Functions
-
-import numpy as np
-import os
-
 
 class UIFunctions(MainWindow):
 
