@@ -11,8 +11,6 @@ import Application.Imports.import_dicom_structure as dicom_structure
 import Application.Imports.import_dicom_planning as dicom_planning
 import Application.Imports.import_dicom as dicom
 
-from Core.Models.Tandem import TandemModel
-
 import numpy as np
 
 import os
@@ -47,11 +45,6 @@ def process_file(window: MainWindow, filepath: str):
         if dicom.is_rp_file(filepath):
             add_rp_file(window, filepath)
             return True
-        
-    supported_file_types = [".stl", ".3mf", ".obj", ".stp", ".step"]
-    if file_type in supported_file_types:
-        add_tandem_file(window, filepath)
-        return True
     else:
         print("Invalid file!")
         return False
@@ -65,6 +58,11 @@ def add_rs_file(window: MainWindow, filepath: str) -> None:
     window.ui.cylinderRadiusSpinBox.setValue(window.brachyCylinder.radius * 2)
     window.ui.cylinderLengthSpinBox.setValue(window.brachyCylinder.length)
     window.ui.checkbox_cylinder_base.setChecked(window.brachyCylinder.expand_base)
+
+    # global values for the cylinder offsets
+    direction, length = window.brachyCylinder.getDirection()
+    window.cylinder_offset_direction = direction
+    window.cylinder_offset_length = length
 
     window.display_cylinder = window.brachyCylinder.shape()
     window.isLocked = False

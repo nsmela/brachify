@@ -74,7 +74,9 @@ class MainWindow(QMainWindow):
         ## Cylinder Stuff
         ########################################################################
         import Presentation.Features.Cylinder.CylinderFunctions as cylinder
-        self.brachyCylinder = None  
+        self.brachyCylinder = None
+        self.cylinder_offset_direction = [0.0, 0.0, 0.0]
+        self.cylinder_offset_length = 0.0
         
         self.ui.cylinderRadiusSpinBox.valueChanged.connect(lambda: cylinder.setRadius(self))
         self.ui.cylinderLengthSpinBox.valueChanged.connect(lambda: cylinder.setLength(self))
@@ -99,7 +101,7 @@ class MainWindow(QMainWindow):
         import Presentation.Features.Tandem.TandemDisplay as tandem
         self.tandem = None
         self.tandems = {}
-        self.tandem_index = -1;
+        self.tandem_index = -1
         self.tandem_offset_position = [0.0, 0.0, 0.0] # set by needle channels and offset by cylinder origin
         self.tandem_offset_rotation = 0.0 # set by the tandem channel in needle channels
         tandem.init(self)

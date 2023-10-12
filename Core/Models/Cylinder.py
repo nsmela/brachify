@@ -41,12 +41,18 @@ def add_base(shape: TopoDS_Solid, radius1: float, radius2: float):
 
 
 class BrachyCylinder:
-    def __init__(self, tip, base, radius: float = 30.0, expand_base: bool = False ):
+    def __init__(self, tip, base, radius: float = 30.0, expand_base: bool = False):
         self.length = 200.0
-        self.tip = tip
-        self.base = base
+        self.tip = np.array(tip)
+        self.base = np.array(base)
         self.radius = radius
         self.expand_base = expand_base
+
+    def getDirection(self):
+        direction = self.tip - self.base
+        length = np.linalg.norm(direction)
+        print(f"Cylinder's direction: {direction[0]}, {direction[1]}, {direction[2]} length: {length}")
+        return direction, length
 
     def shape(self) -> TopoDS_Shape:
         # cylinder references
