@@ -160,3 +160,8 @@ cython_debug/
 #.idea/
 /.vs/Modern-GUI-PyQt5/v17
 /.vs/Modern-GUI-PyQt5/FileContentIndex
+/.idea
+/.vs/BrachyApp-PyQt5
+/.vs/PythonSettings.json
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
