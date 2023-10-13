@@ -16,4 +16,10 @@ class NeedleChannel:
     def toString(self):
         return f"Channel {self.channelId} ({self.channelId}: Offset: {self.curve_downwards})"
 
-        
+    def getRotation(self):
+        # calculate the sin angle on the xy plane using 0,0 and the highest point in the list of points
+        # sort by z
+        # get xy
+        # get angle (radians or degrees?)
+        # return result
+        pass
