@@ -45,6 +45,7 @@ def process_file(window: MainWindow, filepath: str):
         print("Invalid file!")
         return False
 
+
 def get_file_shape(filepath: str) -> TopoDS_Shape:
     # make sure the path exists otherwise OCE get confused
     if not os.path.exists(filepath):

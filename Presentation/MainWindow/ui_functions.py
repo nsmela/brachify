@@ -49,9 +49,9 @@ class UIFunctions:
         for button in views.values():
             button["Button"].setStyleSheet(style_unclicked)
         
-        views[view_name]["Button"].setStyleSheet(style_clicked)
-        window.ui.stackedWidget.setCurrentIndex(views[view_name]["Index"])
-        views[view_name]["Display"](window)
+        views[view_name]["Button"].setStyleSheet(style_clicked) # set the active button's style
+        window.ui.stackedWidget.setCurrentIndex(views[view_name]["Index"]) # set the stackedWidget's page
+        views[view_name]["Display"](window) 
 
 
         

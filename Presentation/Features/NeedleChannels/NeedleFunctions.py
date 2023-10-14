@@ -1,7 +1,7 @@
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.TopoDS import TopoDS_Shape
 from PyQt5.QtWidgets import QListWidgetItem
-from Application.BRep.channel import generate_curved_channel
+from Application.BRep.Channel import generate_curved_channel
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.NeedleChannels.NeedlesDisplay as needlesDisplay
 from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
@@ -148,6 +148,7 @@ def add_rp_file(window: MainWindow, filepath: str) -> None:
             new_points = new_points - offset_vector
             channels[i].points = list(list(points) for points in new_points)
     window.needles = NeedlesModel(channels=channels)
+    window.ui.channelsListWidget.clear()
     for needle in window.needles.channels:
         window.ui.channelsListWidget.addItem(needle.channelId)
 
