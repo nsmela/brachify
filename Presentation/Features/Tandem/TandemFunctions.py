@@ -67,7 +67,7 @@ def save_tandem(window: MainWindow) -> bool:
         # if not, save the info instead
         # copy model files to the tandem directory
         result = shutil.copy(tandem_display_model, tandem.shape_filepath)
-        print(f"diaply model copied to {result}")
+        print(f"display model copied to {result}")
 
         result = shutil.copy(tandem_tool_model, tandem.tool_filepath)
         print(f"tool model copied to {result}")
@@ -148,7 +148,7 @@ def apply_tandem_offsets(tandem: TandemModel, position: list = [0.0, 0.0, 0.0], 
     if not tandem:
         return None
 
-    offset = gp_Vec(position[0], position[1], position[2])
+    offset = gp_Vec(0.0, 0.0, position[2] - 9.0)
 
     if tandem.shape:
         tandem.shape = rotate_shape(shape=tandem.shape, axis=gp.OZ(), angle=rotation)

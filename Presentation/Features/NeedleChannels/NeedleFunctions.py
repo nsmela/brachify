@@ -120,10 +120,11 @@ def set_tandem_offsets(window: MainWindow) -> None:
     tandem_channel = window.needles.channels[0]
 
     # position
-    window.tandem_offset_position = tandem_channel.points[0]
+    window.tandem_offset_position = tandem_channel.points[-1]
 
     # rotation
-    window.tandem_offset_rotation = 0.0  # TODO
+    window.tandem_offset_rotation = tandem_channel.getRotation()
+    print(f"Rotation calculated: {window.tandem_offset_rotation}")
 
 
 def add_rp_file(window: MainWindow, filepath: str) -> None:
