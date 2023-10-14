@@ -6,8 +6,8 @@
 ##
 ################################################################################
 from turtle import Vec2D
-from typing import Self
-from PyQt5 import QtCore
+# from typing import Self
+# from PyQt5 import QtCore
 
 ## ==> GUI FILE
 from Presentation.MainWindow.core import MainWindow
