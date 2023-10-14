@@ -148,7 +148,7 @@ def apply_tandem_offsets(tandem: TandemModel, position: list = [0.0, 0.0, 0.0], 
     if not tandem:
         return None
 
-    offset = gp_Vec(0.0, 0.0, position[2] - 9.0)
+    offset = gp_Vec(0.0, 0.0, 191.0)
 
     if tandem.shape:
         tandem.shape = rotate_shape(shape=tandem.shape, axis=gp.OZ(), angle=rotation)
