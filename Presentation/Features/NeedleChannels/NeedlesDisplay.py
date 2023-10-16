@@ -1,6 +1,7 @@
+from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
-import Presentation.Features.NeedleChannels.NeedleFunctions as needles
+import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
 from Presentation.MainWindow.display_functions import DisplayFunctions
 
 from Presentation.MainWindow.core import MainWindow
@@ -33,6 +34,24 @@ def view(window: MainWindow) -> None:
     window.display.SetSelectionModeShape()
     window.display._select_callbacks = []
     window.display.register_select_callback(lambda shape, *args: selectNeedle(window, shape))
+
+    diameter = window.ui.channelDiameterSpinBox.value()
+    window.display_needles_list = []
+    window.display_needles = None
+    for needle in window.needles.channels:
+        if needle.disabled:
+            continue
+        needle.shape = needleFunctions.generate_curved_channel(
+            channel=needle,
+            cylinder_offset=window.ui.cylinderLengthSpinBox.value() - 200.0,
+            diameter=window.ui.channelDiameterSpinBox.value())
+        window.display_needles_list.append(needle.shape)
+        if window.display_needles:
+            window.display_needles = BRepAlgoAPI_Fuse(window.display_needles, needle.shape).Shape()
+        else:
+            window.display_needles = needle.shape
+
+    needleFunctions.set_tandem_offsets(window)    
 
     update(window)
 
@@ -109,7 +128,7 @@ def update(window: MainWindow):
 def selectNeedle(window: MainWindow, shapes):
     index = -1
     if len(shapes) > 0:
-        index  = needles.get_clicked_needle_index(window, shapes[0])
+        index  = needleFunctions.get_clicked_needle_index(window, shapes[0])
     
     if window.needles_active_index == index:
         return

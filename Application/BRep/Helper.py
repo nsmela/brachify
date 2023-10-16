@@ -8,7 +8,7 @@ from OCC.Core.TopExp import TopExp_Explorer
 from OCC.Core.TopoDS import topods, TopoDS_Face, TopoDS_Solid, TopoDS_Shape
 from OCC.Core.gp import gp_Dir, gp_Ax2, gp_Pnt, gp_Pln, gp_Vec
 from OCC.Extend.TopologyUtils import TopologyExplorer
-from OCC.Extend.ShapeFactory import translate_shp
+from OCC.Extend.ShapeFactory import translate_shp, rotate_shape
 
 import numpy as np
 
@@ -107,8 +107,16 @@ def get_direction(p1: gp_Pnt, p2: gp_Pnt) -> gp_Dir:
 
 
 def extend_bottom_face(shape:TopoDS_Shape) -> TopoDS_Shape:
-    face = lowest_face_by_normal(shape) #get_lowest_face(shape)
-    z = face[2].Z() #geom_plane_from_face(face).Location().Z()
+    face = lowest_face_by_normal(shape)
+    z = face[2].Z()
     direction = gp_Vec(0,0, -z - 0.1)
     extended_geometry = BRepPrimAPI_MakePrism(face[0], direction).Shape()
     return BRepAlgoAPI_Fuse(shape, extended_geometry).Shape()
+
+
+def translate_shape(shape: TopoDS_Shape, vector: gp_Vec) -> TopoDS_Shape:
+    return translate_shp(shape, vector).Shape()
+
+
+def rotate_shape(shape: TopoDS_Shape, rotation:gp_Vec) -> TopoDS_Shape:
+    pass
