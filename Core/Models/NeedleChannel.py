@@ -40,6 +40,16 @@ class NeedleChannel:
         v2 = self.points[0]
         angle = get_angle(v1, v2) * 180 / 3.14159 # convert to degrees
         print(f"needle channel angle: {self.points[0]} : {angle}")
+
+        # ensuring the angle stays between 0 and 360 degrees
+        while angle < 0:
+            angle += 360
+            print(f"Small Angle! corrected to {angle}")
+
+        while angle > 360:
+            angle -= 360
+            print(f"Large angle! corrected to {angle}")
+
         return angle
 
 

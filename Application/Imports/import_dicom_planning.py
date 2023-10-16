@@ -3,8 +3,9 @@ import pydicom
 
 from Core.Models.NeedleChannel import NeedleChannel
 
-def _convert_control_point(brachyControlPoint):
-    position = brachyControlPoint.ControlPoint3DPosition
+
+def _convert_control_point(brachy_control_point):
+    position = brachy_control_point.ControlPoint3DPosition
     point = [position[0], position[1], position[2]]
     return point
 
@@ -12,12 +13,12 @@ def _convert_control_point(brachyControlPoint):
 def read_needles_file(filepath: str):
     dataset = pydicom.read_file(filepath)
      
-    channelSequence = dataset.ApplicationSetupSequence[0].ChannelSequence
+    channel_sequence = dataset.ApplicationSetupSequence[0].ChannelSequence
 
     channels = []
-    for channel in channelSequence:
-        channelNumber = channel.ChannelNumber
-        channelID = channel.SourceApplicatorID
+    for channel in channel_sequence:
+        channel_number = channel.ChannelNumber
+        channel_id = channel.SourceApplicatorID
         sequence = channel.BrachyControlPointSequence
 
         points = [_convert_control_point(p) for p in sequence]
@@ -25,12 +26,12 @@ def read_needles_file(filepath: str):
         # removing duplicate points
         del points[::2]
 
-        needle = NeedleChannel(number=channelNumber, id=channelID, points=points)
+        needle = NeedleChannel(number=channel_number, id=channel_id, points=points)
         channels.append(needle)
     return channels
 
 
-def Rotate_Cloud(Points, V1, V2):
+def Rotate_Cloud(points, V1, V2):
     # V1 is the current vector which the coordinate system is aligned to
     # V2 is the vector we want the system aligned to
     # Points is an (n,3) array of n points (x,y,z)
@@ -59,13 +60,13 @@ def Rotate_Cloud(Points, V1, V2):
     # Using Rodrigues' rotation formula (wikipedia):
     e = V1V2CrossNormalized
 
-    pts_rotated = np.empty((len(Points), 3))
-    if np.size(Points) == 3:
-        p = Points
+    pts_rotated = np.empty((len(points), 3))
+    if np.size(points) == 3:
+        p = points
         p_rotated = np.cos(Theta) * p + np.sin(Theta) * (np.cross(e, p)) + (1 - np.cos(Theta)) * np.dot(e, p) * e
         pts_rotated = p_rotated
     else:
-        for i, p in enumerate(Points):
+        for i, p in enumerate(points):
             p_rotated = np.cos(Theta) * p + np.sin(Theta) * (np.cross(e, p)) + (1 - np.cos(Theta)) * np.dot(e, p) * e
             pts_rotated[i] = p_rotated
     return pts_rotated
