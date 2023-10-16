@@ -37,7 +37,7 @@ def view(window: MainWindow):
     try: 
         # tandem
         if window.tandem:
-            shape = BRepAlgoAPI_Cut(shape, window.tandem.tool_shape).Shape()
+            shape = BRepAlgoAPI_Cut(shape, window.tandem.shape).Shape()
 
     except Exception as error_message:
         print(error_message)

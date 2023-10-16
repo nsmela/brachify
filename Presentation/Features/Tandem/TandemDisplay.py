@@ -64,7 +64,7 @@ def update(window: MainWindow):
             import Application.BRep.Helper as brep
             color = Quantity_Color(0.0, 1.0, 0.0, Quantity_TOC_RGB)
 
-            faces = brep.get_faces_axis(window.tandem.tool_shape)
+            faces = brep.get_faces_axis(window.tandem.shape)
 
             for i, face in enumerate(faces):
                 axis = face[1].Direction()
