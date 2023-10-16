@@ -39,24 +39,19 @@ def load_tandems(window: MainWindow) -> None:
 def save_tandem(window: MainWindow) -> bool:
     """attempts to add or update the json file containing the tandem settings"""
     tandem_name = window.ui.lineEdit_tandemName.text()
-    tandem_display_model = window.ui.tandem_lineEdit_displayModel.text()
-    tandem_tool_model = window.ui.tandem_lineEdit_toolModel.text()
+    tandem_model = window.ui.tandem_lineEdit_toolModel.text()
     index = window.ui.listWidget_savedTandems.currentRow()
 
     # check if info is enough to proceed
     if not tandem_name:
         return False
-    if not tandem_display_model:
-        return False
-    if not tandem_tool_model:
+    if not tandem_model:
         return False
 
     # turn info into dict for json
     tandem = TandemModel()
     tandem.name = tandem_name
-    tandem.shape_filepath = os.path.join(tandem_dir,
-                                         f"{tandem_name}_display{os.path.splitext(tandem_display_model)[1]}")
-    tandem.tool_filepath = os.path.join(tandem_dir, f"{tandem_name}_tool{os.path.splitext(tandem_tool_model)[1]}")
+    tandem.shape_filepath = os.path.join(tandem_dir, f"{tandem_name}_model{os.path.splitext(tandem_model)[1]}")
 
     # check if file exists, if not create a blank one
     try:
@@ -66,11 +61,8 @@ def save_tandem(window: MainWindow) -> bool:
     except FileNotFoundError:
         # if not, save the info instead
         # copy model files to the tandem directory
-        result = shutil.copy(tandem_display_model, tandem.shape_filepath)
-        print(f"display model copied to {result}")
-
-        result = shutil.copy(tandem_tool_model, tandem.tool_filepath)
-        print(f"tool model copied to {result}")
+        result = shutil.copy(tandem_model, tandem.shape_filepath)
+        print(f"tandem model copied to {result}")
 
         data = tandem.toDict()
         with open(data_filepath, "x") as data_file:
@@ -79,18 +71,12 @@ def save_tandem(window: MainWindow) -> bool:
         print(f"Tandem save failed: {error_message}")
         return False
     else:
-        # copy model files to the tandem directory
+        # copy model file to the tandem directory
         try:
-            result = shutil.copy(tandem_display_model, tandem.shape_filepath)
+            result = shutil.copy(tandem_model, tandem.shape_filepath)
             print(f"display model copied to {result}")
         except shutil.SameFileError as error_message:
             print(f"File {tandem.shape_filepath} already exists!")
-
-        try:
-            result = shutil.copy(tandem_tool_model, tandem.tool_filepath)
-            print(f"tool model copied to {result}")
-        except shutil.SameFileError as error_message:
-            print(f"File {tandem.tool_filepath} already exists!")
 
         data.update(tandem.toDict())
         with open(data_filepath, "w") as data_file:
@@ -121,7 +107,7 @@ def set_tandem(window: MainWindow, index: int = None) -> None:
     update_tandem_settings(window, tandem)
     load_tandem_models(window, tandem)
     window.tandem = apply_tandem_offsets(tandem, position=window.tandem_offset_position,
-                                         rotation=window.tandem_offset_rotation)
+                                        rotation=window.tandem_offset_rotation)
     tandemDisplay.update(window)
 
 
@@ -133,15 +119,9 @@ def load_tandem_models(window: MainWindow, tandem: TandemModel) -> None:
         print(f"Tandem {tandem.name} display model is referencing an invalid filepath: {tandem.shape_filepath}")
         return
 
-    if not os.path.exists(tandem.tool_filepath):
-        print(f"Tandem {tandem.name} tool model is referencing an invalid filepath: {tandem.tool_filepath}")
-        return
-
     tandem.shape = imports.get_file_shape(tandem.shape_filepath)
-    tandem.tool_shape = imports.get_file_shape(tandem.tool_filepath)
 
     tandemDisplay.update(window)
-
 
 
 def apply_tandem_offsets(tandem: TandemModel, position: list = [0.0, 0.0, 0.0], rotation: float = 0.0) -> TandemModel:
@@ -154,10 +134,6 @@ def apply_tandem_offsets(tandem: TandemModel, position: list = [0.0, 0.0, 0.0], 
         tandem.shape = rotate_shape(shape=tandem.shape, axis=gp.OZ(), angle=rotation)
         tandem.shape = translate_shp(tandem.shape, offset)
 
-    if tandem.tool_shape:
-        tandem.tool_shape = rotate_shape(shape=tandem.tool_shape, axis=gp.OZ(), angle=rotation)
-        tandem.tool_shape = translate_shp(tandem.tool_shape, offset)
-
     tandem = extend(tandem)
 
     return tandem
@@ -166,23 +142,13 @@ def apply_tandem_offsets(tandem: TandemModel, position: list = [0.0, 0.0, 0.0], 
 def extend(tandem: TandemModel) -> TandemModel:
     try:
         tandem.shape = brep.extend_bottom_face(tandem.shape)
-        tandem.tool_shape = brep.extend_bottom_face(tandem.tool_shape)
     except Exception as error_message:
         print(f"Lower face extension failed! {error_message}")
 
     return tandem
 
 
-def load_tandem_display_model(window: MainWindow) -> None:
-    filename = QFileDialog.getOpenFileName(window, 'Select Tandem Display Model', '',
-                                           "Supported files (*.stl *.3mf *.obj *.stp *.step)")[0]
-    if len(filename) == 0:
-        return
-
-    window.ui.tandem_lineEdit_displayModel.setText(filename)
-
-
-def load_tandem_tool_model(window: MainWindow) -> None:
+def load_tandem_model(window: MainWindow) -> None:
     filename = QFileDialog.getOpenFileName(window, 'Select Tandem Tool Model', '',
                                            "Supported files (*.stl *.3mf *.obj *.stp *.step)")[0]
     if len(filename) == 0:
@@ -192,7 +158,6 @@ def load_tandem_tool_model(window: MainWindow) -> None:
 
 
 def clear_tandem_settings(window: MainWindow) -> None:
-    window.ui.tandem_lineEdit_displayModel.setText("")
     window.ui.tandem_lineEdit_toolModel.setText("")
     window.ui.lineEdit_tandemName.setText("")
     window.ui.btn_tandem_add_update.setObjectName("Add")
@@ -207,7 +172,6 @@ def update_tandem_settings(window: MainWindow, tandem: TandemModel) -> None:
         clear_tandem_settings(window)
         return
 
-    window.ui.tandem_lineEdit_displayModel.setText(tandem.shape_filepath)
-    window.ui.tandem_lineEdit_toolModel.setText(tandem.tool_filepath)
+    window.ui.tandem_lineEdit_toolModel.setText(tandem.shape_filepath)
     window.ui.lineEdit_tandemName.setText(tandem.name)
     window.ui.btn_tandem_add_update.setObjectName("Update")

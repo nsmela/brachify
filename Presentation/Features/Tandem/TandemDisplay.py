@@ -11,8 +11,7 @@ from Core.Models.Tandem import TandemModel
 def init(window: MainWindow):
     """Called when the core class is initializing"""
     try:
-        window.ui.btn_tandem_importDisplayModel.clicked.connect(lambda: tandem.load_tandem_display_model(window))
-        window.ui.btn_tandem_importToolModel.clicked.connect(lambda: tandem.load_tandem_tool_model(window))
+        window.ui.btn_tandem_importToolModel.clicked.connect(lambda: tandem.load_tandem_model(window))
         window.ui.btn_tandem_clear.clicked.connect(lambda: tandem.clear_tandem_settings(window))
         window.ui.btn_tandem_add_update.clicked.connect(lambda: tandem.save_tandem(window))
         window.ui.listWidget_savedTandems.itemSelectionChanged.connect(lambda: tandem.set_tandem(window))
@@ -59,7 +58,7 @@ def update(window: MainWindow):
             color = Quantity_Color(0.2, 0.2, 0.55, Quantity_TOC_RGB)
             
             color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
-            window.display.DisplayShape(shapes=window.tandem.tool_shape, color=color, material=Graphic3d_NOM_TRANSPARENT)
+            window.display.DisplayShape(shapes=window.tandem.shape, color=color, material=Graphic3d_NOM_TRANSPARENT)
             
             # debugging
             import Application.BRep.Helper as brep

@@ -1,27 +1,6 @@
 {
-    "Basic Example": {
-        "Tandem Name": "Basic Example",
-        "Display Model File": ".\\files\\tandem\\Basic Example_display.step",
-        "Tool Model File": ".\\files\\tandem\\Basic Example_tool.step"
-    },
-    "FDM - VMS 60deg BCCK Modified Tandem": {
-        "Tandem Name": "FDM - VMS 60deg BCCK Modified Tandem",
-        "Display Model File": ".\\files\\tandem\\FDM - VMS 60deg BCCK Modified Tandem_display.step",
-        "Tool Model File": ".\\files\\tandem\\FDM - VMS 60deg BCCK Modified Tandem_tool.step",
-        "Offsets": [
-            0.0,
-            0.0,
-            0.0
-        ],
-        "Rotation": [
-            0.0,
-            0.0,
-            0.0
-        ]
-    },
-    "basic visual": {
-        "Tandem Name": "basic visual",
-        "Display Model File": ".\\files\\tandem\\basic visual_display.step",
-        "Tool Model File": ".\\files\\tandem\\basic visual_tool.step"
+    "VSM 60 Deg FDM": {
+        "Tandem Name": "VSM 60 Deg FDM",
+        "Model File": ".\\files\\tandem\\VSM 60 Deg FDM_model.step"
     }
 }
