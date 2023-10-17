@@ -16,6 +16,7 @@ def read_needles_file(filepath: str):
     channel_sequence = dataset.ApplicationSetupSequence[0].ChannelSequence
 
     channels = []
+    print("### Importing RP File ###")
     for channel in channel_sequence:
         channel_number = channel.ChannelNumber
         channel_id = channel.SourceApplicatorID
@@ -23,12 +24,25 @@ def read_needles_file(filepath: str):
 
         points = [_convert_control_point(p) for p in sequence]
 
+        print(f" Raw Points: \n{points}\n\n")
         # removing duplicate points
         del points[::2]
-
+        print(f" Every second point removed: \n{points}\n\n")
         needle = NeedleChannel(number=channel_number, id=channel_id, points=points)
         channels.append(needle)
     return channels
+
+
+def read_rs_file(filepath: str) -> list:
+    dataset = pydicom.read_file(filepath)
+    referenced_applicators = list(filter(lambda s: ("applicator" in s.ROIObservationLabel.lower()),
+                                 dataset.RTROIObservationsSequence))
+    referenced_roi = [roi.ReferencedROINumber for roi in referenced_applicators]
+    applicators = list(filter(lambda s: (s.ReferencedROINumber in referenced_roi),
+                               dataset.ROIContourSequence))
+    print(f"{applicators}")
+
+    return None
 
 
 def Rotate_Cloud(points, V1, V2):

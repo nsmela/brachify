@@ -5,6 +5,7 @@ from OCC.Extend.DataExchange import read_step_file, read_stl_file
 
 import Application.Imports.import_dicom as dicom
 from Application.Imports import *
+from Application.Imports import import_dicom_planning
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.Cylinder.CylinderFunctions as cylFunctions
 import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
@@ -29,14 +30,62 @@ def get_dicom_rp_file(window: MainWindow) -> None:
     needleFunctions.add_rp_file(window, filename)
 
 
+def get_dicom_folder(window: MainWindow) -> None:
+    foldername = QFileDialog.getExistingDirectoryUrl(window, "Open patient folder").toLocalFile()
+    if not foldername:  # no folder selected?
+        return
+
+    add_dicom_folder(foldername)
+
+
+
+def add_dicom_folder(folderpath: str) -> None:
+    files = [os.path.join(folderpath, file) for file in os.scandir(folderpath) if os.path.isfile(file)]
+
+    print(f"{files}")
+
+    # look for planning file first
+    rp_file = None
+    for file in files:
+        if dicom.is_rp_file(file):
+            rp_file = file
+            break
+
+    if not rp_file:  # if none of the files within the folder are a rp file
+        print(f"No rs files where found at {folderpath}")
+
+    # looking for the structure file
+    rs_file = None
+    for file in files:
+        if dicom.is_rs_file(file):
+            rs_file = file
+            break
+
+    if not rs_file:
+        print(f"No rs file was found in {folderpath}")
+
+    # get data from files
+    print(f"Planning file is: {rp_file}")
+    print(f"Structure file is: {rs_file}")
+    data = dicom.load_dicom_data(rp_file, rs_file)
+
+
+
 def process_file(window: MainWindow, filepath: str):
-    """receive a file and process it appropriately"""
+    """receive a dragged file or folder and process it appropriately"""
+    if not os.path.isfile(filepath):  # not a file, could it be a folder?
+        if os.path.isdir(filepath):
+            add_dicom_folder(filepath)
+        return
+
+    # if the imported object is a file
     file_type = os.path.splitext(filepath)[1].lower()
         
     # if is DICOM?
     if file_type == ".dcm":
         if dicom.is_rs_file(filepath):
             cylFunctions.add_rs_file(window, filepath)
+            import_dicom_planning.read_rs_file(filepath)
             return True
         if dicom.is_rp_file(filepath):
             needleFunctions.add_rp_file(window, filepath)

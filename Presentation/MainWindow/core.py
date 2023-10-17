@@ -64,7 +64,8 @@ class MainWindow(QMainWindow):
         ########################################################################
         import Presentation.Features.Imports.ImportFunctions as imports
 
-        self.ui.btn_import_dicom_rs.clicked.connect(lambda: imports.get_dicom_rs_file(self))
+        #self.ui.btn_import_dicom_rs.clicked.connect(lambda: imports.get_dicom_rs_file(self))
+        self.ui.btn_import_dicom_rs.clicked.connect(lambda: imports.get_dicom_folder(self))
         self.ui.btn_import_dicom_rp.clicked.connect(lambda: imports.get_dicom_rp_file(self))
 
         # drag and drop      

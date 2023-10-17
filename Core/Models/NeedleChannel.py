@@ -29,7 +29,7 @@ class NeedleChannel:
         return {"Channel Number": self.channelNumber, "Channel ID": self.channelId, "Points": self.points}
 
     def toString(self):
-        return f"Channel {self.channelId} ({self.channelId}: Offset: {self.curve_downwards})"
+        return f"Channel {self.channelId} ({self.channelId}: Offset: {self.curve_downwards}\n Points: {self.points})"
 
     # ref: 
     # https://stackoverflow.com/questions/2827393/angles-between-two-n-dimensional-vectors-in-python/13849249#13849249
