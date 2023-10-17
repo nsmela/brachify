@@ -99,15 +99,15 @@ def load_cylinder(data: DicomData) -> BrachyCylinder:
     point1 = np.asarray(data.cylinder_contour[0])
     point2 = np.asarray(data.cylinder_contour[-1])
     difference = point2 - point1
-    diameter = np.sqrt((difference[0]) ** 2 + (difference[1]) ** 2 + (difference[2]) ** 2)
-    diameter = round(diameter, 1)
+    radius = np.sqrt((difference[0]) ** 2 + (difference[1]) ** 2 + (difference[2]) ** 2) / 2
+    radius = round(radius, 1)
 
     middle_index = int(len(data.cylinder_contour) / 2)
     tip = data.cylinder_contour[middle_index]
 
     base = point1 + (difference / 2)
-    print(f"Cylinder results: \n Diameter: {diameter}\n Tip: {tip}\n Base: {base}")
-    return BrachyCylinder(tip=tip, base=base, radius=diameter)
+    print(f"Cylinder results: \n Diameter: {radius}\n Tip: {tip}\n Base: {base}")
+    return BrachyCylinder(tip=tip, base=base, radius=radius)
 
 
 def load_channels(data: DicomData) -> list[NeedleChannel]:

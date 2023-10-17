@@ -12,6 +12,7 @@ import Application.BRep.Helper as helper
 
 import numpy as np
 
+NEEDLE_LENGTH = 2.50
 
 def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diameter: float = 3.0) -> TopoDS_Shape:
     '''
@@ -29,15 +30,24 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
     points = []
     for point in channel.points:
         points.append(gp_Pnt(point[0], point[1], point[2] - cylinder_offset))
-    
-    radius = diameter /2 
-    
+
+    radius = diameter / 2
+
     # generate starting point on top (cone)
     p1 = points[0]
     p2 = points[1]
-    pipe = _cone_pipe(p1, p2, radius)
+    length = helper.get_magnitude(p1, p2)
+    if length < NEEDLE_LENGTH:
+        pipe = _cone_pipe(p1, p2, radius)
+    else:
+        vector = helper.get_vector(p1, p2, length=NEEDLE_LENGTH)
+        p_mid = gp_Pnt(p1.X() + vector.X(), p1.Y() + vector.Y(), p1.Z() + vector.Z())
+        cone = _cone_pipe(p1, p_mid, radius)
+        face = helper.get_lowest_face(cone)
+        pipe = _straight_pipe(p_mid, p2, face)
+        pipe = BRepAlgoAPI_Fuse(cone, pipe).Shape()
     face = helper.get_lowest_face(pipe)
-    
+
     # for each (after the first), create a cylinder to next point to join
     for i in range(1, len(points) - 1):
         p1 = points[i]
@@ -50,14 +60,14 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
     # add a curved pipe downwards using offset length and direction of last two points
     length = helper.get_magnitude(points[-2], points[-1])
     vector = helper.get_vector(points[-2], points[-1], length + channel.curve_downwards)
-    p1 = points[-1] # last point in array
-    p2 = gp_Pnt(p1.X() + vector.X(), p1.Y() + vector.Y(), p1.Z() + vector.Z()) # middle point for bcurve
-    p3 = gp_Pnt(p2.X(), p2.Y(), p2.Z() - length) # last point, lowered towards bottom
-    
+    p1 = points[-1]  # last point in array
+    p2 = gp_Pnt(p1.X() + vector.X(), p1.Y() + vector.Y(), p1.Z() + vector.Z())  # middle point for bcurve
+    p3 = gp_Pnt(p2.X(), p2.Y(), p2.Z() - length)  # last point, lowered towards bottom
+
     # curve elbow after the points
     pipe_bend = _curved_pipe(p1, p2, p3, face)
     pipe = BRepAlgoAPI_Fuse(pipe, pipe_bend).Shape()
-    
+
     # add a cylinder from pipe to past bottom of cylinder 
     base_point = gp_Pnt(p3.X(), p3.Y(), -10.0)
     face = helper.get_lowest_face(pipe)

@@ -66,12 +66,17 @@ def add_dicom_folder(window: MainWindow, folder_path: str) -> None:
     # get data from files
     print(f"Planning file is: {rp_file}")
     print(f"Structure file is: {rs_file}")
+
     data = dicom.load_dicom_data(rp_file, rs_file)
+
     cylinder = dicom.load_cylinder(data)
     cylFunctions.set_cylinder(window, cylinder)
+
     channels = dicom.load_channels(data)
     needleFunctions.set_channels(window, channels)
 
+    from Presentation.MainWindow.ui_functions import UIFunctions
+    UIFunctions.setPage(window, UIFunctions.NEEDLE_CHANNELS_VIEW)
 
 def process_file(window: MainWindow, filepath: str):
     """receive a dragged file or folder and process it appropriately"""
