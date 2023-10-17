@@ -4,9 +4,12 @@ from OCC.Core.Graphic3d import *
 from OCC.Core.TopoDS import TopoDS_Shape
 
 from Presentation.MainWindow.core import MainWindow
-
+from Presentation.Features.Imports.ImportFunctions import *
 
 ## IMPORTS
+def init(window: MainWindow) -> None:
+    window.ui.btn_import_dicom_folder.clicked.connect(lambda: get_dicom_folder(window))
+
 def view(window: MainWindow):
     # set display
     try:

@@ -7,6 +7,7 @@ from Presentation.MainWindow.display_functions import DisplayFunctions
 from Presentation.MainWindow.core import MainWindow
 
 import Application.BRep.Intersections as intersect
+import Application.BRep.Channel as channelHelper
 
 
 # def startView
@@ -55,10 +56,10 @@ def view(window: MainWindow) -> None:
     for needle in window.needles.channels:
         if needle.disabled:
             continue
-        needle.shape = needleFunctions.generate_curved_channel(
-            channel=needle,
-            cylinder_offset=window.ui.cylinderLengthSpinBox.value() - 200.0,
-            diameter=window.ui.channelDiameterSpinBox.value())
+        needle.shape = channelHelper.sharp_needle_channel(needle, 0.0, 3.0)#needleFunctions.generate_curved_channel(
+           # channel=needle,
+            #cylinder_offset=window.ui.cylinderLengthSpinBox.value() - 200.0,
+           # diameter=window.ui.channelDiameterSpinBox.value())
         window.display_needles_list.append(needle.shape)
         if window.display_needles:
             window.display_needles = BRepAlgoAPI_Fuse(window.display_needles, needle.shape).Shape()

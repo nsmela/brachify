@@ -1,9 +1,8 @@
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 
 from Application.BRep.Channel import generate_curved_channel
-import Application.Imports.import_dicom_planning as dicom_planning
-from Core.Models.DicomData import DicomData
 from Presentation.MainWindow.core import MainWindow
+import Application.BRep.Helper as helper
 import Presentation.Features.NeedleChannels.NeedlesDisplay as needlesDisplay
 from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
 
@@ -80,7 +79,7 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
         for i, c in enumerate(channels):
             new_points = np.array(c.rawPoints)
             new_points = np.array(new_points) - base
-            new_points = dicom_planning.Rotate_Cloud(new_points, cyl_vec, z_up)
+            new_points = helper.rotate_points(new_points, cyl_vec, z_up)
             new_points = new_points - offset_vector
             channels[i].points = list(list(points) for points in new_points)
     window.needles = NeedlesModel(channels=channels)

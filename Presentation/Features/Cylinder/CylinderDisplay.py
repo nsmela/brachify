@@ -14,6 +14,11 @@ def view(window: MainWindow):
     window.display.SetSelectionModeShape()
     window.display.default_drawer.SetFaceBoundaryDraw(True)
 
+    update(window)
+
+
+def update(window: MainWindow) -> None:
+    """When this is the active view, use this method to update the ui and 3d display view"""
     window.ui.cylinderRadiusSpinBox.blockSignals(True)
     window.ui.cylinderRadiusSpinBox.setValue(window.brachyCylinder.radius * 2)
     window.ui.cylinderRadiusSpinBox.blockSignals(False)

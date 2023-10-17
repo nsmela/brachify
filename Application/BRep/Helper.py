@@ -122,7 +122,7 @@ def rotate_shape(shape: TopoDS_Shape, rotation: gp_Vec) -> TopoDS_Shape:
     pass
 
 
-def Rotate_Cloud(points, v_1, v_2):
+def rotate_points(points, v_1, v_2):
     # V1 is the current vector which the coordinate system is aligned to
     # V2 is the vector we want the system aligned to
     # Points is an (n,3) array of n points (x,y,z)

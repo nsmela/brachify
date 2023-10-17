@@ -12,23 +12,9 @@ import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
 
 import os
 
-
-# https://srinikom.github.io/pyside-docs/PySide/QtGui/QFileDialog.html?highlight=qstringlist
-def get_dicom_rs_file(window: MainWindow) -> None:
-    filename = QFileDialog.getOpenFileName(window, 'Open Patient RS File', '', "DICOM files (*.dcm)")[0]
-    if len(filename) == 0:
-        return
-
-    cylFunctions.add_rs_file(window, filename)
-
-
-def get_dicom_rp_file(window: MainWindow) -> None:
-    filename = QFileDialog.getOpenFileName(window, 'Open Patient RP File', '', "DICOM files (*.dcm)")[0]
-    if len(filename) == 0:
-        return
-
-    needleFunctions.add_rp_file(window, filename)
-
+# TODO check folder to ensure it has the right files
+# TODO check if folder exists
+# TODO make sure dicom files are related by UID
 
 def get_dicom_folder(window: MainWindow) -> None:
     foldername = QFileDialog.getExistingDirectoryUrl(window, "Open patient folder").toLocalFile()
@@ -39,6 +25,7 @@ def get_dicom_folder(window: MainWindow) -> None:
 
 
 def add_dicom_folder(window: MainWindow, folder_path: str) -> None:
+    """Used to import a folder, check it for relevant dicom files, and set up the app for the data"""
     files = [os.path.join(folder_path, file) for file in os.scandir(folder_path) if os.path.isfile(file)]
 
     print(f"{files}")
@@ -78,6 +65,7 @@ def add_dicom_folder(window: MainWindow, folder_path: str) -> None:
     from Presentation.MainWindow.ui_functions import UIFunctions
     UIFunctions.setPage(window, UIFunctions.NEEDLE_CHANNELS_VIEW)
 
+
 def process_file(window: MainWindow, filepath: str):
     """receive a dragged file or folder and process it appropriately"""
     if not os.path.isfile(filepath):  # not a file, could it be a folder?
@@ -85,24 +73,11 @@ def process_file(window: MainWindow, filepath: str):
             add_dicom_folder(window, filepath)
         return
 
-    # if the imported object is a file
-    file_type = os.path.splitext(filepath)[1].lower()
-
-    # if is DICOM?
-    if file_type == ".dcm":
-        if dicom.is_rs_file(filepath):
-            cylFunctions.add_rs_file(window, filepath)
-            import_dicom_planning.read_rs_file(filepath)
-            return True
-        if dicom.is_rp_file(filepath):
-            needleFunctions.add_rp_file(window, filepath)
-            return True
-    else:
-        print("Invalid file!")
-        return False
+    print("not a valid entry! need a folder with dicom files in it!")
 
 
 def get_file_shape(filepath: str) -> TopoDS_Shape:
+    """import a model file and generate a shape for it"""
     # make sure the path exists otherwise OCE get confused
     if not os.path.exists(filepath):
         raise AssertionError(f"file does not exist: {filepath}")
