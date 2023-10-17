@@ -1,7 +1,12 @@
 # the raw dicom data and how to grab relevant data from it
-import pydicom
 
+from Core.Models.Cylinder import BrachyCylinder
 from Core.Models.DicomData import DicomData
+
+import pydicom
+import numpy as np
+
+from Core.Models.NeedleChannel import NeedleChannel
 
 
 def is_rs_file(filepath: str) -> bool:
@@ -88,3 +93,32 @@ def load_dicom_data(rp_file: str, rs_file: str) -> DicomData:
         print(f"Loading RS Dicom file failed! {rs_file}\n{error_message}")
 
     return data
+
+
+def load_cylinder(data: DicomData) -> BrachyCylinder:
+    point1 = np.asarray(data.cylinder_contour[0])
+    point2 = np.asarray(data.cylinder_contour[-1])
+    difference = point2 - point1
+    diameter = np.sqrt((difference[0]) ** 2 + (difference[1]) ** 2 + (difference[2]) ** 2)
+    diameter = round(diameter, 1)
+
+    middle_index = int(len(data.cylinder_contour) / 2)
+    tip = data.cylinder_contour[middle_index]
+
+    base = point1 + (difference / 2)
+    print(f"Cylinder results: \n Diameter: {diameter}\n Tip: {tip}\n Base: {base}")
+    return BrachyCylinder(tip=tip, base=base, radius=diameter)
+
+
+def load_channels(data: DicomData) -> list[NeedleChannel]:
+    channels = []
+    print("### Importing RP Data ###")
+    for i in range(len(data.channels_rois)):
+        channel_number = f"{data.channels_rois[i]}"
+        channel_id = f"Channel {channel_number}"
+        points = data.channel_contours[i]
+
+        print(f" Raw Points: \n{points}\n\n")
+        needle = NeedleChannel(number=channel_number, id=channel_number, points=points)
+        channels.append(needle)
+    return channels

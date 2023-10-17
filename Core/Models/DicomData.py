@@ -36,14 +36,6 @@ class DicomData:
         if new_data.channel_contours:
             self.channel_contours = new_data.channel_contours
 
-    def getCylinderContour(self) -> list:
-        return [[self.cylinder_contour[i], self.cylinder_contour[i + 1], self.cylinder_contour[i + 2]]
-                for i in range(0, len(self.cylinder_contour), 3)]
-
-    def getChannelContour(self, index: int) -> list:
-        return [[self.channel_contours[index][i], self.cylinder_contour[index][i + 1], self.cylinder_contour[index][i + 2]]
-                for i in range(0, len(self.cylinder_contour[index]), 3)]
-
     def toString(self):
         text = "## DicomData Object:\n"
         text += f"Patient {self.patient_name} -- ID: {self.patient_id}\n"

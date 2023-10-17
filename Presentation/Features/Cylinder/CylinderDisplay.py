@@ -14,6 +14,18 @@ def view(window: MainWindow):
     window.display.SetSelectionModeShape()
     window.display.default_drawer.SetFaceBoundaryDraw(True)
 
+    window.ui.cylinderRadiusSpinBox.blockSignals(True)
+    window.ui.cylinderRadiusSpinBox.setValue(window.brachyCylinder.radius * 2)
+    window.ui.cylinderRadiusSpinBox.blockSignals(False)
+
+    window.ui.cylinderLengthSpinBox.blockSignals(True)
+    window.ui.cylinderLengthSpinBox.setValue(window.brachyCylinder.length)
+    window.ui.cylinderLengthSpinBox.blockSignals(False)
+
+    window.ui.checkbox_cylinder_base.blockSignals(True)
+    window.ui.checkbox_cylinder_base.setChecked(window.brachyCylinder.expand_base)
+    window.ui.checkbox_cylinder_base.blockSignals(False)
+
     try:
         window.display.EraseAll()
 

@@ -12,6 +12,8 @@ from OCC.Extend.ShapeFactory import translate_shp
 
 import numpy as np
 
+from Core.Models.DicomData import DicomData
+
 
 def face_is_plane(face: TopoDS_Face) -> bool:
     """

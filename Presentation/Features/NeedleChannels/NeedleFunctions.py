@@ -2,6 +2,7 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 
 from Application.BRep.Channel import generate_curved_channel
 import Application.Imports.import_dicom_planning as dicom_planning
+from Core.Models.DicomData import DicomData
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.NeedleChannels.NeedlesDisplay as needlesDisplay
 from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
@@ -25,6 +26,48 @@ def add_rp_file(window: MainWindow, filepath: str) -> None:
     # get data from dicom
     channels = dicom_planning.read_needles_file(filepath)
 
+    # offset each point
+    if window.brachyCylinder:
+        z_up = np.array([0, 0, 1])  # z axis reference, the direction we want the cylinder and needles to go
+        tip = np.array(window.brachyCylinder.tip)
+        base = np.array(window.brachyCylinder.base)
+        cyl_vec = tip - base  # the cylinder's original vector
+        cyl_length = np.linalg.norm(cyl_vec)
+        offset_vector = np.array([0, 0, - cyl_length])  # normalized direction from tip to base
+
+        # debugging
+        print("### Importing RP File ###")
+        print(f" Number of channels: {len(channels)}")
+        print(f"Loading dicom file for channels:\n\n Tip: {tip}\n Base: {base}\n Cylinder Vector: {cyl_vec}\n ")
+        print(f" Cylinder Length: {cyl_length}\n Offset vector: {offset_vector}")
+        for i, c in enumerate(channels):
+            print(f"## Calculating for Needle Channel Position {i}")
+            new_points = np.array(c.rawPoints)
+            print(f"Points: \n{new_points}\n")
+            new_points = np.array(new_points) - base
+            print(f" Base-aligned Points: \n{new_points}\n")
+            new_points = dicom_planning.Rotate_Cloud(new_points, cyl_vec, z_up)
+            print(f" Rotated Points: \n{new_points}\n")
+            new_points = new_points - offset_vector
+            print(f" Offset Points: \n{new_points}\n")
+            channels[i].points = list(list(points) for points in new_points)
+    window.needles = NeedlesModel(channels=channels)
+    window.ui.channelsListWidget.clear()
+    for needle in window.needles.channels:
+        window.ui.channelsListWidget.addItem(needle.channelId)
+
+    diameter = 3.00
+
+    # update the spin box without triggering the change event
+    window.ui.channelDiameterSpinBox.blockSignals(True)
+    window.ui.channelDiameterSpinBox.setValue(diameter)
+    window.ui.channelDiameterSpinBox.blockSignals(False)
+
+    from Presentation.MainWindow.ui_functions import UIFunctions
+    UIFunctions.setPage(window, UIFunctions.NEEDLE_CHANNELS_VIEW)
+
+
+def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
     # offset each point
     if window.brachyCylinder:
         z_up = np.array([0, 0, 1])  # z axis reference, the direction we want the cylinder and needles to go
