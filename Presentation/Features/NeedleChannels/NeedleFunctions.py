@@ -113,26 +113,11 @@ def setCylinderVisibility(window: MainWindow) -> None:
 
 
 def get_clicked_needle_index(window: MainWindow, shape) -> int:
-    for i, needle in enumerate(window.display_needles_list):
-        if shape == needle:
+    for i, needle in enumerate(window.needles.channels):
+        if shape == needle.shape():
             return i
 
     return -1
-
-
-def setChannelOffset(window: MainWindow, offset: int) -> None:
-    index = window.needles_active_index
-    if index < 0:
-        return
-
-    old_value = window.ui.slider_needle_extension.value()
-    # if old_value != offset:
-    #     window.ui.slider_needle_extension.setValue(offset)
-
-    channel = window.needles.channels[window.needles_active_index]
-    channel.curve_downwards = offset
-
-    reshape(window, channel)
 
 
 def setNeedleDisabled(window: MainWindow):
@@ -144,6 +129,17 @@ def setNeedleDisabled(window: MainWindow):
     channel.disabled = not channel.disabled
     recalculate(window)
 
+
+def setChannelsDiameter(window: MainWindow, diameter: float = 3.0) -> None:
+    if window.needles is None:
+        return
+
+    window.channel_diameter = diameter
+
+    for channel in window.needles.channels:
+        channel.setDiameter(window.channel_diameter)
+
+    needlesDisplay.update(window)
 
 def recalculate(window: MainWindow):
     """

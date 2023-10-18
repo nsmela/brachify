@@ -19,27 +19,30 @@ class NeedleChannel(NeedleChannelModel):
         if self._shape:
             return self._shape
 
-        self._shape = sharp_needle_channel(self.points, self._offset, self._diameter)
+        self._shape = generate_curved_channel(self.points, self._offset, self._diameter)
         return self._shape
 
     def setChannel(self, height: float = 0.0, diameter: float = 3.0) -> None:
         self._offset = height
         self._diameter = diameter
+        self._shape = None
+        self.shape()
+
+    def setDiameter(self, diameter: float) -> None:
+        self._diameter = diameter
+        self._shape = None
         self.shape()
 
     def setOffset(self, height: float = 0.0) -> None:
         self._offset = height
-        self.shape()
-
-    def getOffset(self):
-        return self._offset
-
-    def setDiameter(self, diameter: float) -> None:
-        self._diameter = diameter
+        self._shape = None
         self.shape()
 
     def getDiameter(self):
         return self._diameter
+
+    def getOffset(self):
+        return self._offset
 
     # ref:
     # https://stackoverflow.com/questions/2827393/angles-between-two-n-dimensional-vectors-in-python/13849249#13849249

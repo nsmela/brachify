@@ -368,7 +368,7 @@ QPushButton:hover {
              <bool>false</bool>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="page_1">
              <property name="acceptDrops">
@@ -542,7 +542,7 @@ QPushButton:hover {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QDoubleSpinBox" name="cylinderRadiusSpinBox"/>
+                  <widget class="QDoubleSpinBox" name="cylinderDiameterSpinBox"/>
                  </item>
                 </layout>
                </widget>

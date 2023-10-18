@@ -15,4 +15,4 @@ def get_brachy_cylinder(data: DicomData) -> BrachyCylinder:
 
     base = point1 + (difference / 2)
     print(f"Cylinder results: \n Diameter: {diameter}\n Tip: {tip}\n Base: {base}")
-    return BrachyCylinder(tip=tip, base=base, radius=diameter)
+    return BrachyCylinder(tip=tip, base=base, diameter=diameter)

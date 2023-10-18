@@ -13,21 +13,21 @@ import numpy as np
 
 NEEDLE_LENGTH = 2.50
 
-def generate_curved_channel(points, offset: float = 0.0, diameter: float = 3.0) -> TopoDS_Shape:
+def generate_curved_channel(channel_points, offset: float = 0.0, diameter: float = 3.0) -> TopoDS_Shape:
     '''
     Generates a TopoDS_Shape from the Needle Channel's points
     Cylinder Offset is for height offset
     diameter is the channel's diameter
     '''
 
-    if len(points) < 3:
+    if len(channel_points) < 3:
         print(F"Needle Channel Generation error! needs 2 or more points!")
         return None
 
     # offset points using z axis and cylinder's offset
     # and convert into a gp_Pnt
     points = []
-    for point in points:
+    for point in channel_points:
         points.append(gp_Pnt(point[0], point[1], point[2] - offset))
 
     radius = diameter / 2

@@ -214,9 +214,9 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.frame_5)
         self.label.setObjectName("label")
         self.horizontalLayout_8.addWidget(self.label)
-        self.cylinderRadiusSpinBox = QtWidgets.QDoubleSpinBox(self.frame_5)
-        self.cylinderRadiusSpinBox.setObjectName("cylinderRadiusSpinBox")
-        self.horizontalLayout_8.addWidget(self.cylinderRadiusSpinBox)
+        self.cylinderDiameterSpinBox = QtWidgets.QDoubleSpinBox(self.frame_5)
+        self.cylinderDiameterSpinBox.setObjectName("cylinderDiameterSpinBox")
+        self.horizontalLayout_8.addWidget(self.cylinderDiameterSpinBox)
         self.verticallayout_6.addWidget(self.frame_5, 0, QtCore.Qt.AlignTop)
         self.frame_6 = QtWidgets.QFrame(self.page_2)
         self.frame_6.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -459,7 +459,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(1)
         self.tandem_tabbedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

@@ -9,6 +9,7 @@ from Presentation.MainWindow.core import MainWindow
 import Application.BRep.Intersections as intersect
 import Application.BRep.Channel as channelHelper
 
+
 # TODO list display variables as constants
 # cylinder
 # needle channel
@@ -20,16 +21,19 @@ import Application.BRep.Channel as channelHelper
 ## NEEDLE CHANNELS
 def init(window: MainWindow) -> None:
     print("Needles Display: init!")
-    window.ui.checkBox_hide_cylinder.stateChanged.connect(lambda: needleFunctions.setCylinderVisibility(window))
-    window.ui.channelDiameterSpinBox.valueChanged.connect(lambda: needleFunctions.recalculate(window))
+    window.ui.checkBox_hide_cylinder.stateChanged.connect(
+        lambda: needleFunctions.setCylinderVisibility(window))
+    window.ui.channelDiameterSpinBox.valueChanged.connect(
+        lambda: needleFunctions.setChannelsDiameter(window, window.ui.channelDiameterSpinBox.value()))
     window.ui.channelsListWidget.itemSelectionChanged.connect(
         lambda: needleFunctions.setActiveNeedleChannel(window, window.ui.channelsListWidget.currentRow()))
-    window.ui.btn_channel_disable.clicked.connect(lambda: needleFunctions.setNeedleDisabled(window))
+    window.ui.btn_channel_disable.clicked.connect(
+        lambda: needleFunctions.setNeedleDisabled(window))
 
     # variables/settings
     window.channel_active_index = None  # which channel is selected?
     window.channel_hide_cylinder = False
-    window.channel_radius = 3.0
+    window.channel_diameter = 3.0
 
 
 def view(window: MainWindow) -> None:
@@ -51,7 +55,7 @@ def update(window: MainWindow):
 
     # set stacked widget objects
     window.ui.channelDiameterSpinBox.blockSignals(True)
-    window.ui.channelDiameterSpinBox.setValue(window.channel_radius)
+    window.ui.channelDiameterSpinBox.setValue(window.channel_diameter)
     window.ui.channelDiameterSpinBox.blockSignals(False)
 
     window.ui.checkBox_hide_cylinder.blockSignals(True)

@@ -43,11 +43,11 @@ def add_base(shape: TopoDS_Solid, radius1: float, radius2: float):
 
 
 class BrachyCylinder:
-    def __init__(self, tip, base, radius: float = 30.0, expand_base: bool = False):
+    def __init__(self, tip, base, diameter: float = 30.0, expand_base: bool = False):
         self.length = 200.0
         self.tip = np.array(tip)
         self.base = np.array(base)
-        self.radius = radius
+        self.diameter = diameter
         self.expand_base = expand_base
         self._shape = None
 
@@ -64,7 +64,7 @@ class BrachyCylinder:
         # cylinder references
         cylinder_axis = gp_Dir(0, 0, 1)
         cylinder_vector = gp_Ax2(gp_Pnt(0, 0, 0), cylinder_axis)
-        cylinder = BRepPrimAPI_MakeCylinder(cylinder_vector, self.radius, (self.length + self.radius))
+        cylinder = BRepPrimAPI_MakeCylinder(cylinder_vector, self.diameter / 2, (self.length + self.diameter / 2))
 
         # Our goal is to find the highest Z face and remove it
         z_max = -300.0
@@ -87,9 +87,9 @@ class BrachyCylinder:
         # applying fillet to whole cylinder
         fillet = BRepFilletAPI_MakeFillet(cylinder.Shape())
         for e in TopologyExplorer(top_face).edges():
-            fillet.Add(self.radius, e)
+            fillet.Add(self.diameter / 2, e)
         fillet.Build()
         cylinder = fillet.Shape()
         if self.expand_base:
-            cylinder = add_base(shape=cylinder, radius1=self.radius, radius2= 12.0)
+            cylinder = add_base(shape=cylinder, radius1=self.diameter / 2, radius2= 12.0)
         return cylinder

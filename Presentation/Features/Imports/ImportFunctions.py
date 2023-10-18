@@ -4,7 +4,6 @@ from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Extend.DataExchange import read_step_file, read_stl_file
 
 import Application.Imports.import_dicom as dicom
-from Application.Imports import import_dicom_planning
 
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.Cylinder.CylinderFunctions as cylFunctions
