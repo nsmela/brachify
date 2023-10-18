@@ -18,54 +18,6 @@ self.needles_active_index: the current active needle channel
 '''
 
 
-def add_rp_file(window: MainWindow, filepath: str) -> None:
-    print(f"reading {filepath} to import Channels!")
-    window.ui.lineedit_dicom_rp.setText(filepath)
-
-    # get data from dicom
-    channels = dicom_planning.read_needles_file(filepath)
-
-    # offset each point
-    if window.brachyCylinder:
-        z_up = np.array([0, 0, 1])  # z axis reference, the direction we want the cylinder and needles to go
-        tip = np.array(window.brachyCylinder.tip)
-        base = np.array(window.brachyCylinder.base)
-        cyl_vec = tip - base  # the cylinder's original vector
-        cyl_length = np.linalg.norm(cyl_vec)
-        offset_vector = np.array([0, 0, - cyl_length])  # normalized direction from tip to base
-
-        # debugging
-        print("### Importing RP File ###")
-        print(f" Number of channels: {len(channels)}")
-        print(f"Loading dicom file for channels:\n\n Tip: {tip}\n Base: {base}\n Cylinder Vector: {cyl_vec}\n ")
-        print(f" Cylinder Length: {cyl_length}\n Offset vector: {offset_vector}")
-        for i, c in enumerate(channels):
-            print(f"## Calculating for Needle Channel Position {i}")
-            new_points = np.array(c.rawPoints)
-            print(f"Points: \n{new_points}\n")
-            new_points = np.array(new_points) - base
-            print(f" Base-aligned Points: \n{new_points}\n")
-            new_points = dicom_planning.Rotate_Cloud(new_points, cyl_vec, z_up)
-            print(f" Rotated Points: \n{new_points}\n")
-            new_points = new_points - offset_vector
-            print(f" Offset Points: \n{new_points}\n")
-            channels[i].points = list(list(points) for points in new_points)
-    window.needles = NeedlesModel(channels=channels)
-    window.ui.channelsListWidget.clear()
-    for needle in window.needles.channels:
-        window.ui.channelsListWidget.addItem(needle.channelId)
-
-    diameter = 3.00
-
-    # update the spin box without triggering the change event
-    window.ui.channelDiameterSpinBox.blockSignals(True)
-    window.ui.channelDiameterSpinBox.setValue(diameter)
-    window.ui.channelDiameterSpinBox.blockSignals(False)
-
-    from Presentation.MainWindow.ui_functions import UIFunctions
-    UIFunctions.setPage(window, UIFunctions.NEEDLE_CHANNELS_VIEW)
-
-
 def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
     # offset each point
     if window.brachyCylinder:
@@ -97,10 +49,10 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
 
 
 def setActiveNeedleChannel(window: MainWindow, index: int = -1) -> None:
-    if window.needles_active_index == index:
+    if window.channel_active_index == index:
         return
 
-    window.needles_active_index = index
+    window.channel_active_index = index
     if len(window.ui.channelsListWidget.selectedIndexes()) < 1 or \
             index != window.ui.channelsListWidget.selectedIndexes()[0].row():
         window.ui.channelsListWidget.setCurrentRow(index)
@@ -121,13 +73,13 @@ def get_clicked_needle_index(window: MainWindow, shape) -> int:
 
 
 def setNeedleDisabled(window: MainWindow):
-    index = window.needles_active_index
+    index = window.channel_active_index
     if index < 0:
         return
 
-    channel = window.needles.channels[window.needles_active_index]
+    channel = window.needles.channels[window.channel_active_index]
     channel.disabled = not channel.disabled
-    recalculate(window)
+    needlesDisplay.update(window)
 
 
 def setChannelsDiameter(window: MainWindow, diameter: float = 3.0) -> None:
@@ -139,55 +91,6 @@ def setChannelsDiameter(window: MainWindow, diameter: float = 3.0) -> None:
     for channel in window.needles.channels:
         channel.setDiameter(window.channel_diameter)
 
-    needlesDisplay.update(window)
-
-def recalculate(window: MainWindow):
-    """
-    Called after the Needle Channels are changed.
-    Generates each channel's shape and saves them in self.display_needles_list
-    Then fuses them together and saves that model in self.display_needles
-
-    the needles list is used only for channels view
-    the fused model is used in all other views and to boolean subtract
-
-    also set the tandem offset from the first needle channel
-    """
-    print("Recalculating channels!")
-    diameter = window.ui.channelDiameterSpinBox.value()
-    window.display_needles_list = []
-    window.display_needles = None
-    for needle in window.needles.channels:
-        if needle.disabled:
-            continue
-        needle.shape = generate_curved_channel(
-            channel=needle,
-            cylinder_offset=window.ui.cylinderLengthSpinBox.value() - 200.0,
-            diameter=window.ui.channelDiameterSpinBox.value())
-        window.display_needles_list.append(needle.shape)
-        if window.display_needles:
-            window.display_needles = BRepAlgoAPI_Fuse(window.display_needles, needle.shape).Shape()
-        else:
-            window.display_needles = needle.shape
-
-    set_tandem_offsets(window)
-    needlesDisplay.view(window)
-
-
-def reshape(window: MainWindow, channel: NeedleChannel):
-    '''
-    Needle Channel shapes are saved within the NeedleChannel class
-    '''
-
-    print("reshaping channel")
-    diameter = window.ui.channelDiameterSpinBox.value()
-    cylinder_offset = window.ui.cylinderLengthSpinBox.value() - 200.0
-    window.display_needles = None  # can be recalculated later when needed
-    if channel.disabled:
-        channel.shape = None
-    else:
-        channel.shape = generate_curved_channel(channel=channel, cylinder_offset=cylinder_offset, diameter=diameter)
-
-    set_tandem_offsets(window)
     needlesDisplay.update(window)
 
 

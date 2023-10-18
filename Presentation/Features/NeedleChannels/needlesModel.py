@@ -23,6 +23,8 @@ class NeedlesModel(QtCore.QAbstractListModel):
         shapes = [channel.shape() for channel in self.channels]
         shape = shapes[0] #  priming the fused shapes
         for i in range(1, len(shapes)):
+            if self.channels[i].disabled:
+                continue
             shape = BRepAlgoAPI_Fuse(shape, shapes[i]).Shape()
 
         self._shape = shape

@@ -31,7 +31,7 @@ def init(window: MainWindow) -> None:
         lambda: needleFunctions.setNeedleDisabled(window))
 
     # variables/settings
-    window.channel_active_index = None  # which channel is selected?
+    window.channel_active_index  = None  # which channel is selected?
     window.channel_hide_cylinder = False
     window.channel_diameter = 3.0
 
@@ -64,14 +64,19 @@ def update(window: MainWindow):
 
     window.ui.channelsListWidget.blockSignals(True)
     index = -1
-    if window.channel_active_index:
-        index = window.needles_active_index
+    if window.channel_active_index is not None:
+        index = window.channel_active_index
     window.ui.channelsListWidget.setCurrentRow(index)
     window.ui.channelsListWidget.blockSignals(False)
 
     window.ui.groupBox_5.blockSignals(True)
     enable_widget = window.channel_active_index is not None
+    label = "Disable"
+    if window.channel_active_index is not None \
+        and window.needles.channels[window.channel_active_index].disabled:
+        label = "Enable"
     window.ui.groupBox_5.setEnabled(enable_widget)
+    window.ui.btn_channel_disable.setText(label)
     window.ui.groupBox_5.blockSignals(False)
 
     try:
@@ -107,7 +112,9 @@ def update(window: MainWindow):
             colliding_color = Quantity_Color(0.95, 0.1, 0.1, Quantity_TOC_RGB)
             selected_color = Quantity_Color(0.1, 0.4, 0.4, Quantity_TOC_RGB)
             for i, channel in enumerate(channels):
-                if i == window.needles_active_index:
+                if window.needles.channels[i].disabled:
+                    continue
+                if i == window.channel_active_index:
                     window.display.DisplayColoredShape(shapes=channel[0], color=selected_color)
                 else:
                     color = standard_color
@@ -140,8 +147,8 @@ def selectNeedle(window: MainWindow, shapes):
     if len(shapes) > 0:
         index = needleFunctions.get_clicked_needle_index(window, shapes[0])
 
-    if window.needles_active_index == index:
+    if window.channel_active_index == index:
         return
 
-    window.needles_active_index = index
+    window.channel_active_index = index
     update(window)
