@@ -31,7 +31,7 @@ def recalculate(window: MainWindow) -> None:
 
 def set_cylinder(window: MainWindow, cylinder: BrachyCylinder) -> None:
     window.brachyCylinder = cylinder
-    window.display_cylinder = window.brachyCylinder.shape()
+    window.brachyCylinder.shape()
     # TODO update current view if cylinder view
 
 

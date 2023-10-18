@@ -9,86 +9,76 @@ from Presentation.MainWindow.core import MainWindow
 import Application.BRep.Intersections as intersect
 import Application.BRep.Channel as channelHelper
 
-
-# def startView
-# def updateView
-# def endView
-
+# TODO list display variables as constants
+# cylinder
+# needle channel
+# selected needle channel
+# intersecting needle channel
+# close proximity needle channel
+# outside cylinder needle channel
 
 ## NEEDLE CHANNELS
-
-
 def init(window: MainWindow) -> None:
+    print("Needles Display: init!")
     window.ui.checkBox_hide_cylinder.stateChanged.connect(lambda: needleFunctions.setCylinderVisibility(window))
     window.ui.channelDiameterSpinBox.valueChanged.connect(lambda: needleFunctions.recalculate(window))
     window.ui.channelsListWidget.itemSelectionChanged.connect(
         lambda: needleFunctions.setActiveNeedleChannel(window, window.ui.channelsListWidget.currentRow()))
-    window.ui.groupBox_5.setEnabled(False)
-    window.ui.slider_needle_extension.valueChanged.connect(lambda: needleFunctions.setChannelOffset(window,
-        window.ui.slider_needle_extension.value()))
     window.ui.btn_channel_disable.clicked.connect(lambda: needleFunctions.setNeedleDisabled(window))
+
+    # variables/settings
+    window.channel_active_index = None  # which channel is selected?
+    window.channel_hide_cylinder = False
+    window.channel_radius = 3.0
 
 
 def view(window: MainWindow) -> None:
-    # variables
-    window.ui.channelsListWidget.setCurrentRow(window.needles_active_index)
-
-    # set page
-    if window.needles_active_index >= 0:
-        window.ui.groupBox_5.setEnabled(True)
-        channel = window.needles.channels[window.needles_active_index]
-        window.ui.slider_needle_extension.setValue(channel.curve_downwards)
-    else:
-        window.ui.groupBox_5.setEnabled(False)
-        window.ui.slider_needle_extension.setValue(0)
-
-    window.ui.stackedWidget.setCurrentIndex(2)
-
+    print("Needles Display: view!")
     # set display
     window.display.default_drawer.SetFaceBoundaryDraw(True)
     window.display.SetSelectionModeShape()
     window.display._select_callbacks = []
     window.display.register_select_callback(lambda shape, *args: selectNeedle(window, shape))
 
-    diameter = window.ui.channelDiameterSpinBox.value()
-    window.display_needles_list = []
-    window.display_needles = None
-    for needle in window.needles.channels:
-        if needle.disabled:
-            continue
-        needle.shape = channelHelper.sharp_needle_channel(needle, 0.0, 3.0)#needleFunctions.generate_curved_channel(
-           # channel=needle,
-            #cylinder_offset=window.ui.cylinderLengthSpinBox.value() - 200.0,
-           # diameter=window.ui.channelDiameterSpinBox.value())
-        window.display_needles_list.append(needle.shape)
-        if window.display_needles:
-            window.display_needles = BRepAlgoAPI_Fuse(window.display_needles, needle.shape).Shape()
-        else:
-            window.display_needles = needle.shape
-
-    needleFunctions.set_tandem_offsets(window)
-
     update(window)
+
+    # show left stacked widget menu
+    window.ui.stackedWidget.setCurrentIndex(2)
 
 
 def update(window: MainWindow):
-    print("NeedlesDisplay: update!!")
-    # update view UI
-    if window.needles_active_index >= 0:
-        window.ui.groupBox_5.setEnabled(True)
-        channel = window.needles.channels[window.needles_active_index]
-        window.ui.slider_needle_extension.setValue(channel.curve_downwards)
-    else:
-        window.ui.groupBox_5.setEnabled(False)
-        window.ui.slider_needle_extension.setValue(0)
+    print("Needles Display: update!")
+
+    # set stacked widget objects
+    window.ui.channelDiameterSpinBox.blockSignals(True)
+    window.ui.channelDiameterSpinBox.setValue(window.channel_radius)
+    window.ui.channelDiameterSpinBox.blockSignals(False)
+
+    window.ui.checkBox_hide_cylinder.blockSignals(True)
+    window.ui.checkBox_hide_cylinder.setCheckState(window.channel_hide_cylinder)
+    window.ui.checkBox_hide_cylinder.blockSignals(False)
+
+    window.ui.channelsListWidget.blockSignals(True)
+    index = -1
+    if window.channel_active_index:
+        index = window.needles_active_index
+    window.ui.channelsListWidget.setCurrentRow(index)
+    window.ui.channelsListWidget.blockSignals(False)
+
+    window.ui.groupBox_5.blockSignals(True)
+    enable_widget = window.channel_active_index is not None
+    window.ui.groupBox_5.setEnabled(enable_widget)
+    window.ui.groupBox_5.blockSignals(False)
 
     try:
+        # TODO instead of clearing, try to find each shape and add it if it doesn't exist
+        # TODO create a list of shapes within the display. If not in the display anynmore,
+        #  remove them from display first then clear from list
         window.display.EraseAll()
 
         # cylinder shown
-        if not window.isCylinderHidden and window.brachyCylinder:
-            shape = window.display_cylinder
-            window.display.DisplayShape(shapes=shape, material=Graphic3d_NOM_TRANSPARENT)
+        if not window.isCylinderHidden and window.brachyCylinder.shape():
+            window.display.DisplayShape(shapes=window.brachyCylinder.shape(), material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:
         print(f"Needle Display _cylinder error: \n {error_message}")
@@ -99,16 +89,15 @@ def update(window: MainWindow):
             # intersecting channels detection
             channels = []
             for channel in window.needles.channels:
-                shape = channel.shape
                 result = False
                 for otherChannel in window.needles.channels:
                     if channel is otherChannel:
                         continue
-                    result = intersect.are_colliding(channel.shape, otherChannel.shape)
+                    result = intersect.are_colliding(channel.shape(), otherChannel.shape())
                     if result:
                         break
                 channels.append(
-                    [channel.shape, result])  # TopoDS_Shape, bool (is it colliding with any other channels?)
+                    [channel.shape(), result])  # TopoDS_Shape, bool (is it colliding with any other channels?)
 
             standard_color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
             colliding_color = Quantity_Color(0.95, 0.1, 0.1, Quantity_TOC_RGB)

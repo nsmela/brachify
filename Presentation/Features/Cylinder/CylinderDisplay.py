@@ -36,9 +36,8 @@ def update(window: MainWindow) -> None:
 
         # cylinder shown
         if window.brachyCylinder is not None:
-            shape = window.display_cylinder
             color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
-            window.display.DisplayColoredShape(shapes=shape, color=color)
+            window.display.DisplayColoredShape(shapes=window.brachyCylinder.shape(), color=color)
 
     except Exception as error_message:
         print(f"CylinderView: Cylinder load error: \n{error_message}")
@@ -47,7 +46,7 @@ def update(window: MainWindow) -> None:
         # needles shown
         if window.needles is not None:
             color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
-            window.display.DisplayShape(shapes=window.display_needles, material=Graphic3d_NOM_TRANSPARENT)
+            window.display.DisplayShape(shapes=window.needles.shape(), material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:
         print(f"CylinderView: Channels load error: \n{error_message}")

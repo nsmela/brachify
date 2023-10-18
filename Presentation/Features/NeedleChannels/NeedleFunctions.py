@@ -6,7 +6,7 @@ import Application.BRep.Helper as helper
 import Presentation.Features.NeedleChannels.NeedlesDisplay as needlesDisplay
 from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
 
-from Core.Models.NeedleChannel import NeedleChannel
+from Application.NeedleChannels.Models import NeedleChannel
 
 import numpy as np
 

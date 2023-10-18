@@ -7,29 +7,28 @@ from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakePipe
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.TopoDS import TopoDS_Shape
 
-from Core.Models.NeedleChannel import NeedleChannel
 import Application.BRep.Helper as helper
 
 import numpy as np
 
 NEEDLE_LENGTH = 2.50
 
-def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diameter: float = 3.0) -> TopoDS_Shape:
+def generate_curved_channel(points, offset: float = 0.0, diameter: float = 3.0) -> TopoDS_Shape:
     '''
     Generates a TopoDS_Shape from the Needle Channel's points
     Cylinder Offset is for height offset
     diameter is the channel's diameter
     '''
 
-    if len(channel.points) < 3:
-        print(F"Needle Channel {channel.channelId}:{channel.channelNumber} Generation error! needs 2 or more points!")
+    if len(points) < 3:
+        print(F"Needle Channel Generation error! needs 2 or more points!")
         return None
 
     # offset points using z axis and cylinder's offset
     # and convert into a gp_Pnt
     points = []
-    for point in channel.points:
-        points.append(gp_Pnt(point[0], point[1], point[2] - cylinder_offset))
+    for point in points:
+        points.append(gp_Pnt(point[0], point[1], point[2] - offset))
 
     radius = diameter / 2
 
@@ -59,7 +58,7 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
 
     # add a curved pipe downwards using offset length and direction of last two points
     length = helper.get_magnitude(points[-2], points[-1])
-    vector = helper.get_vector(points[-2], points[-1], length + channel.curve_downwards)
+    vector = helper.get_vector(points[-2], points[-1], length)
     p1 = points[-1]  # last point in array
     p2 = gp_Pnt(p1.X() + vector.X(), p1.Y() + vector.Y(), p1.Z() + vector.Z())  # middle point for bcurve
     p3 = gp_Pnt(p2.X(), p2.Y(), p2.Z() - length)  # last point, lowered towards bottom
@@ -72,28 +71,28 @@ def generate_curved_channel(channel: NeedleChannel, cylinder_offset: float, diam
     base_point = gp_Pnt(p3.X(), p3.Y(), -10.0)
     face = helper.get_lowest_face(pipe)
     edge = BRepBuilderAPI_MakeEdge(p3, base_point).Edge()
-    makeWire = BRepBuilderAPI_MakeWire(edge)
-    makeWire.Build()
-    wire = makeWire.Wire()
+    make_wire = BRepBuilderAPI_MakeWire(edge)
+    make_wire.Build()
+    wire = make_wire.Wire()
     cylinder = BRepOffsetAPI_MakePipe(wire, face).Shape()
     pipe = BRepAlgoAPI_Fuse(pipe, cylinder).Shape()
 
     return pipe
 
 
-def sharp_needle_channel(channel: NeedleChannel, cylinder_offset: float, diameter: float = 3.0) -> TopoDS_Shape:
+def sharp_needle_channel(channel_points, offset: float = 0.0, diameter: float = 3.0) -> TopoDS_Shape:
     """
     If a needle channel has a long distance between the first and second point, this helps stub it
     """
-    if len(channel.points) < 3:
-        print(F"Needle Channel {channel.channelId}:{channel.channelNumber} Generation error! needs 3 or more points!")
+    if len(channel_points) < 3:
+        print(F"Needle Channel Generation error! needs 3 or more points!")
         return None
 
         # offset points using z axis and cylinder's offset
         # and convert into a gp_Pnt
     points = []
-    for point in channel.points:
-        points.append(gp_Pnt(point[0], point[1], point[2] - cylinder_offset))
+    for point in channel_points:
+        points.append(gp_Pnt(point[0], point[1], point[2] - offset))
 
     radius = diameter / 2
 

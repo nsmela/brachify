@@ -6,7 +6,7 @@ from Core.Models.DicomData import DicomData
 import pydicom
 import numpy as np
 
-from Core.Models.NeedleChannel import NeedleChannel
+from Application.NeedleChannels.Models import NeedleChannel
 
 
 def is_rs_file(filepath: str) -> bool:

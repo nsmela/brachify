@@ -1,7 +1,7 @@
 import numpy as np
 import pydicom
 
-from Core.Models.NeedleChannel import NeedleChannel
+from Application.NeedleChannels.Models import NeedleChannel
 
 
 def _convert_control_point(brachy_control_point):

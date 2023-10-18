@@ -49,6 +49,7 @@ class BrachyCylinder:
         self.base = np.array(base)
         self.radius = radius
         self.expand_base = expand_base
+        self._shape = None
 
     def getDirection(self):
         direction = self.tip - self.base
@@ -57,6 +58,9 @@ class BrachyCylinder:
         return direction, length
 
     def shape(self) -> TopoDS_Shape:
+        if self._shape:
+            return self._shape
+
         # cylinder references
         cylinder_axis = gp_Dir(0, 0, 1)
         cylinder_vector = gp_Ax2(gp_Pnt(0, 0, 0), cylinder_axis)
