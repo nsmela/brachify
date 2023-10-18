@@ -34,6 +34,7 @@ def init(window: MainWindow) -> None:
     window.channel_active_index  = None  # which channel is selected?
     window.channel_hide_cylinder = False
     window.channel_diameter = 3.0
+    window.channel_height_offset = 0.0
 
 
 def view(window: MainWindow) -> None:

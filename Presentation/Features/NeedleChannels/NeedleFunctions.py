@@ -35,6 +35,12 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
             new_points = new_points - offset_vector
             channels[i].points = list(list(points) for points in new_points)
     window.needles = NeedlesModel(channels=channels)
+
+    # offset
+    for i in range(len(window.needles.channels)):
+        window.needles.channels[i].setOffset(window.channel_height_offset)
+
+    # list of needles in widget
     window.ui.channelsListWidget.clear()
     for needle in window.needles.channels:
         window.ui.channelsListWidget.addItem(needle.channelId)

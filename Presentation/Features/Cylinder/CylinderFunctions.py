@@ -21,7 +21,13 @@ def setLength(window: MainWindow) -> None:
     window.brachyCylinder._shape = None
 
     window.tandem_height = window.brachyCylinder.length - 39.0
-    # TODO: change offset for needle channels
+    if window.tandem is not None:
+        window.tandem.setOffsets(window.tandem_height)
+
+    window.channel_height_offset = window.brachyCylinder.length - 200.0
+    if window.needles is not None:
+        for i in range(len(window.needles.channels)):
+            window.needles.channels[i].setOffset(window.channel_height_offset)
 
     cylinderDisplay.update(window)
 
