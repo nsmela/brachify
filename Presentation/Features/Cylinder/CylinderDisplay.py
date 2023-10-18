@@ -72,7 +72,7 @@ def update(window: MainWindow) -> None:
         # tandem
         if window.tandem is not None:
             color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
-            window.display.DisplayShape(shapes=window.tandem.tool_shape, color=color,
+            window.display.DisplayShape(shapes=window.tandem.shape(), color=color,
                                         material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:

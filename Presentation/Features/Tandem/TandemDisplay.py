@@ -7,7 +7,6 @@ from Presentation.MainWindow.core import MainWindow
 from Core.Models.Tandem import TandemModel
 
 
-
 def init(window: MainWindow):
     """Called when the core class is initializing"""
     try:
@@ -16,6 +15,10 @@ def init(window: MainWindow):
         window.ui.btn_tandem_add_update.clicked.connect(lambda: tandem.save_tandem(window))
         window.ui.listWidget_savedTandems.itemSelectionChanged.connect(lambda: tandem.set_tandem(window))
         tandem.load_tandems(window)
+
+        window.tandem_height = 161.0
+        window.tandem_rotation = 0.0
+
     except Exception as error_message:
         print(f"tandem display init failed: {error_message}")
 
@@ -38,8 +41,7 @@ def update(window: MainWindow):
 
         # cylinder shown
         if window.brachyCylinder is not None:
-            shape = window.display_cylinder
-            window.display.DisplayShape(shapes=shape, material=Graphic3d_NOM_TRANSPARENT)
+            window.display.DisplayShape(shapes=window.brachyCylinder.shape(), material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:
         print(f"TandemView: Cylinder load error: \n{error_message}")
@@ -47,7 +49,7 @@ def update(window: MainWindow):
     try: 
         # needles shown
         if window.needles is not None:
-            window.display.DisplayShape(shapes=window.display_needles, material=Graphic3d_NOM_TRANSPARENT)
+            window.display.DisplayShape(shapes=window.needles.shape(), material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:
         print(f"TandemView: Needles load error: \n{error_message}")
@@ -58,13 +60,13 @@ def update(window: MainWindow):
             color = Quantity_Color(0.2, 0.2, 0.55, Quantity_TOC_RGB)
             
             color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
-            window.display.DisplayShape(shapes=window.tandem.shape, color=color, material=Graphic3d_NOM_TRANSPARENT)
+            window.display.DisplayShape(shapes=window.tandem.shape(), color=color, material=Graphic3d_NOM_TRANSPARENT)
             
             # debugging
             import Application.BRep.Helper as brep
             color = Quantity_Color(0.0, 1.0, 0.0, Quantity_TOC_RGB)
 
-            faces = brep.get_faces_axis(window.tandem.shape)
+            faces = brep.get_faces_axis(window.tandem.shape())
 
             for i, face in enumerate(faces):
                 axis = face[1].Direction()

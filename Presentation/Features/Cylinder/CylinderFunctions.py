@@ -18,9 +18,12 @@ def setLength(window: MainWindow) -> None:
         return
 
     window.brachyCylinder.length = window.ui.cylinderLengthSpinBox.value()
+    window.brachyCylinder._shape = None
+
+    window.tandem_height = window.brachyCylinder.length - 39.0
     # TODO: change offset for needle channels
-    # TODO change offset for Tandem
-    recalculate(window)
+
+    cylinderDisplay.update(window)
 
 
 def setBase(window: MainWindow) -> None:
@@ -42,4 +45,9 @@ def recalculate(window: MainWindow) -> None:
 def set_cylinder(window: MainWindow, cylinder: BrachyCylinder) -> None:
     window.brachyCylinder = cylinder
     window.brachyCylinder.shape()
+
+    window.tandem_height = window.brachyCylinder.length - 39.0
+    if window.tandem is not None:
+        window.tandem.setOffsets(height=window.tandem_height)
+
     # TODO update current view if cylinder view

@@ -1,12 +1,9 @@
 from PyQt5.QtWidgets import QFileDialog
 
-from OCC.Extend.ShapeFactory import translate_shp, rotate_shape
-from OCC.Core.gp import gp, gp_Vec
-
+from Application.Tandem.Models import Tandem
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.Imports.ImportFunctions as imports
 import Presentation.Features.Tandem.TandemDisplay as tandemDisplay
-import Application.BRep.Helper as brep
 from Core.Models.Tandem import TandemModel
 
 import os
@@ -100,52 +97,29 @@ def set_tandem(window: MainWindow, index: int = None) -> None:
     selection = window.tandems[tandems[index]]
 
     # building the Tandem Model
-    tandem = TandemModel()
+    tandem = Tandem()
     tandem.fromDict(selection)
 
     window.tandem = tandem
     update_tandem_settings(window, tandem)
     load_tandem_models(window, tandem)
-    window.tandem = apply_tandem_offsets(tandem, position=window.tandem_offset_position,
-                                        rotation=window.tandem_offset_rotation)
+
+    # offsets
+    window.tandem.setOffsets(height=window.tandem_height, rotation=window.tandem_rotation)
     tandemDisplay.update(window)
 
 
-def load_tandem_models(window: MainWindow, tandem: TandemModel) -> None:
-    if not tandem:
+def load_tandem_models(window: MainWindow, tandem: Tandem) -> None:
+    if tandem is None:
         return
 
     if not os.path.exists(tandem.shape_filepath):
         print(f"Tandem {tandem.name} display model is referencing an invalid filepath: {tandem.shape_filepath}")
         return
 
-    tandem.shape = imports.get_file_shape(tandem.shape_filepath)
+    tandem._base_shape = imports.get_file_shape(tandem.shape_filepath)
 
     tandemDisplay.update(window)
-
-
-def apply_tandem_offsets(tandem: TandemModel, position: list = [0.0, 0.0, 0.0], rotation: float = 0.0) -> TandemModel:
-    if not tandem:
-        return None
-
-    offset = gp_Vec(0.0, 0.0, 191.0)
-
-    if tandem.shape:
-        tandem.shape = rotate_shape(shape=tandem.shape, axis=gp.OZ(), angle=rotation)
-        tandem.shape = translate_shp(tandem.shape, offset)
-
-    tandem = extend(tandem)
-
-    return tandem
-
-
-def extend(tandem: TandemModel) -> TandemModel:
-    try:
-        tandem.shape = brep.extend_bottom_face(tandem.shape)
-    except Exception as error_message:
-        print(f"Lower face extension failed! {error_message}")
-
-    return tandem
 
 
 def load_tandem_model(window: MainWindow) -> None:
@@ -167,7 +141,7 @@ def clear_tandem_settings(window: MainWindow) -> None:
     tandemDisplay.update(window)
 
 
-def update_tandem_settings(window: MainWindow, tandem: TandemModel) -> None:
+def update_tandem_settings(window: MainWindow, tandem: Tandem) -> None:
     if tandem is None:
         clear_tandem_settings(window)
         return
