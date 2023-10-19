@@ -10,7 +10,7 @@ import Application.BRep.Intersections as intersect
 import Application.BRep.Channel as channelHelper
 
 
-# TODO list display variables as constants
+# TODO list display colours as constants
 # cylinder
 # needle channel
 # selected needle channel
@@ -31,10 +31,10 @@ def init(window: MainWindow) -> None:
         lambda: needleFunctions.setNeedleDisabled(window, window.channel_active_index))
 
     # variables/settings
-    window.channel_active_index  = None  # which channel is selected?
+    window.channel_active_index = None  # which channel is selected?
     window.channel_hide_cylinder = False
-    window.channel_diameter = 3.0
-    window.channel_height_offset = 0.0
+    window.channel_diameter = needleFunctions.DEFAULT_DIAMETER
+    window.channel_height = needleFunctions.DEFAULT_HEIGHT
 
 
 def view(window: MainWindow) -> None:

@@ -16,8 +16,8 @@ def init(window: MainWindow):
         window.ui.listWidget_savedTandems.itemSelectionChanged.connect(lambda: tandem.set_tandem(window))
         tandem.load_tandems(window)
 
-        window.tandem_height = 161.0
-        window.tandem_rotation = 0.0
+        window.tandem_height_offset = tandem.DEFAULT_HEIGHT
+        window.tandem_rotation_offset = tandem.DEFAULT_ROTATION
 
     except Exception as error_message:
         print(f"tandem display init failed: {error_message}")

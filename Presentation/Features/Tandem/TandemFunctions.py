@@ -10,19 +10,20 @@ import os
 import json
 import shutil
 
-tandem_dir = ".\\files\\tandem"
-data_filepath = os.path.join(tandem_dir, "tandem.json")
-
+DEFAULT_DIR = ".\\files\\tandem"
+DEFAULT_FILEPATH = os.path.join(DEFAULT_DIR, "tandem.json")
+DEFAULT_HEIGHT = 161.0
+DEFAULT_ROTATION = 0.0
 
 def load_tandems(window: MainWindow) -> None:
-    '''reads the json file for locally stored tandems and convert it into a list of tandems and store it globally'''
+    """reads the json file for locally stored tandems and convert it into a list of tandems and store it globally"""
     window.ui.listWidget_savedTandems.clear()
 
     try:
-        with open(data_filepath, "r") as data_file:
+        with open(DEFAULT_FILEPATH, "r") as data_file:
             window.tandems = json.load(data_file)
     except FileNotFoundError as error_message:
-        print(f"File {data_filepath} was not found! \n {error_message}")
+        print(f"File {DEFAULT_FILEPATH} was not found! \n {error_message}")
 
     if window.tandems is None:
         return
@@ -48,12 +49,12 @@ def save_tandem(window: MainWindow) -> bool:
     # turn info into dict for json
     tandem = TandemModel()
     tandem.name = tandem_name
-    tandem.shape_filepath = os.path.join(tandem_dir, f"{tandem_name}_model{os.path.splitext(tandem_model)[1]}")
+    tandem.shape_filepath = os.path.join(DEFAULT_DIR, f"{tandem_name}_model{os.path.splitext(tandem_model)[1]}")
 
     # check if file exists, if not create a blank one
     try:
         # load file if exists
-        with open(data_filepath, "r") as data_file:
+        with open(DEFAULT_FILEPATH, "r") as data_file:
             data = json.load(data_file)
     except FileNotFoundError:
         # if not, save the info instead
@@ -62,7 +63,7 @@ def save_tandem(window: MainWindow) -> bool:
         print(f"tandem model copied to {result}")
 
         data = tandem.toDict()
-        with open(data_filepath, "x") as data_file:
+        with open(DEFAULT_FILEPATH, "x") as data_file:
             json.dump(data, data_file, indent=4)
     except Exception as error_message:
         print(f"Tandem save failed: {error_message}")
@@ -76,7 +77,7 @@ def save_tandem(window: MainWindow) -> bool:
             print(f"File {tandem.shape_filepath} already exists!")
 
         data.update(tandem.toDict())
-        with open(data_filepath, "w") as data_file:
+        with open(DEFAULT_FILEPATH, "w") as data_file:
             json.dump(data, data_file, indent=4)
     finally:
         load_tandems(window)
@@ -105,7 +106,7 @@ def set_tandem(window: MainWindow, index: int = None) -> None:
     load_tandem_models(window, tandem)
 
     # offsets
-    window.tandem.setOffsets(height=window.tandem_height, rotation=window.tandem_rotation)
+    window.tandem.setOffsets(height=window.tandem_height_offset, rotation=window.tandem_rotation_offset)
     tandemDisplay.update(window)
 
 
@@ -120,6 +121,16 @@ def load_tandem_models(window: MainWindow, tandem: Tandem) -> None:
     tandem._base_shape = imports.get_file_shape(tandem.shape_filepath)
 
     tandemDisplay.update(window)
+
+
+def applyOffsets(window: MainWindow, height_offset: float = None, rotation: float = None) -> None:
+    if height_offset is not None:
+        window.tandem_height_offset = DEFAULT_HEIGHT + height_offset
+    if rotation is not None:
+        window.tandem_rotation_offset = rotation
+
+    if window.tandem is not None:
+        window.tandem.setOffsets(window.tandem_height_offset, window.tandem_rotation_offset)
 
 
 def load_tandem_model(window: MainWindow) -> None:

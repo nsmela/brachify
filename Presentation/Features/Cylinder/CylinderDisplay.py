@@ -27,8 +27,8 @@ def view(window: MainWindow):
 
 def update(window: MainWindow) -> None:
     """When this is the active view, use this method to update the ui and 3d display view"""
-    diameter = 30.0
-    length = 200.0
+    diameter = cylinder.DEFAULT_DIAMETER
+    length = cylinder.DEFAULT_LENGTH
     expand_base = False
 
     if window.brachyCylinder is not None:

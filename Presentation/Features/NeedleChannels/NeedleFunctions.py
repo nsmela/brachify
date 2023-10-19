@@ -1,11 +1,8 @@
-from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
-
-from Application.BRep.Channel import generate_curved_channel
 from Presentation.MainWindow.core import MainWindow
 import Application.BRep.Helper as helper
 import Presentation.Features.NeedleChannels.NeedlesDisplay as needlesDisplay
 from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
-
+import Presentation.Features.Tandem.TandemFunctions as tandemFunctions
 from Application.NeedleChannels.Models import NeedleChannel
 
 import numpy as np
@@ -17,6 +14,8 @@ self.display_needle_list: a list of the needle channels
 self.needles_active_index: the current active needle channel
 '''
 
+DEFAULT_DIAMETER = 3.0
+DEFAULT_HEIGHT = 0.0
 
 def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
     # offset each point
@@ -39,7 +38,7 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
 
     # offset
     for i in range(len(window.needles.channels)):
-        window.needles.channels[i].setOffset(window.channel_height_offset)
+        window.needles.channels[i].setOffset(window.channel_height)
 
     # channel 0 is the tandem needle channel
     set_tandem_needle(window, 0)
@@ -111,9 +110,9 @@ def set_tandem_needle(window: MainWindow, index: int) -> None:
     #window.tandem_offset_position = tandem_channel.points[-1]  # last point is the height
 
     # rotation
-    window.tandem_rotation = tandem_channel.getRotation()
-    print(f"Rotation calculated: {window.tandem_rotation}")
-    if window.tandem is not None:
-        window.tandem.setOffsets(rotation=window.tandem_rotation)
+    rotation = tandem_channel.getRotation()
+    print(f"Rotation calculated: {rotation}")
+
+    tandemFunctions.applyOffsets(window, rotation=rotation)
 
 

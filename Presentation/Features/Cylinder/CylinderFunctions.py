@@ -1,8 +1,12 @@
 from Core.Models.Cylinder import BrachyCylinder
-from Core.Models.DicomData import DicomData
+
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.Cylinder.CylinderDisplay as cylinderDisplay
-import Application.BRep.Cylinder as cyl
+import Presentation.Features.Tandem.TandemFunctions as tandemFunctions
+
+
+DEFAULT_LENGTH = 191.0
+DEFAULT_DIAMETER = 30.0
 
 
 def setDiameter(window: MainWindow) -> None:
@@ -18,16 +22,17 @@ def setLength(window: MainWindow) -> None:
         return
 
     window.brachyCylinder.length = window.ui.cylinderLengthSpinBox.value()
-    window.brachyCylinder._shape = None
+    window.brachyCylinder._shape = None  # next time the shape is needed, a new one will be generated
 
-    window.tandem_height = window.brachyCylinder.length - 39.0
-    if window.tandem is not None:
-        window.tandem.setOffsets(window.tandem_height)
+    # applying tandem height offset
+    height_offset = window.brachyCylinder.length - DEFAULT_LENGTH
+    tandemFunctions.applyOffsets(window, height_offset=height_offset)
 
-    window.channel_height_offset = window.brachyCylinder.length - 200.0
+    # applying needle channel height offset
+    window.channel_height = height_offset
     if window.needles is not None:
         for i in range(len(window.needles.channels)):
-            window.needles.channels[i].setOffset(window.channel_height_offset)
+            window.needles.channels[i].setOffset(window.channel_height)
 
     cylinderDisplay.update(window)
 
@@ -52,8 +57,10 @@ def set_cylinder(window: MainWindow, cylinder: BrachyCylinder) -> None:
     window.brachyCylinder = cylinder
     window.brachyCylinder.shape()
 
-    window.tandem_height = window.brachyCylinder.length - 39.0
-    if window.tandem is not None:
-        window.tandem.setOffsets(height=window.tandem_height)
+    # applying offset to tandem
+    height_offset = window.brachyCylinder.length - DEFAULT_LENGTH
+    tandemFunctions.applyOffsets(window, height_offset=height_offset)
+
+    # applying offset to needles
 
     # TODO update current view if cylinder view
