@@ -28,7 +28,7 @@ def init(window: MainWindow) -> None:
     window.ui.channelsListWidget.itemSelectionChanged.connect(
         lambda: needleFunctions.setActiveNeedleChannel(window, window.ui.channelsListWidget.currentRow()))
     window.ui.btn_channel_disable.clicked.connect(
-        lambda: needleFunctions.setNeedleDisabled(window))
+        lambda: needleFunctions.setNeedleDisabled(window, window.channel_active_index))
 
     # variables/settings
     window.channel_active_index  = None  # which channel is selected?

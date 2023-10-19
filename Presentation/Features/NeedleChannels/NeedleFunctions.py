@@ -21,6 +21,7 @@ self.needles_active_index: the current active needle channel
 def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
     # offset each point
     if window.brachyCylinder:
+        # use the brachy cylinder to offset the points
         z_up = np.array([0, 0, 1])  # z axis reference, the direction we want the cylinder and needles to go
         tip = np.array(window.brachyCylinder.tip)
         base = np.array(window.brachyCylinder.base)
@@ -40,6 +41,10 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
     for i in range(len(window.needles.channels)):
         window.needles.channels[i].setOffset(window.channel_height_offset)
 
+    # channel 0 is the tandem needle channel
+    set_tandem_needle(window, 0)
+    setNeedleDisabled(window, 0)
+
     # list of needles in widget
     window.ui.channelsListWidget.clear()
     for needle in window.needles.channels:
@@ -51,7 +56,6 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
     window.ui.channelDiameterSpinBox.blockSignals(True)
     window.ui.channelDiameterSpinBox.setValue(diameter)
     window.ui.channelDiameterSpinBox.blockSignals(False)
-
 
 
 def setActiveNeedleChannel(window: MainWindow, index: int = -1) -> None:
@@ -78,13 +82,13 @@ def get_clicked_needle_index(window: MainWindow, shape) -> int:
     return -1
 
 
-def setNeedleDisabled(window: MainWindow):
-    index = window.channel_active_index
-    if index < 0:
+def setNeedleDisabled(window: MainWindow, index: int) -> None:
+    if index < 0 or index >= len(window.needles.channels):
         return
 
-    channel = window.needles.channels[window.channel_active_index]
-    channel.disabled = not channel.disabled
+    channel = window.needles.channels[index]
+    window.needles.channels[index].disabled = not channel.disabled
+    window.needles.clearShape()
     needlesDisplay.update(window)
 
 
@@ -100,15 +104,16 @@ def setChannelsDiameter(window: MainWindow, diameter: float = 3.0) -> None:
     needlesDisplay.update(window)
 
 
-def set_tandem_offsets(window: MainWindow) -> None:
-    tandem_channel = window.needles.channels[0]
+def set_tandem_needle(window: MainWindow, index: int) -> None:
+    tandem_channel = window.needles.channels[index]
 
     # position
-    window.tandem_offset_position = tandem_channel.points[-1]
+    #window.tandem_offset_position = tandem_channel.points[-1]  # last point is the height
 
     # rotation
-    window.tandem_offset_rotation = tandem_channel.getRotation()
-    print(f"Rotation calculated: {window.tandem_offset_rotation}")
-
+    window.tandem_rotation = tandem_channel.getRotation()
+    print(f"Rotation calculated: {window.tandem_rotation}")
+    if window.tandem is not None:
+        window.tandem.setOffsets(rotation=window.tandem_rotation)
 
 
