@@ -135,7 +135,11 @@ def rotate_points(points, v_1, v_2):
     v_1 = v_1 / len_1
     v_2 = v_2 / len_2
 
+    if np.array_equal(v_1, v_2):  # points do not need to be rotated
+        return points
+
     # Calculate the vector cross product
+    print(f"cross normalized: {v_1} {v_2}")
     cross_v1v2 = np.cross(v_1, v_2)
     cross_norm = (cross_v1v2[0] ** 2 + cross_v1v2[1] ** 2 + cross_v1v2[2] ** 2) ** 0.5
     cross_normalized = cross_v1v2 / cross_norm

@@ -92,6 +92,7 @@ def load_dicom_data(rp_file: str, rs_file: str) -> DicomData:
     except Exception as error_message:
         print(f"Loading RS Dicom file failed! {rs_file}\n{error_message}")
 
+    print(f"{data.toString()}")
     return data
 
 
