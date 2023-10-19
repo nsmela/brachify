@@ -2,6 +2,7 @@ from Core.Models.Cylinder import BrachyCylinder
 
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.Cylinder.CylinderDisplay as cylinderDisplay
+import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
 import Presentation.Features.Tandem.TandemFunctions as tandemFunctions
 
 
@@ -29,10 +30,7 @@ def setLength(window: MainWindow) -> None:
     tandemFunctions.applyOffsets(window, height_offset=height_offset)
 
     # applying needle channel height offset
-    window.channel_height = height_offset
-    if window.needles is not None:
-        for i in range(len(window.needles.channels)):
-            window.needles.channels[i].setOffset(window.channel_height)
+    needleFunctions.applyOffsets(window, height_offset=height_offset)
 
     cylinderDisplay.update(window)
 

@@ -38,7 +38,7 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
 
     # offset
     for i in range(len(window.needles.channels)):
-        window.needles.channels[i].setOffset(window.channel_height)
+        window.needles.channels[i].setOffset(window.channel_height_offset)
 
     # channel 0 is the tandem needle channel
     set_tandem_needle(window, 0)
@@ -116,3 +116,9 @@ def set_tandem_needle(window: MainWindow, index: int) -> None:
     tandemFunctions.applyOffsets(window, rotation=rotation)
 
 
+def applyOffsets(window, height_offset: float) -> None:
+    window.channel_height_offset = height_offset
+    for i in range(len(window.needles.channels)):
+        window.needles.channels[i].setOffset(window.channel_height_offset)
+
+    window.needles.clearShape()

@@ -34,7 +34,7 @@ def init(window: MainWindow) -> None:
     window.channel_active_index = None  # which channel is selected?
     window.channel_hide_cylinder = False
     window.channel_diameter = needleFunctions.DEFAULT_DIAMETER
-    window.channel_height = needleFunctions.DEFAULT_HEIGHT
+    window.channel_height_offset = needleFunctions.DEFAULT_HEIGHT
 
 
 def view(window: MainWindow) -> None:

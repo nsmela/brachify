@@ -10,7 +10,6 @@ def init(window: MainWindow):
     window.ui.cylinderLengthSpinBox.valueChanged.connect(lambda: cylinder.setLength(window))
     window.ui.checkbox_cylinder_base.toggled.connect(lambda: cylinder.setBase(window))
 
-
 def view(window: MainWindow):
     print("switched to cylinder view!")
     # variables

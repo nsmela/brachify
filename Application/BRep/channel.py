@@ -28,7 +28,7 @@ def generate_curved_channel(channel_points, offset: float = 0.0, diameter: float
     # and convert into a gp_Pnt
     points = []
     for point in channel_points:
-        points.append(gp_Pnt(point[0], point[1], point[2] - offset))
+        points.append(gp_Pnt(point[0], point[1], point[2] + offset))
 
     radius = diameter / 2
 
