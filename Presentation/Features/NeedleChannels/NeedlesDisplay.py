@@ -11,6 +11,7 @@ CYLINDER_COLOUR = Quantity_Color(0.0, 0.0, 0.0, Quantity_TOC_RGB)
 CHANNEL_COLOUR_STANDARD = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
 CHANNEL_COLOUR_ACTIVE = Quantity_Color(0.1, 0.4, 0.4, Quantity_TOC_RGB)
 CHANNEL_COLOUR_COLLIDING = Quantity_Color(0.95, 0.1, 0.1, Quantity_TOC_RGB)
+CHANNEL_COLOUR_DISABLED = Quantity_Color(0.95, 0.95, 0.95, Quantity_TOC_RGB)
 # close proximity needle channel
 # outside cylinder needle channel
 
@@ -94,19 +95,13 @@ def update(window: MainWindow):
         if window.needles is not None:
             channels = window.channels
 
-            standard_color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
-            colliding_color = Quantity_Color(0.95, 0.1, 0.1, Quantity_TOC_RGB)
-            selected_color = Quantity_Color(0.1, 0.4, 0.4, Quantity_TOC_RGB)
-
             for i, channel in enumerate(channels):
-                if window.needles.channels[i].disabled:
-                    continue
                 if i == window.channel_active_index:
-                    window.display.DisplayColoredShape(shapes=channel[0], color=selected_color)
+                    window.display.DisplayShape(shapes=channel[0], color=CHANNEL_COLOUR_ACTIVE)
                 else:
-                    color = standard_color
+                    color = CHANNEL_COLOUR_STANDARD
                     if channel[1]:
-                        color = colliding_color
+                        color = CHANNEL_COLOUR_COLLIDING
                     window.display.DisplayColoredShape(shapes=channel[0], color=color)
 
     except Exception as error_message:
