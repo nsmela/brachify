@@ -4,6 +4,9 @@ import Presentation.Features.NeedleChannels.NeedlesDisplay as needlesDisplay
 from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
 import Presentation.Features.Tandem.TandemFunctions as tandemFunctions
 from Application.NeedleChannels.Models import NeedleChannel
+import Application.BRep.Intersections as intersect
+
+from OCC.Core.TopoDS import TopoDS_Shape
 
 import numpy as np
 
@@ -16,6 +19,7 @@ self.needles_active_index: the current active needle channel
 
 DEFAULT_DIAMETER = 3.0
 DEFAULT_HEIGHT = 0.0
+
 
 def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
     # offset each point
@@ -56,6 +60,8 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
     window.ui.channelDiameterSpinBox.setValue(diameter)
     window.ui.channelDiameterSpinBox.blockSignals(False)
 
+    # propagate the channels to be displayed and if they're colliding
+    window.channels = checkIntersecting(window)
 
 def setActiveNeedleChannel(window: MainWindow, index: int = -1) -> None:
     if window.channel_active_index == index:
@@ -88,6 +94,8 @@ def setNeedleDisabled(window: MainWindow, index: int) -> None:
     channel = window.needles.channels[index]
     window.needles.channels[index].disabled = not channel.disabled
     window.needles.clearShape()
+    window.channels = checkIntersecting(window)
+
     needlesDisplay.update(window)
 
 
@@ -100,6 +108,8 @@ def setChannelsDiameter(window: MainWindow, diameter: float = 3.0) -> None:
     for channel in window.needles.channels:
         channel.setDiameter(window.channel_diameter)
 
+    window.channels = checkIntersecting(window)
+
     needlesDisplay.update(window)
 
 
@@ -107,7 +117,7 @@ def set_tandem_needle(window: MainWindow, index: int) -> None:
     tandem_channel = window.needles.channels[index]
 
     # position
-    #window.tandem_offset_position = tandem_channel.points[-1]  # last point is the height
+    # window.tandem_offset_position = tandem_channel.points[-1]  # last point is the height
 
     # rotation
     rotation = tandem_channel.getRotation()
@@ -122,3 +132,31 @@ def applyOffsets(window, height_offset: float) -> None:
         window.needles.channels[i].setOffset(window.channel_height_offset)
 
     window.needles.clearShape()
+
+
+def checkIntersecting(window: MainWindow) -> list[TopoDS_Shape, bool]:
+    channels = None
+
+    # needles shown
+    if window.needles is not None:
+        # intersecting channels detection
+        channels = []
+        # shapes to check if they collide with each the needle channel
+        otherShapes = [channel.shape() for channel in window.needles.channels]
+        if window.tandem is not None:
+            otherShapes.append(window.tandem.shape())
+
+        # intersection testing returns an array of [shape, bool] where bool is if anything intersects it
+        for channel in window.needles.channels:
+            result = False  # is the shape intersecting something?
+            shape = channel.shape()  # shape to test
+            for otherShape in otherShapes:
+                if shape is otherShape:
+                    continue  # skip if its own shape
+                result = intersect.are_colliding(shape, otherShape)
+                if result:
+                    break
+            channels.append(
+                [channel.shape(), result])  # TopoDS_Shape, bool (is it colliding with any other channels?)
+
+    return channels

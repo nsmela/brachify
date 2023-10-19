@@ -5,15 +5,12 @@ import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
 
 from Presentation.MainWindow.core import MainWindow
 
-import Application.BRep.Intersections as intersect
-import Application.BRep.Channel as channelHelper
-
 
 # TODO list display colours as constants
-# cylinder
-# needle channel
-# selected needle channel
-# intersecting needle channel
+CYLINDER_COLOUR = Quantity_Color(0.0, 0.0, 0.0, Quantity_TOC_RGB)
+CHANNEL_COLOUR_STANDARD = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
+CHANNEL_COLOUR_ACTIVE = Quantity_Color(0.1, 0.4, 0.4, Quantity_TOC_RGB)
+CHANNEL_COLOUR_COLLIDING = Quantity_Color(0.95, 0.1, 0.1, Quantity_TOC_RGB)
 # close proximity needle channel
 # outside cylinder needle channel
 
@@ -34,7 +31,7 @@ def init(window: MainWindow) -> None:
     window.channel_hide_cylinder = False
     window.channel_diameter = needleFunctions.DEFAULT_DIAMETER
     window.channel_height_offset = needleFunctions.DEFAULT_HEIGHT
-
+    window.channels = []
 
 def view(window: MainWindow) -> None:
     print("Needles Display: view!")
@@ -95,22 +92,12 @@ def update(window: MainWindow):
     try:
         # needles shown
         if window.needles is not None:
-            # intersecting channels detection
-            channels = []
-            for channel in window.needles.channels:
-                result = False
-                for otherChannel in window.needles.channels:
-                    if channel is otherChannel:
-                        continue
-                    result = intersect.are_colliding(channel.shape(), otherChannel.shape())
-                    if result:
-                        break
-                channels.append(
-                    [channel.shape(), result])  # TopoDS_Shape, bool (is it colliding with any other channels?)
+            channels = window.channels
 
             standard_color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
             colliding_color = Quantity_Color(0.95, 0.1, 0.1, Quantity_TOC_RGB)
             selected_color = Quantity_Color(0.1, 0.4, 0.4, Quantity_TOC_RGB)
+
             for i, channel in enumerate(channels):
                 if window.needles.channels[i].disabled:
                     continue
