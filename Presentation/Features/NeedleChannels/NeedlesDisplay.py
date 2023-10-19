@@ -2,7 +2,6 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
 import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
-from Presentation.MainWindow.display_functions import DisplayFunctions
 
 from Presentation.MainWindow.core import MainWindow
 

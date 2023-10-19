@@ -11,8 +11,7 @@ from turtle import Vec2D
 
 ## ==> GUI FILE
 from Presentation.MainWindow.core import MainWindow
-from Presentation.MainWindow.display_functions import DisplayFunctions
-import Presentation.Features.Imports.ImportDisplay as importDisplay 
+import Presentation.Features.Imports.ImportDisplay as importDisplay
 import Presentation.Features.Cylinder.CylinderDisplay as cylDisplay 
 import Presentation.Features.NeedleChannels.NeedlesDisplay as needleDisplay
 import Presentation.Features.Tandem.TandemDisplay as tandemDisplay
