@@ -8,6 +8,7 @@ class DicomData:
         self.cylinder_contour = None
 
         self.channels_rois = None
+        self.channels_labels = None
         self.channels_colors = None
         self.channel_contours = None
 

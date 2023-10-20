@@ -49,6 +49,7 @@ def load_dicom_data(rp_file: str, rs_file: str) -> DicomData:
         # we use the Planning file to get the channel ROI numbers
         rp_dataset = pydicom.read_file(rp_file)
         data.channels_rois = [roi.ReferencedROINumber for roi in rp_dataset.ApplicationSetupSequence[0].ChannelSequence]
+        data.channels_labels = [roi.SourceApplicatorID for roi in rp_dataset.ApplicationSetupSequence[0].ChannelSequence]
     except Exception as error_message:
         print(f"Loading RP Dicom file failed! {rp_file}\n{error_message}")
 
@@ -116,10 +117,10 @@ def load_channels(data: DicomData) -> list[NeedleChannel]:
     print("### Importing RP Data ###")
     for i in range(len(data.channels_rois)):
         channel_number = f"{data.channels_rois[i]}"
-        channel_id = f"Channel {channel_number}"
+        channel_id = f"Channel {data.channels_labels[i]}"
         points = data.channel_contours[i]
 
         print(f" Raw Points: \n{points}\n\n")
-        needle = NeedleChannel(number=channel_number, id=channel_number, points=points)
+        needle = NeedleChannel(number=channel_number, id=channel_id, points=points)
         channels.append(needle)
     return channels
