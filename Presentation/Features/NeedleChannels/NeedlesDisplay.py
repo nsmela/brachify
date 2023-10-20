@@ -31,6 +31,7 @@ def init(window: MainWindow) -> None:
 
     # variables/settings
     window.channel_active_index = None  # which channel is selected?
+    window.channel_tandem_index = None
     window.channel_hide_cylinder = False
     window.channel_diameter = needleFunctions.DEFAULT_DIAMETER
     window.channel_height_offset = needleFunctions.DEFAULT_HEIGHT
@@ -99,6 +100,10 @@ def update(window: MainWindow):
             channels = window.needles.channels
 
             for i, channel in enumerate(channels):
+                if i == window.channel_tandem_index \
+                        and window.tandem is not None:
+                    continue
+
                 color = CHANNEL_COLOUR_STANDARD
                 if i == window.channel_active_index:
                     color=CHANNEL_COLOUR_ACTIVE

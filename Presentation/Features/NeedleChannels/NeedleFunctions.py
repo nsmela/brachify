@@ -47,7 +47,7 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
     # channel 0 is the tandem needle channel
     for i, channel in enumerate(window.needles.channels):
         if "tandem" in channel.channelId.lower():
-            set_tandem_needle(window, index=i)
+            setTandemNeedle(window, index=i)
             setNeedleDisabled(window, index=i)
             break
 
@@ -116,11 +116,14 @@ def setChannelsDiameter(window: MainWindow, diameter: float = 3.0) -> None:
     needlesDisplay.update(window)
 
 
-def set_tandem_needle(window: MainWindow, index: int) -> None:
-    tandem_channel = window.needles.channels[index]
+def setTandemNeedle(window: MainWindow, index: int) -> None:
+    window.channel_tandem_index = index
 
-    # position
-    # window.tandem_offset_position = tandem_channel.points[-1]  # last point is the height
+    if window.channel_tandem_index is None:
+        tandemFunctions.applyOffsets(window, rotation=0.0)
+        return
+
+    tandem_channel = window.needles.channels[window.channel_tandem_index]
 
     # rotation
     rotation = tandem_channel.getRotation()
@@ -135,10 +138,9 @@ def applyOffsets(window, height_offset: float) -> None:
     if window.needles is None or len(window.needles.channels) < 1:
         return None
 
-    #for i in range(len(window.needles.channels)):
-       # window.needles.channels[i].setOffset(window.channel_height_offset)
+    for channel in window.needles.channels:
+        channel.setOffset(window.channel_height_offset)
 
-    [channel.setOffset(window.channel_height_offset) for channel in window.needles.channels]
     window.needles.clearShape()
 
 
