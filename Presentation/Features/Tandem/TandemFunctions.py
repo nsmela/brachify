@@ -134,7 +134,7 @@ def applyOffsets(window: MainWindow, height_offset: float = None, rotation: floa
 
 
 def load_tandem_model(window: MainWindow) -> None:
-    filename = QFileDialog.getOpenFileName(window, 'Select Tandem Tool Model', '',
+    filename = QFileDialog.getOpenFileName(window, 'Select Tandem Tool Model', window.import_default_folder,
                                            "Supported files (*.stl *.3mf *.obj *.stp *.step)")[0]
     if len(filename) == 0:
         return

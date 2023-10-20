@@ -9,6 +9,7 @@ from Presentation.Features.Imports.ImportFunctions import *
 ## IMPORTS
 def init(window: MainWindow) -> None:
     window.ui.btn_import_dicom_folder.clicked.connect(lambda: get_dicom_folder(window))
+    window.import_default_folder = ""
 
 def view(window: MainWindow):
     # set display

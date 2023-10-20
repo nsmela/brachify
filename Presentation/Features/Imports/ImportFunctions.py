@@ -61,6 +61,8 @@ def add_dicom_folder(window: MainWindow, folder_path: str) -> None:
     channels = dicom.load_channels(data)
     needleFunctions.set_channels(window, channels)
 
+    window.import_default_folder = folder_path
+
     from Presentation.MainWindow.ui_functions import UIFunctions
     UIFunctions.setPage(window, UIFunctions.NEEDLE_CHANNELS_VIEW)
 
