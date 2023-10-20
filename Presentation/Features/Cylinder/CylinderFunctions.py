@@ -14,16 +14,15 @@ def setDiameter(window: MainWindow) -> None:
     if window.brachyCylinder is None:
         return
 
-    window.brachyCylinder.diameter = window.ui.cylinderDiameterSpinBox.value()
-    recalculate(window)
+    window.brachyCylinder.setDiameter(window.ui.cylinderDiameterSpinBox.value())
+    cylinderDisplay.update(window)
 
 
 def setLength(window: MainWindow) -> None:
     if window.brachyCylinder is None:
         return
 
-    window.brachyCylinder.length = window.ui.cylinderLengthSpinBox.value()
-    window.brachyCylinder._shape = None  # next time the shape is needed, a new one will be generated
+    window.brachyCylinder.setLength(window.ui.cylinderLengthSpinBox.value())
 
     # applying tandem height offset
     height_offset = window.brachyCylinder.length - DEFAULT_LENGTH
@@ -39,15 +38,7 @@ def setBase(window: MainWindow) -> None:
     if window.brachyCylinder is None:
         return
 
-    window.brachyCylinder.expand_base = window.ui.checkbox_cylinder_base.isChecked()
-    recalculate(window)
-
-
-def recalculate(window: MainWindow) -> None:
-    """Called after the BrachyCylinder is changed"""
-    print("Recalculating cylinder!")
-
-    window.brachyCylinder.shape()
+    window.brachyCylinder.enableBase(window.ui.checkbox_cylinder_base.isChecked())
     cylinderDisplay.update(window)
 
 
@@ -55,10 +46,10 @@ def set_cylinder(window: MainWindow, cylinder: BrachyCylinder) -> None:
     window.brachyCylinder = cylinder
     window.brachyCylinder.shape()
 
-    # applying offset to tandem
     height_offset = window.brachyCylinder.length - DEFAULT_LENGTH
+    # applying offset to tandem
     tandemFunctions.applyOffsets(window, height_offset=height_offset)
-
     # applying offset to needles
+    needleFunctions.applyOffsets(window, height_offset=height_offset)
 
     # TODO update current view if cylinder view

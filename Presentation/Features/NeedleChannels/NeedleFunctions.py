@@ -128,9 +128,14 @@ def set_tandem_needle(window: MainWindow, index: int) -> None:
 
 def applyOffsets(window, height_offset: float) -> None:
     window.channel_height_offset = height_offset
-    for i in range(len(window.needles.channels)):
-        window.needles.channels[i].setOffset(window.channel_height_offset)
 
+    if window.needles is None or len(window.needles.channels) < 1:
+        return None
+
+    #for i in range(len(window.needles.channels)):
+       # window.needles.channels[i].setOffset(window.channel_height_offset)
+
+    [channel.setoffset(window.channel_height_offset) for channel in window.needles.channels]
     window.needles.clearShape()
 
 

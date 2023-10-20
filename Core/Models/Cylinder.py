@@ -96,3 +96,18 @@ class BrachyCylinder:
         if self.expand_base:
             cylinder = add_base(shape=cylinder, radius1=self.diameter / 2, radius2= 12.0)
         return cylinder
+
+    def setDiameter(self, diameter:float ) -> None:
+        self.diameter = diameter
+        self._shape = None
+        self._shape = self.shape()
+
+    def setLength(self, length: float) -> None:
+        self.length = length
+        self._shape = None
+        self._shape = self.shape()
+
+    def enableBase(self, isBaseEnabled: bool) -> None:
+        self.expand_base = isBaseEnabled
+        self._shape = None
+        self._shape = self.shape()
