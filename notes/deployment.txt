@@ -3,3 +3,10 @@ https://www.youtube.com/watch?v=p3tSLatmGvU
 
 # course
 https://www.classcentral.com/classroom/youtube-pyqt5-pyqt6-tutorial-create-gui-with-python-92283/6299980b13eb4
+
+# building
+>auto-app-to-exe
+# use ./output/pyinstaller_config.json
+
+>pyinstaller --noconfirm --onedir --console --icon "./resources/sewing-needle.ico" --name "prodd" --hidden-import "pydicom.encoders.gdcm" --hidden-import "OCC" --hidden-import "pydicom.encoders.pylibjpeg"  "./main.py"
+

@@ -24,6 +24,8 @@ def load_tandems(window: MainWindow) -> None:
             window.tandems = json.load(data_file)
     except FileNotFoundError as error_message:
         print(f"File {DEFAULT_FILEPATH} was not found! \n {error_message}")
+        if not os.path.exists(DEFAULT_DIR):
+            os.makedirs(DEFAULT_DIR)
 
     if window.tandems is None:
         return
