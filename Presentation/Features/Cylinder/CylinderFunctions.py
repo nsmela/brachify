@@ -6,7 +6,7 @@ import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
 import Presentation.Features.Tandem.TandemFunctions as tandemFunctions
 from Core.Models.Cylinder import BrachyCylinder
 
-DEFAULT_LENGTH = 160.0
+DEFAULT_LENGTH = 161.0
 DEFAULT_DIAMETER = 30.0
 
 

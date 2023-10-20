@@ -135,7 +135,7 @@ def applyOffsets(window, height_offset: float) -> None:
     #for i in range(len(window.needles.channels)):
        # window.needles.channels[i].setOffset(window.channel_height_offset)
 
-    [channel.setoffset(window.channel_height_offset) for channel in window.needles.channels]
+    [channel.setOffset(window.channel_height_offset) for channel in window.needles.channels]
     window.needles.clearShape()
 
 
