@@ -8,8 +8,9 @@ from Presentation.MainWindow.core import MainWindow
 
 # TODO list display colours as constants
 CYLINDER_COLOUR = Quantity_Color(0.0, 0.0, 0.0, Quantity_TOC_RGB)
-CHANNEL_COLOUR_STANDARD = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
-CHANNEL_COLOUR_ACTIVE = Quantity_Color(0.1, 0.4, 0.4, Quantity_TOC_RGB)
+TANDEM_COLOUR = Quantity_Color(0.0, 0.0, 0.0, Quantity_TOC_RGB)
+CHANNEL_COLOUR_STANDARD = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
+CHANNEL_COLOUR_ACTIVE = Quantity_Color(0.2, 0.95, 0.55, Quantity_TOC_RGB)
 CHANNEL_COLOUR_COLLIDING = Quantity_Color(0.95, 0.1, 0.1, Quantity_TOC_RGB)
 CHANNEL_COLOUR_DISABLED = Quantity_Color(0.05, 0.05, 0.05, Quantity_TOC_RGB)
 # close proximity needle channel
@@ -86,7 +87,8 @@ def update(window: MainWindow):
 
         # cylinder shown
         if not window.isCylinderHidden and window.brachyCylinder.shape():
-            window.display.DisplayShape(shapes=window.brachyCylinder.shape(), material=Graphic3d_NOM_TRANSPARENT)
+            window.display.DisplayShape(shapes=window.brachyCylinder.shape(), color=CYLINDER_COLOUR,
+                            material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:
         print(f"Needle Display _cylinder error: \n {error_message}")
@@ -104,7 +106,8 @@ def update(window: MainWindow):
                     color = CHANNEL_COLOUR_COLLIDING
                 elif channel.disabled:
                     color = CHANNEL_COLOUR_DISABLED
-                window.display.DisplayColoredShape(shapes=channel.shape(), color=color)
+                window.display.DisplayShape(shapes=channel.shape(), color=color,
+                                            material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:
         print(f"Needle Display _needles error: \n {error_message}")
@@ -112,8 +115,7 @@ def update(window: MainWindow):
     try:
         # tandem
         if window.tandem is not None:
-            color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
-            window.display.DisplayShape(shapes=window.tandem.shape(), color=color,
+            window.display.DisplayShape(shapes=window.tandem.shape(), color=TANDEM_COLOUR,
                                         material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:

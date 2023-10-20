@@ -5,6 +5,10 @@ from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.Cylinder.CylinderFunctions as cylinder
 
 ## CYLINDER
+CYLINDER_COLOUR = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
+TANDEM_COLOUR = Quantity_Color(0.0, 0.0, 0.0, Quantity_TOC_RGB)
+CHANNEL_COLOUR = Quantity_Color(0.9, 0.9, 0.9, Quantity_TOC_RGB)
+
 def init(window: MainWindow):
     window.ui.cylinderDiameterSpinBox.valueChanged.connect(lambda: cylinder.setDiameter(window))
     window.ui.cylinderLengthSpinBox.valueChanged.connect(lambda: cylinder.setLength(window))
@@ -52,8 +56,8 @@ def update(window: MainWindow) -> None:
 
         # cylinder shown
         if window.brachyCylinder is not None:
-            color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
-            window.display.DisplayColoredShape(shapes=window.brachyCylinder.shape(), color=color)
+            window.display.DisplayShape(shapes=window.brachyCylinder.shape(), color=CYLINDER_COLOUR,
+                                        material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:
         print(f"CylinderView: Cylinder load error: \n{error_message}")
@@ -61,8 +65,8 @@ def update(window: MainWindow) -> None:
     try:
         # needles shown
         if window.needles is not None:
-            color = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
-            window.display.DisplayShape(shapes=window.needles.shape(), material=Graphic3d_NOM_TRANSPARENT)
+            window.display.DisplayShape(shapes=window.needles.shape(),
+                                        color=CHANNEL_COLOUR, material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:
         print(f"CylinderView: Channels load error: \n{error_message}")
@@ -70,8 +74,7 @@ def update(window: MainWindow) -> None:
     try:
         # tandem
         if window.tandem is not None:
-            color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
-            window.display.DisplayShape(shapes=window.tandem.shape(), color=color,
+            window.display.DisplayShape(shapes=window.tandem.shape(), color=TANDEM_COLOUR,
                                         material=Graphic3d_NOM_TRANSPARENT)
 
     except Exception as error_message:

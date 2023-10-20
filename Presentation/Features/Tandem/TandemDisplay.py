@@ -6,6 +6,7 @@ import Presentation.Features.Tandem.TandemFunctions as tandem
 from Presentation.MainWindow.core import MainWindow
 from Core.Models.Tandem import TandemModel
 
+TANDEM_COLOUR = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
 
 def init(window: MainWindow):
     """Called when the core class is initializing"""
@@ -57,10 +58,7 @@ def update(window: MainWindow):
     try: 
         # tandem
         if window.tandem is not None:
-            color = Quantity_Color(0.2, 0.2, 0.55, Quantity_TOC_RGB)
-            
-            color = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
-            window.display.DisplayShape(shapes=window.tandem.shape(), color=color, material=Graphic3d_NOM_TRANSPARENT)
+            window.display.DisplayShape(shapes=window.tandem.shape(), color=TANDEM_COLOUR, material=Graphic3d_NOM_TRANSPARENT)
             
             # debugging
             import Application.BRep.Helper as brep
@@ -72,7 +70,6 @@ def update(window: MainWindow):
                 axis = face[1].Direction()
                 location = face[2]
                 result = axis.Z() < 0.0
-                print(f" Result: {result} face {i}: axis X:{axis.X()} Y:{axis.Y()} Z:{axis.Z()} location X:{location.X()} Y:{location.Y()} Z:{location.Z()}")
                 if result:
                     window.display.DisplayShape(shapes=face[0], color=color)
 
