@@ -7,7 +7,7 @@ from OCC.Display.backend import load_backend
 
 load_backend("qt-pyqt5")
 import OCC.Display.qtDisplay as qtDisplay
-
+from Presentation.MainWindow.CustomViewer import OrbitCameraViewer3d
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 import os
@@ -22,7 +22,6 @@ class MainWindow(QMainWindow):
         self.isInit = False  # used to prevent others from referencing it before init
         self.ui.setupUi(self)
 
-        from Presentation.MainWindow.ui_functions import UIFunctions
         ########################################################################
         self.button_style = self.ui.btn_views_imports.styleSheet()
 
@@ -48,7 +47,7 @@ class MainWindow(QMainWindow):
 
         ## pythonOCC Display
         ########################################################################
-        self.canvas = qtDisplay.qtViewer3d(self)
+        self.canvas = OrbitCameraViewer3d(self) #qtDisplay.qtViewer3d(self)
         self.ui.model_frame.layout().addWidget(self.canvas)
         self.canvas.InitDriver()
         self.display = self.canvas._display

@@ -11,7 +11,7 @@ CYLINDER_COLOUR = Quantity_Color(0.0, 0.0, 0.0, Quantity_TOC_RGB)
 CHANNEL_COLOUR_STANDARD = Quantity_Color(0.35, 0.2, 0.35, Quantity_TOC_RGB)
 CHANNEL_COLOUR_ACTIVE = Quantity_Color(0.1, 0.4, 0.4, Quantity_TOC_RGB)
 CHANNEL_COLOUR_COLLIDING = Quantity_Color(0.95, 0.1, 0.1, Quantity_TOC_RGB)
-CHANNEL_COLOUR_DISABLED = Quantity_Color(0.95, 0.95, 0.95, Quantity_TOC_RGB)
+CHANNEL_COLOUR_DISABLED = Quantity_Color(0.05, 0.05, 0.05, Quantity_TOC_RGB)
 # close proximity needle channel
 # outside cylinder needle channel
 

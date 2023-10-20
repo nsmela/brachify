@@ -15,6 +15,9 @@ import numpy as np
 from Core.Models.DicomData import DicomData
 
 
+DEFAULT_LENGTH = 160.0
+
+
 def face_is_plane(face: TopoDS_Face) -> bool:
     """
     Returns True if the TopoDS_Face is a plane, False otherwise
@@ -44,7 +47,7 @@ def add_base(shape: TopoDS_Solid, radius1: float, radius2: float):
 
 class BrachyCylinder:
     def __init__(self, tip, base, diameter: float = 30.0, expand_base: bool = False):
-        self.length = 200.0
+        self.length = DEFAULT_LENGTH
         self.tip = np.array(tip)
         self.base = np.array(base)
         self.diameter = diameter
