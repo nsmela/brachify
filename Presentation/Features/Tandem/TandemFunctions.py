@@ -10,7 +10,7 @@ import os
 import json
 import shutil
 
-DEFAULT_DIR = ".\\files\\tandem"
+DEFAULT_DIR = os.path.join(os.getcwd() + "\\files", "tandem")
 DEFAULT_FILEPATH = os.path.join(DEFAULT_DIR, "tandem.json")
 DEFAULT_HEIGHT = 161.0
 DEFAULT_ROTATION = 0.0
