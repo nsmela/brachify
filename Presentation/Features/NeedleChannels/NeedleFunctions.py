@@ -134,13 +134,12 @@ def applyOffsets(window, height_offset: float) -> None:
     window.needles.clearShape()
 
 
-def checkIntersecting(window: MainWindow) -> list[TopoDS_Shape, bool]:
+def checkIntersecting(window: MainWindow) -> None:
     channels = None
 
     # needles shown
     if window.needles is not None:
         # intersecting channels detection
-        channels = []
         # shapes to check if they collide with each the needle channel
         otherShapes = [channel.shape() for channel in window.needles.channels if not channel.disabled]
         if window.tandem is not None:
@@ -149,6 +148,7 @@ def checkIntersecting(window: MainWindow) -> list[TopoDS_Shape, bool]:
         # intersection testing returns an array of [shape, bool] where bool is if anything intersects it
         for channel in window.needles.channels:
             if channel.disabled:
+                channel.isIntersecting = False
                 continue
             result = False  # is the shape intersecting something?
             shape = channel.shape()  # shape to test
@@ -158,7 +158,4 @@ def checkIntersecting(window: MainWindow) -> list[TopoDS_Shape, bool]:
                 result = intersect.are_colliding(shape, otherShape)
                 if result:
                     break
-            channels.append(
-                [channel.shape(), result])  # TopoDS_Shape, bool (is it colliding with any other channels?)
-
-    return channels
+            channel.isIntersecting = result  # TopoDS_Shape, bool (is it colliding with any other channels?)

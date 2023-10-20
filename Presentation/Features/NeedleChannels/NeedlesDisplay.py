@@ -15,6 +15,7 @@ CHANNEL_COLOUR_DISABLED = Quantity_Color(0.95, 0.95, 0.95, Quantity_TOC_RGB)
 # close proximity needle channel
 # outside cylinder needle channel
 
+
 ## NEEDLE CHANNELS
 def init(window: MainWindow) -> None:
     print("Needles Display: init!")
@@ -93,16 +94,17 @@ def update(window: MainWindow):
     try:
         # needles shown
         if window.needles is not None:
-            channels = window.channels
+            channels = window.needles.channels
 
             for i, channel in enumerate(channels):
+                color = CHANNEL_COLOUR_STANDARD
                 if i == window.channel_active_index:
-                    window.display.DisplayShape(shapes=channel[0], color=CHANNEL_COLOUR_ACTIVE)
-                else:
-                    color = CHANNEL_COLOUR_STANDARD
-                    if channel[1]:
-                        color = CHANNEL_COLOUR_COLLIDING
-                    window.display.DisplayColoredShape(shapes=channel[0], color=color)
+                    color=CHANNEL_COLOUR_ACTIVE
+                elif channel.isIntersecting:
+                    color = CHANNEL_COLOUR_COLLIDING
+                elif channel.disabled:
+                    color = CHANNEL_COLOUR_DISABLED
+                window.display.DisplayColoredShape(shapes=channel.shape(), color=color)
 
     except Exception as error_message:
         print(f"Needle Display _needles error: \n {error_message}")
