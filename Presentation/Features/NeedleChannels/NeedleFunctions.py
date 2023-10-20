@@ -45,8 +45,11 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
         window.needles.channels[i].setOffset(window.channel_height_offset)
 
     # channel 0 is the tandem needle channel
-    set_tandem_needle(window, 0)
-    setNeedleDisabled(window, 0)
+    for i, channel in enumerate(window.needles.channels):
+        if "tandem" in channel.channelId.lower():
+            set_tandem_needle(window, index=i)
+            setNeedleDisabled(window, index=i)
+            break
 
     # list of needles in widget
     window.ui.channelsListWidget.clear()
