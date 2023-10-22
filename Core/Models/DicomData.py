@@ -60,3 +60,26 @@ class DicomData:
 
         return text
 
+    def toJson(self) -> dict:
+        return {
+            "Patient Name": self.patient_name,
+            "Patient ID": self.patient_id,
+            "Cylinder ROI": self.cylinder_roi,
+            "Cylinder Colour": self.cylinder_color,
+            "Cylinder Contour": self.cylinder_contour,
+            "Channel ROIs": self.channels_rois,
+            "Channel Labels": self.channels_labels,
+            "Channel Colours": self.channels_colors,
+            "Channel Contours": self.channel_contours
+        }
+    
+    def fromJson(self, json: dict) -> None:
+        self.patient_name = json["Patient Name"] 
+        self.patient_id = json["Patient ID"]
+        self.cylinder_roi = json["Cylinder ROI"]
+        self.cylinder_color = json["Cylinder Colour"]
+        self.cylinder_contour = json["Cylinder Contour"]
+        self.channels_rois = json["Channel ROIs"]
+        self.channels_labels = json["Channel Labels"]
+        self.channels_colors = json["Channel Colours"]
+        self.channel_contours = json["Channel Contours"]
