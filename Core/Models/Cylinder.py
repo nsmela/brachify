@@ -67,7 +67,7 @@ class BrachyCylinder:
         # cylinder references
         cylinder_axis = gp_Dir(0, 0, 1)
         cylinder_vector = gp_Ax2(gp_Pnt(0, 0, 0), cylinder_axis)
-        cylinder = BRepPrimAPI_MakeCylinder(cylinder_vector, self.diameter / 2, (self.length + self.diameter / 2))
+        cylinder = BRepPrimAPI_MakeCylinder(cylinder_vector, self.diameter / 2, self.length)
 
         # Our goal is to find the highest Z face and remove it
         z_max = -300.0
