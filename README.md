@@ -1,2 +1,2 @@
-# BrachyApp-PyQt5
+# brachify
 DICOM goes in, brachy applicator comes out.
