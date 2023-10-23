@@ -2,5 +2,9 @@
     "VSM 60 Deg FDM": {
         "Tandem Name": "VSM 60 Deg FDM",
         "Model File": ".\\files\\tandem\\VSM 60 Deg FDM_model.step"
+    },
+    "VSM 60 Deg FDM v2": {
+        "Tandem Name": "VSM 60 Deg FDM v2",
+        "Model File": "C:\\Users\\nsmel\\Documents\\Programming\\nsmela\\Modern-GUI-PyQt5\\files\\tandem\\VSM 60 Deg FDM v2_model.STEP"
     }
 }

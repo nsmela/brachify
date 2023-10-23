@@ -12,8 +12,10 @@ import shutil
 
 DEFAULT_DIR = os.path.join(os.getcwd() + "\\files", "tandem")
 DEFAULT_FILEPATH = os.path.join(DEFAULT_DIR, "tandem.json")
-DEFAULT_HEIGHT = 161.0
 DEFAULT_ROTATION = 0.0
+
+tandem_height = -30.0
+
 
 def load_tandems(window: MainWindow) -> None:
     """reads the json file for locally stored tandems and convert it into a list of tandems and store it globally"""
@@ -126,8 +128,11 @@ def load_tandem_models(window: MainWindow, tandem: Tandem) -> None:
 
 
 def applyOffsets(window: MainWindow, height_offset: float = None, rotation: float = None) -> None:
+    if window.brachyCylinder is not None:
+        tandem_height = -1 * window.brachyCylinder.diameter
+
     if height_offset is not None:
-        window.tandem_height_offset = DEFAULT_HEIGHT + height_offset
+        window.tandem_height_offset = tandem_height + height_offset
     if rotation is not None:
         window.tandem_rotation_offset = rotation
 

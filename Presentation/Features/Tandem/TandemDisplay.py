@@ -17,7 +17,7 @@ def init(window: MainWindow):
         window.ui.listWidget_savedTandems.itemSelectionChanged.connect(lambda: tandem.set_tandem(window))
         tandem.load_tandems(window)
 
-        window.tandem_height_offset = tandem.DEFAULT_HEIGHT
+        window.tandem_height_offset = tandem.tandem_height
         window.tandem_rotation_offset = tandem.DEFAULT_ROTATION
 
     except Exception as error_message:
