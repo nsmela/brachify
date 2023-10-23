@@ -30,13 +30,16 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
         base = np.array(window.brachyCylinder.base)
         cyl_vec = tip - base  # the cylinder's original vector
         cyl_length = np.linalg.norm(cyl_vec)
-        offset_vector = np.array([0, 0, - cyl_length])  # normalized direction from tip to base
+        #offset_vector = np.array([0, 0, - cyl_length])  # normalized direction from tip to base # TODO correct this
+        offset_vector = np.array([0, 0, - cyl_length + 160.0])  # normalized direction from tip to base
 
+        updated_tip = helper.rotate_points(tip, cyl_vec, z_up)
+        updated_base = helper.rotate_points(base, cyl_vec, z_up)
         for i, c in enumerate(channels):
             new_points = np.array(c.rawPoints)
-            new_points = np.array(new_points) - base
             new_points = helper.rotate_points(new_points, cyl_vec, z_up)
-            new_points = new_points - offset_vector
+            new_points = np.array(new_points) - updated_base
+            new_points = new_points + offset_vector
             channels[i].points = list(list(points) for points in new_points)
     window.needles = NeedlesModel(channels=channels)
 
