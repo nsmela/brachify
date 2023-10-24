@@ -35,10 +35,11 @@ def geom_plane_from_face(face: TopoDS_Face) -> gp_Pln:
 
 
 def add_base(shape: TopoDS_Solid, radius1: float, radius2: float):
-    #cylinder references
+    # cylinder references
     cylinder_axis = gp_Dir(0, 0, 1)
     cylinder_vector = gp_Ax2(gp_Pnt(0, 0, 0), cylinder_axis)
-    cylinder = BRepPrimAPI_MakeCylinder(cylinder_vector, radius1+radius2, radius2).Shape()
+    cylinder = BRepPrimAPI_MakeCylinder(
+        cylinder_vector, radius1+radius2, radius2).Shape()
     torus = BRepPrimAPI_MakeTorus(radius1 + radius2, radius2).Shape()
     torus = translate_shp(torus, gp_Vec(0.0, 0.0, radius2))
     result = BRepAlgoAPI_Cut(cylinder, torus).Shape()
@@ -57,7 +58,8 @@ class BrachyCylinder:
     def getDirection(self):
         direction = self.tip - self.base
         length = np.linalg.norm(direction)
-        print(f"Cylinder's direction: {direction[0]}, {direction[1]}, {direction[2]} length: {length}")
+        print(
+            f"Cylinder's direction: {direction[0]}, {direction[1]}, {direction[2]} length: {length}")
         return direction, length
 
     def shape(self) -> TopoDS_Shape:
@@ -67,7 +69,8 @@ class BrachyCylinder:
         # cylinder references
         cylinder_axis = gp_Dir(0, 0, 1)
         cylinder_vector = gp_Ax2(gp_Pnt(0, 0, 0), cylinder_axis)
-        cylinder = BRepPrimAPI_MakeCylinder(cylinder_vector, self.diameter / 2, self.length)
+        cylinder = BRepPrimAPI_MakeCylinder(
+            cylinder_vector, self.diameter / 2, self.length)
 
         # Our goal is to find the highest Z face and remove it
         z_max = -300.0
@@ -94,10 +97,11 @@ class BrachyCylinder:
         fillet.Build()
         cylinder = fillet.Shape()
         if self.expand_base:
-            cylinder = add_base(shape=cylinder, radius1=self.diameter / 2, radius2= 12.0)
+            cylinder = add_base(
+                shape=cylinder, radius1=self.diameter / 2, radius2=12.0)
         return cylinder
 
-    def setDiameter(self, diameter:float ) -> None:
+    def setDiameter(self, diameter: float) -> None:
         self.diameter = diameter
         self._shape = None
         self._shape = self.shape()

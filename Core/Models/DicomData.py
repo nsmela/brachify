@@ -19,7 +19,7 @@ class DicomData:
         if new_data.patient_id:
             self.patient_id = new_data.patient_id
 
-        if new_data.cylinder_roi :
+        if new_data.cylinder_roi:
             self.cylinder_roi = new_data.cylinder_roi
 
         if new_data.cylinder_color:
@@ -72,9 +72,9 @@ class DicomData:
             "Channel Colours": self.channels_colors,
             "Channel Contours": self.channel_contours
         }
-    
+
     def fromJson(self, json: dict) -> None:
-        self.patient_name = json["Patient Name"] 
+        self.patient_name = json["Patient Name"]
         self.patient_id = json["Patient ID"]
         self.cylinder_roi = json["Cylinder ROI"]
         self.cylinder_color = json["Cylinder Colour"]
