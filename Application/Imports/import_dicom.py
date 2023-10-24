@@ -125,7 +125,10 @@ def load_channels(data: DicomData) -> list[NeedleChannel]:
         channel_id = f"Channel {data.channels_labels[i]}"
         points = data.channel_contours[i]
 
-        print(f" Raw Points: \n{points}\n\n")
+        # to print the list fo points without quotes
+        points_list = f"Raw points: {points}"
+        print(points_list.replace("'", ""))
+
         needle = NeedleChannel(number=channel_number,
                                id=channel_id, points=points)
         channels.append(needle)
