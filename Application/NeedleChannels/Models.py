@@ -21,7 +21,8 @@ class NeedleChannel(NeedleChannelModel):
         if self._shape:
             return self._shape
 
-        self._shape = rounded_channel(self.points, self._offset, self._diameter)
+        self._shape = rounded_channel(
+            self.points, self._offset, self._diameter)
         #  self._shape = generate_curved_channel(self.points, self._offset, self._diameter)
         return self._shape
 
@@ -54,7 +55,8 @@ class NeedleChannel(NeedleChannelModel):
         # calculate the sin angle on the xy plane using 0,0 and the highest point in the list of points
         v1 = [1.0, 0.0, self.points[0][2]]
         v2 = self.points[0]
-        angle = math.atan2(v2[1] - v1[1], v2[0] - v1[0]) * (180 / 3.14159)  # convert to degrees
+        angle = math.atan2(v2[1] - v1[1], v2[0] - v1[0]) * \
+            (180 / 3.14159)  # convert to degrees
         print(f"needle channel angle: {self.points[0]} : {angle}")
 
         # ensuring the angle stays between 0 and 360 degrees

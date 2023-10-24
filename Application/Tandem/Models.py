@@ -11,7 +11,7 @@ class Tandem(TandemModel):
         super().__init__()
         self._base_shape = None  # file imported
         self._shape = None  # the shape used to cut from the model
-        self.offset_height = 0.0 # translate offsets height
+        self.offset_height = 0.0  # translate offsets height
         self.rotation = 0.0  # rotation (0.0) along each axis xyz
 
     def setOffsets(self, height: float = None, rotation: float = None) -> None:
@@ -32,7 +32,8 @@ class Tandem(TandemModel):
         rotation = self.rotation
 
         if self._base_shape:
-            self._shape = rotate_shape(shape=self._base_shape, axis=gp.OZ(), angle=rotation)
+            self._shape = rotate_shape(
+                shape=self._base_shape, axis=gp.OZ(), angle=rotation)
             self._shape = translate_shp(self._shape, offset)
             self._shape = extend_bottom_face(self._shape)
         return self._shape

@@ -11,3 +11,6 @@ def are_colliding(shape1: TopoDS_Shape, shape2: TopoDS_Shape) -> bool:
     collision_shapes = BRepAlgoAPI_Section(shape1, shape2)
     return collision_shapes.Shape().NbChildren() > 0
 
+
+# TODO check for distances
+# TODO create meshes and check for intersections that way

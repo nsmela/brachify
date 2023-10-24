@@ -1,14 +1,12 @@
 from OCC.Core.BRepAdaptor import BRepAdaptor_Surface
-from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut, BRepAlgoAPI_Fuse
-from OCC.Core.BRepFilletAPI import BRepFilletAPI_MakeFillet
+from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace
-from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeTorus, BRepPrimAPI_MakePrism
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakePrism
 from OCC.Core.GeomAbs import GeomAbs_Plane
 from OCC.Core.TopAbs import TopAbs_FACE
 from OCC.Core.TopExp import TopExp_Explorer
-from OCC.Core.TopoDS import topods, TopoDS_Face, TopoDS_Solid, TopoDS_Shape, TopoDS_Wire
+from OCC.Core.TopoDS import topods, TopoDS_Face, TopoDS_Shape
 from OCC.Core.gp import gp_Dir, gp_Ax2, gp_Pnt, gp_Pln, gp_Vec, gp_Circ
-from OCC.Extend.TopologyUtils import TopologyExplorer
 from OCC.Extend.ShapeFactory import translate_shp, rotate_shape
 
 import numpy as np
@@ -44,7 +42,8 @@ def get_faces(shape: TopoDS_Shape) -> list[TopoDS_Face]:
         face = topods.Face(explorer.Current())
         if face_is_plane(face):
             a_plane = geom_plane_from_face(face)
-            faces.append([face, a_plane.Location().Z()])  # face with it's z height
+            # face with it's z height
+            faces.append([face, a_plane.Location().Z()])
         explorer.Next()
     faces.sort(key=sortByZ)
     return faces
@@ -98,7 +97,7 @@ def get_vector(p1: gp_Pnt, p2: gp_Pnt, length: float = 1.0) -> gp_Vec:
 
 def get_magnitude(p1: gp_Pnt, p2: gp_Pnt) -> float:
     vector = np.array([p2.X(), p2.Y(), p2.Z()]) \
-             - np.array([p1.X(), p1.Y(), p1.Z()])
+        - np.array([p1.X(), p1.Y(), p1.Z()])
     return np.linalg.norm(vector)
 
 
@@ -141,7 +140,8 @@ def rotate_points(points, v_1, v_2):
 
     # Calculate the vector cross product
     cross_v1v2 = np.cross(v_1, v_2)
-    cross_norm = (cross_v1v2[0] ** 2 + cross_v1v2[1] ** 2 + cross_v1v2[2] ** 2) ** 0.5
+    cross_norm = (cross_v1v2[0] ** 2 + cross_v1v2[1]
+                  ** 2 + cross_v1v2[2] ** 2) ** 0.5
     cross_normalized = cross_v1v2 / cross_norm
 
     # Dot product
@@ -158,11 +158,13 @@ def rotate_points(points, v_1, v_2):
     pts_rotated = np.empty((len(points), 3))
     if np.size(points) == 3:
         p = points
-        p_rotated = np.cos(theta) * p + np.sin(theta) * (np.cross(e, p)) + (1 - np.cos(theta)) * np.dot(e, p) * e
+        p_rotated = np.cos(theta) * p + np.sin(theta) * \
+            (np.cross(e, p)) + (1 - np.cos(theta)) * np.dot(e, p) * e
         pts_rotated = p_rotated
     else:
         for i, p in enumerate(points):
-            p_rotated = np.cos(theta) * p + np.sin(theta) * (np.cross(e, p)) + (1 - np.cos(theta)) * np.dot(e, p) * e
+            p_rotated = np.cos(theta) * p + np.sin(theta) * \
+                (np.cross(e, p)) + (1 - np.cos(theta)) * np.dot(e, p) * e
             pts_rotated[i] = p_rotated
     return pts_rotated
 

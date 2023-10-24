@@ -13,4 +13,3 @@ class TandemModel:
         return {self.name: {
             "Tandem Name": self.name,
             "Model File": self.shape_filepath}}
-

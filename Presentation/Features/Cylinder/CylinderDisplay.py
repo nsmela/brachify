@@ -4,15 +4,20 @@ from OCC.Core.Graphic3d import *
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.Cylinder.CylinderFunctions as cylinder
 
-## CYLINDER
+# CYLINDER
 CYLINDER_COLOUR = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
 TANDEM_COLOUR = Quantity_Color(0.0, 0.0, 0.0, Quantity_TOC_RGB)
 CHANNEL_COLOUR = Quantity_Color(0.9, 0.9, 0.9, Quantity_TOC_RGB)
 
+
 def init(window: MainWindow):
-    window.ui.cylinderDiameterSpinBox.valueChanged.connect(lambda: cylinder.setDiameter(window))
-    window.ui.cylinderLengthSpinBox.valueChanged.connect(lambda: cylinder.setLength(window))
-    window.ui.checkbox_cylinder_base.toggled.connect(lambda: cylinder.setBase(window))
+    window.ui.cylinderDiameterSpinBox.valueChanged.connect(
+        lambda: cylinder.setDiameter(window))
+    window.ui.cylinderLengthSpinBox.valueChanged.connect(
+        lambda: cylinder.setLength(window))
+    window.ui.checkbox_cylinder_base.toggled.connect(
+        lambda: cylinder.setBase(window))
+
 
 def view(window: MainWindow):
     print("switched to cylinder view!")
@@ -27,6 +32,7 @@ def view(window: MainWindow):
 
     # show left stacked widget menu
     window.ui.stackedWidget.setCurrentIndex(1)
+
 
 def update(window: MainWindow) -> None:
     """When this is the active view, use this method to update the ui and 3d display view"""
