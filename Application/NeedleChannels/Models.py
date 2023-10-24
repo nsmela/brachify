@@ -21,7 +21,8 @@ class NeedleChannel(NeedleChannelModel):
         if self._shape:
             return self._shape
 
-        self._shape = generate_curved_channel(self.points, self._offset, self._diameter)
+        self._shape = rounded_channel(self.points, self._offset, self._diameter)
+        #  self._shape = generate_curved_channel(self.points, self._offset, self._diameter)
         return self._shape
 
     def setChannel(self, height: float = 0.0, diameter: float = 3.0) -> None:

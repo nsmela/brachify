@@ -1,12 +1,13 @@
 from OCC.Core.BRepAdaptor import BRepAdaptor_Surface
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut, BRepAlgoAPI_Fuse
 from OCC.Core.BRepFilletAPI import BRepFilletAPI_MakeFillet
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeTorus, BRepPrimAPI_MakePrism
 from OCC.Core.GeomAbs import GeomAbs_Plane
 from OCC.Core.TopAbs import TopAbs_FACE
 from OCC.Core.TopExp import TopExp_Explorer
-from OCC.Core.TopoDS import topods, TopoDS_Face, TopoDS_Solid, TopoDS_Shape
-from OCC.Core.gp import gp_Dir, gp_Ax2, gp_Pnt, gp_Pln, gp_Vec
+from OCC.Core.TopoDS import topods, TopoDS_Face, TopoDS_Solid, TopoDS_Shape, TopoDS_Wire
+from OCC.Core.gp import gp_Dir, gp_Ax2, gp_Pnt, gp_Pln, gp_Vec, gp_Circ
 from OCC.Extend.TopologyUtils import TopologyExplorer
 from OCC.Extend.ShapeFactory import translate_shp, rotate_shape
 
@@ -164,3 +165,10 @@ def rotate_points(points, v_1, v_2):
             p_rotated = np.cos(theta) * p + np.sin(theta) * (np.cross(e, p)) + (1 - np.cos(theta)) * np.dot(e, p) * e
             pts_rotated[i] = p_rotated
     return pts_rotated
+
+
+def circle_profile(origin: gp_Pnt, direction: gp_Vec, radius: float) -> TopoDS_Face:
+    circle = gp_Circ(gp_Ax2(origin, direction), radius)
+    edge = BRepBuilderAPI_MakeEdge(circle).Edge()
+    wire = BRepBuilderAPI_MakeWire(edge).Wire()
+    return BRepBuilderAPI_MakeFace(wire).Face()
