@@ -3,7 +3,7 @@
 import os
 
 from Presentation.SplashScreen.core import SplashScreen
-from PyQt5 import QtWidgets
+from PySide6 import QtWidgets
 import sys
 
 def resource_path(relative_path):

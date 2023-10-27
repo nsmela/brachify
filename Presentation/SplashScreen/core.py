@@ -1,20 +1,20 @@
-from PyQt5 import QtWidgets, QtCore
-from PyQt5 import QtGui
-from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QGraphicsDropShadowEffect, QSplashScreen
+from PySide6 import QtWidgets, QtCore
+from PySide6 import QtGui
+from PySide6.QtGui import QColor
+from PySide6.QtWidgets import QGraphicsDropShadowEffect, QSplashScreen
 
 # GUI FILE
 
 
 # IMPORT FUNCTIONS
-from Presentation.SplashScreen.ui_splash import Ui_SplashScreen
+from Presentation.SplashScreen.ui_splash_ui import Ui_SplashScreen
 
 counter = 0
 
 
 class SplashScreen(QSplashScreen):
     def __init__(self):
-        super(QSplashScreen, self).__init__()
+        super().__init__()
         self.ui = Ui_SplashScreen()
         self.ui.setupUi(self)
 
