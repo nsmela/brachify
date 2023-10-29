@@ -92,7 +92,7 @@ class Ui_SplashScreen(object):
 
         self.verticalLayout.addWidget(self.dropShadowFrame)
 
-        # SplashScreen.setCentralWidget(self.centralwidget)
+        SplashScreen.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(SplashScreen)
 
