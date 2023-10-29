@@ -4,8 +4,6 @@ from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QGraphicsDropShadowEffect, QSplashScreen
 
 # GUI FILE
-
-
 # IMPORT FUNCTIONS
 from Presentation.SplashScreen.ui_splash_ui import Ui_SplashScreen
 

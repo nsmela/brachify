@@ -1,11 +1,11 @@
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QAbstractItemView, QMainWindow
+from PySide6 import QtCore
+from PySide6.QtWidgets import QAbstractItemView, QMainWindow
 
 from Presentation.MainWindow.ui_main import Ui_MainWindow
 
 from OCC.Display.backend import load_backend
 
-load_backend("qt-pyqt5")
+load_backend("qt-pyside2")
 import OCC.Display.qtDisplay as qtDisplay
 from Presentation.MainWindow.CustomViewer import OrbitCameraViewer3d
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox

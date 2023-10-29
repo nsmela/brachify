@@ -1,4 +1,4 @@
-# PyQt5 SplashScreen
+# PySide6 SplashScreen
 # https://youtu.be/TsatZJfzb_Q?si=HZ1nt1eqw0AyuYWo
 import os
 

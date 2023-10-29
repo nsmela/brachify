@@ -5,6 +5,7 @@ import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
 
 from Presentation.MainWindow.core import MainWindow
 
+from PySide6.QtWidgets import QCheckBox
 
 # TODO list display colours as constants
 CYLINDER_COLOUR = Quantity_Color(0.0, 0.0, 0.0, Quantity_TOC_RGB)
@@ -60,7 +61,7 @@ def update(window: MainWindow):
     window.ui.channelDiameterSpinBox.blockSignals(False)
 
     window.ui.checkBox_hide_cylinder.blockSignals(True)
-    window.ui.checkBox_hide_cylinder.setCheckState(window.channel_hide_cylinder)
+    #window.ui.checkBox_hide_cylinder.setCheckState(window.channel_hide_cylinder)
     window.ui.checkBox_hide_cylinder.blockSignals(False)
 
     window.ui.channelsListWidget.blockSignals(True)

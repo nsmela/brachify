@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QFileDialog, QListWidget, QMainWindow
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QFileDialog, QListWidget, QMainWindow
 
 from OCC.Extend.DataExchange import write_stl_file
 from OCC.Core.STEPControl import STEPControl_Writer, STEPControl_AsIs
