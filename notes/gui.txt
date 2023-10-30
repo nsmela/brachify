@@ -6,15 +6,17 @@ https://www.youtube.com/watch?v=Ap865V3sAdw
 
 
 # GUI
->pip install pyqt5-tools
+> # TODO pyside6 install tools
 
-# Qt5 Designer
+# PySide6 Designer
 >designer
 
 # PyQt5 converter
 >pyuic5 -x ./Presentation/SplashScreen/ui_splash_screen.ui -o ./ui_splash_interface.py
 >pyuic5 -x ./Presentation/MainWindow/ui_main.ui -o ./Presentation/MainWindow/ui_main.py
 >pyrcc5 ./Presentation/MainWindow/resources.qrc -o ./Presentation/MainWindow/resources_rc.py
+
+# PySide6 converter
 
 # workflow
 -> edit in Qt Designer

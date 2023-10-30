@@ -1,9 +1,9 @@
-# PyQt5 SplashScreen
+# PySide6 SplashScreen
 # https://youtu.be/TsatZJfzb_Q?si=HZ1nt1eqw0AyuYWo
 import os
 
 from Presentation.SplashScreen.core import SplashScreen
-from PyQt5 import QtWidgets
+from PySide6 import QtWidgets
 import sys
 
 def resource_path(relative_path):
