@@ -1,7 +1,4 @@
 import os
-
-# from Presentation.SplashScreen.core import SplashScreen
-
 import sys
 
 SPLASHSCREEN_IMAGE = "src//Presentation//SplashScreen//brachify_splash.png"

@@ -528,9 +528,101 @@ class Ui_MainWindow(object):
         self.tandem_tabbedWidget.addTab(self.tandem_tab_preloaded, "")
         self.tandem_tab_generated = QWidget()
         self.tandem_tab_generated.setObjectName(u"tandem_tab_generated")
+        self.tandem_tab_generated.setFocusPolicy(Qt.NoFocus)
+        self.verticalLayout_13 = QVBoxLayout(self.tandem_tab_generated)
+        self.verticalLayout_13.setSpacing(0)
+        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.verticalLayout_13.setContentsMargins(0, 0, 0, 0)
+        self.custom_tandem_frame = QFrame(self.tandem_tab_generated)
+        self.custom_tandem_frame.setObjectName(u"custom_tandem_frame")
+        self.custom_tandem_frame.setFrameShape(QFrame.StyledPanel)
+        self.custom_tandem_frame.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_3 = QVBoxLayout(self.custom_tandem_frame)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.channel_diameter_frame = QFrame(self.custom_tandem_frame)
+        self.channel_diameter_frame.setObjectName(u"channel_diameter_frame")
+        self.channel_diameter_frame.setFrameShape(QFrame.StyledPanel)
+        self.channel_diameter_frame.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_7 = QHBoxLayout(self.channel_diameter_frame)
+        self.horizontalLayout_7.setSpacing(2)
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.horizontalLayout_7.setContentsMargins(2, 0, 0, 0)
+        self.label_9 = QLabel(self.channel_diameter_frame)
+        self.label_9.setObjectName(u"label_9")
+
+        self.horizontalLayout_7.addWidget(self.label_9)
+
+        self.tandem_spinbox_channel_diameter = QDoubleSpinBox(self.channel_diameter_frame)
+        self.tandem_spinbox_channel_diameter.setObjectName(u"tandem_spinbox_channel_diameter")
+
+        self.horizontalLayout_7.addWidget(self.tandem_spinbox_channel_diameter)
+
+
+        self.verticalLayout_3.addWidget(self.channel_diameter_frame)
+
+        self.frame_3 = QFrame(self.custom_tandem_frame)
+        self.frame_3.setObjectName(u"frame_3")
+        self.frame_3.setFrameShape(QFrame.StyledPanel)
+        self.frame_3.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_13 = QHBoxLayout(self.frame_3)
+        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
+        self.label_10 = QLabel(self.frame_3)
+        self.label_10.setObjectName(u"label_10")
+
+        self.horizontalLayout_13.addWidget(self.label_10)
+
+        self.tandem_spinbox_tip_diameter = QDoubleSpinBox(self.frame_3)
+        self.tandem_spinbox_tip_diameter.setObjectName(u"tandem_spinbox_tip_diameter")
+
+        self.horizontalLayout_13.addWidget(self.tandem_spinbox_tip_diameter)
+
+
+        self.verticalLayout_3.addWidget(self.frame_3)
+
+        self.tip_thickness_frame = QFrame(self.custom_tandem_frame)
+        self.tip_thickness_frame.setObjectName(u"tip_thickness_frame")
+        self.tip_thickness_frame.setFrameShape(QFrame.StyledPanel)
+        self.tip_thickness_frame.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_11 = QHBoxLayout(self.tip_thickness_frame)
+        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
+        self.label_11 = QLabel(self.tip_thickness_frame)
+        self.label_11.setObjectName(u"label_11")
+
+        self.horizontalLayout_11.addWidget(self.label_11)
+
+        self.tandem_spinbox_tip_thickness = QDoubleSpinBox(self.tip_thickness_frame)
+        self.tandem_spinbox_tip_thickness.setObjectName(u"tandem_spinbox_tip_thickness")
+
+        self.horizontalLayout_11.addWidget(self.tandem_spinbox_tip_thickness)
+
+
+        self.verticalLayout_3.addWidget(self.tip_thickness_frame)
+
+        self.tip_angle_frame = QFrame(self.custom_tandem_frame)
+        self.tip_angle_frame.setObjectName(u"tip_angle_frame")
+        self.tip_angle_frame.setFrameShape(QFrame.StyledPanel)
+        self.tip_angle_frame.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_12 = QHBoxLayout(self.tip_angle_frame)
+        self.horizontalLayout_12.setObjectName(u"horizontalLayout_12")
+        self.label_13 = QLabel(self.tip_angle_frame)
+        self.label_13.setObjectName(u"label_13")
+
+        self.horizontalLayout_12.addWidget(self.label_13)
+
+        self.tandem_spinbox_tip_angle = QDoubleSpinBox(self.tip_angle_frame)
+        self.tandem_spinbox_tip_angle.setObjectName(u"tandem_spinbox_tip_angle")
+
+        self.horizontalLayout_12.addWidget(self.tandem_spinbox_tip_angle)
+
+
+        self.verticalLayout_3.addWidget(self.tip_angle_frame)
+
+
+        self.verticalLayout_13.addWidget(self.custom_tandem_frame)
+
         self.tandem_tabbedWidget.addTab(self.tandem_tab_generated, "")
 
-        self.verticalLayout_5.addWidget(self.tandem_tabbedWidget)
+        self.verticalLayout_5.addWidget(self.tandem_tabbedWidget, 0, Qt.AlignLeft|Qt.AlignTop)
 
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -593,8 +685,8 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(1)
-        self.tandem_tabbedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(3)
+        self.tandem_tabbedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -633,6 +725,10 @@ class Ui_MainWindow(object):
         self.btn_tandem_add_update.setText(QCoreApplication.translate("MainWindow", u"Add/Update", None))
         self.btn_tandem_clear.setText(QCoreApplication.translate("MainWindow", u"Clear", None))
         self.tandem_tabbedWidget.setTabText(self.tandem_tabbedWidget.indexOf(self.tandem_tab_preloaded), QCoreApplication.translate("MainWindow", u"PreLoaded Tandems", None))
+        self.label_9.setText(QCoreApplication.translate("MainWindow", u"channel diameter", None))
+        self.label_10.setText(QCoreApplication.translate("MainWindow", u"tip diameter", None))
+        self.label_11.setText(QCoreApplication.translate("MainWindow", u"tip thickness", None))
+        self.label_13.setText(QCoreApplication.translate("MainWindow", u"tip angle", None))
         self.tandem_tabbedWidget.setTabText(self.tandem_tabbedWidget.indexOf(self.tandem_tab_generated), QCoreApplication.translate("MainWindow", u"Generated", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"export", None))
         self.label_12.setText(QCoreApplication.translate("MainWindow", u"Info", None))
