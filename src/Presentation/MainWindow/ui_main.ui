@@ -866,7 +866,7 @@ QPushButton:hover {
               <item alignment="Qt::AlignLeft|Qt::AlignTop">
                <widget class="QTabWidget" name="tandem_tabbedWidget">
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>0</number>
                 </property>
                 <widget class="QWidget" name="tandem_tab_preloaded">
                  <attribute name="title">

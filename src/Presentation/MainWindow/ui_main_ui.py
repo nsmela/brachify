@@ -686,7 +686,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.stackedWidget.setCurrentIndex(3)
-        self.tandem_tabbedWidget.setCurrentIndex(1)
+        self.tandem_tabbedWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
