@@ -4,7 +4,7 @@ import os
 
 import sys
 
-SPLASHSCREEN_IMAGE = "src//Presentation//SplashScreen//resources//brachify_splash.png"
+SPLASHSCREEN_IMAGE = "src//Presentation//SplashScreen//brachify_splash.png"
 
 
 def resource_path(relative_path):
