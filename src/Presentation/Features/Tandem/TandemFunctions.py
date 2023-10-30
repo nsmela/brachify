@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QFileDialog
+from PySide6.QtWidgets import QFileDialog
 
 from Application.Tandem.Models import Tandem
 from Presentation.MainWindow.core import MainWindow

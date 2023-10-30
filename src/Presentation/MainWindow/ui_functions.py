@@ -1,15 +1,4 @@
-################################################################################
-##
-## BY: WANDERSON M.PIMENTA
-## PROJECT MADE WITH: Qt Designer and PySide2
-## V: 1.0.0
-##
-################################################################################
-from turtle import Vec2D
-# from typing import Self
-# from PyQt5 import QtCore
-
-## ==> GUI FILE
+##  GUI FILE
 from Presentation.MainWindow.core import MainWindow
 import Presentation.Features.Imports.ImportDisplay as importDisplay
 import Presentation.Features.Cylinder.CylinderDisplay as cylDisplay 

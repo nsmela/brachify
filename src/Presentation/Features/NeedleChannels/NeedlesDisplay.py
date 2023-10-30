@@ -1,8 +1,8 @@
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
-import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
 
+import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
 from Presentation.MainWindow.core import MainWindow
 
 
@@ -60,7 +60,7 @@ def update(window: MainWindow):
     window.ui.channelDiameterSpinBox.blockSignals(False)
 
     window.ui.checkBox_hide_cylinder.blockSignals(True)
-    window.ui.checkBox_hide_cylinder.setCheckState(window.channel_hide_cylinder)
+    #window.ui.checkBox_hide_cylinder.setCheckState(window.channel_hide_cylinder)
     window.ui.checkBox_hide_cylinder.blockSignals(False)
 
     window.ui.channelsListWidget.blockSignals(True)

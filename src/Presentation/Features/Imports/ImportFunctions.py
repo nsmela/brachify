@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QFileDialog
+from PySide6.QtWidgets import QFileDialog
 
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Extend.DataExchange import read_step_file, read_stl_file

@@ -1,4 +1,4 @@
-from PyQt5 import QtCore
+from PySide6 import QtCore
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.TopoDS import TopoDS_Shape
 
