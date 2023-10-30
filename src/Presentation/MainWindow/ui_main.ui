@@ -20,7 +20,7 @@
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string>Brachy App</string>
+   <string>brachify</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(45, 45, 45);</string>
@@ -126,7 +126,7 @@
              </size>
             </property>
             <property name="text">
-             <string>&lt;strong&gt; BRACHY&lt;/strong&gt;APP</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt; brach&lt;span style=&quot; font-weight:600;&quot;&gt;IFY&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>

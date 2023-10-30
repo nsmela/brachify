@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QAbstractItemView, QMainWindow
 
-from Presentation.MainWindow.ui_main import Ui_MainWindow
+from Presentation.MainWindow.ui_main_ui import Ui_MainWindow
 
 from OCC.Display.backend import load_backend
 
