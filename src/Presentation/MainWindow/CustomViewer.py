@@ -5,7 +5,6 @@ import sys
 from OCC.Core.AIS import AIS_Manipulator
 from OCC.Core.gp import gp_Trsf
 from OCC.Display import OCCViewer
-
 from PySide6 import QtCore, QtGui, QtWidgets, QtOpenGL
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)

@@ -5,6 +5,7 @@ from OCC.Core.Graphic3d import *
 import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
 from Presentation.MainWindow.core import MainWindow
 
+from PySide6.QtWidgets import QCheckBox
 
 # TODO list display colours as constants
 CYLINDER_COLOUR = Quantity_Color(0.0, 0.0, 0.0, Quantity_TOC_RGB)
