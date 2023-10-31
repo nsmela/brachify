@@ -1,10 +1,10 @@
-from unittest import registerResult
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
 
 import Presentation.Features.Tandem.TandemFunctions as tandem
 from Presentation.MainWindow.core import MainWindow
 from Core.Models.Tandem import TandemModel
+import Application.BRep.Tandem as tandemBuilder
 
 TANDEM_COLOUR = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
 
@@ -75,6 +75,13 @@ def update(window: MainWindow):
 
     except Exception as error_message:
         print(f"TandemView: Tandem load error: \n{error_message}")
+
+    try:
+        tandem = tandemBuilder.generate_tandem_from_faces()
+        window.display.DisplayShape(tandem)
+    except Exception as error_message:
+        print(f"TandemView: Custom tandem error: \n{error_message}")
+
 
     try:
         window.display.FitAll()

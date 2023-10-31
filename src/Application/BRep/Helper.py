@@ -182,3 +182,10 @@ def circle_profile(origin: gp_Pnt, direction: gp_Vec, radius: float) -> TopoDS_F
     edge = BRepBuilderAPI_MakeEdge(circle).Edge()
     wire = BRepBuilderAPI_MakeWire(edge).Wire()
     return BRepBuilderAPI_MakeFace(wire).Face()
+
+
+def add_point_and_vector(p1: gp_Pnt, v1:gp_Vec) -> gp_Pnt:
+    return gp_Pnt(
+        p1.X() + v1.X(), 
+        p1.Y() + v1.Y(),
+        p1.Z() + v1.Z())
