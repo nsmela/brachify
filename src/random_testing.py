@@ -13,12 +13,15 @@ display, start_display, add_menu, add_function_to_menu = init_display()
 
 
 def evolved_shape():
-    angle = math.radians(90) 
+    angle = 30
+    angle_rads = math.radians(angle) 
     height = 160
     length = 200
     length_offset = 20.0
     radius_offset = 35.0
     radius = 15.0
+    tip_thickness = 20.0
+
 
     p0 = gp_Pnt(0,0,0)
     p1 = gp_Pnt(0,0,height)
@@ -28,19 +31,30 @@ def evolved_shape():
     edge2 = BRepBuilderAPI_MakeEdge(p1,p2).Edge()
 
     direction = gp_Vec(0, 0, 1)
-    x = radius - math.cos(angle) * radius_offset
-    y = math.sin(angle) * 0
+    x = radius - math.cos(angle_rads) * radius_offset
+    y = math.sin(angle_rads) * 0
     p3 = gp_Pnt(x, 0, length + y)
 
     arc = GC_MakeArcOfCircle(p1, direction, p3)
     edge3 = BRepBuilderAPI_MakeEdge(arc.Value()).Edge()
+
+    angle2 = 90 - angle
+    
+    x = math.cos(math.radians(angle2))
+    y = math.sin(math.radians(angle2))
+    print(angle2, x, y)
+    vec = gp_Vec(x, 0, y) * tip_thickness
+    print(vec.X(), vec.Y(), vec.Z())
+    p4 = gp_Pnt(p3.X() + vec.X(), p3.Y() + vec.Y(), p3.Z() + vec.Z())
+    print(p4)
+    edge4 = BRepBuilderAPI_MakeEdge(p3, p4).Edge()
 
     circle_edge = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p0, gp_Dir(0,0,1)), radius))
     circle_wire = BRepBuilderAPI_MakeWire(circle_edge.Edge()).Wire()
     profile = BRepBuilderAPI_MakeFace(circle_wire).Face()
     
     straight_wire = BRepBuilderAPI_MakeWire(edge1, edge2).Wire()
-    curve_wire = BRepBuilderAPI_MakeWire(edge3).Wire()
+    curve_wire = BRepBuilderAPI_MakeWire(edge3, edge4).Wire()
 
     pipe_straight = BRepFill_PipeShell(straight_wire)
     pipe_straight.Add(circle_wire)
