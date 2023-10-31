@@ -5,7 +5,7 @@ from Presentation.MainWindow.ui_main_ui import Ui_MainWindow
 
 from OCC.Display.backend import load_backend
 
-load_backend("qt-pyside2")
+load_backend("pyside6")
 import OCC.Display.qtDisplay as qtDisplay
 from Presentation.MainWindow.CustomViewer import OrbitCameraViewer3d
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
