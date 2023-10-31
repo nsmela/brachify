@@ -172,9 +172,8 @@ output/prodd/files/tandem/tandem.json
 output/prodd/files/tandem/VSM 60deg FDM_model.STEP
 output/prodd/prodd.exe
 /.vs/ProjectSettings.json
-<<<<<<< HEAD
-files/tandem/tandem.json
-files/tandem/VMS 60deg FDM_model.STL
+files/
+src/files/tandem/VMS 60deg FDM_model.STL
 =======
 files
 >>>>>>> main
