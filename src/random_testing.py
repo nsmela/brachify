@@ -24,6 +24,12 @@ def evolved_shape():
     tip_thickness = 20.0
     tip_radius = 8
 
+    def get_perpindicular_line(p1, p2):
+        m = (p2.Z() - p1.Z()) / (p2.X() - p1.X())     
+        slope = -1 / m
+        b = p1.Z() - (slope * p1.X())
+        return slope, b
+
     # initial tube from origin to designated height
     p0 = gp_Pnt(0,0,0)
     p1 = gp_Pnt(0,0,height)
