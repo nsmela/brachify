@@ -24,10 +24,17 @@ def evolved_shape():
     tip_thickness = 20.0
     tip_radius = 8
 
-    def get_perpindicular_line(p1, p2):
+
+    def get_perpindicular_slope(p1, p2):
         m = (p2.Z() - p1.Z()) / (p2.X() - p1.X())     
-        slope = -1 / m
-        b = p1.Z() - (slope * p1.X())
+        return -1 / m
+
+    def get_line_offset(p1, slope):
+        return p1.Z() - (slope * p1.X())
+
+    def get_perpindicular_line(p1, p2):
+        slope = get_perpindicular_slope(p1, p2)
+        b = get_line_offset(p1, slope)
         return slope, b
 
     # initial tube from origin to designated height
@@ -61,16 +68,13 @@ def evolved_shape():
     # line formula is y = mx + b
     # slope formula is m = y2 - y1 / x2 - x1
     # slope perpindicular is -1 / m
+    slope, b = get_perpindicular_line(p3, p4)
     print(f"p3 = {p3.X()}, {p3.Z()}")
     print(f"p4 = {p4.X()}, {p4.Z()}")
-    m = (p4.Z() - p3.Z()) / (p4.X() - p3.X()) 
-    print(f"m = {m}")
-    slope = -1 / m
     print(f"slope(m): {slope}")
+    print(f"b = {b}")
 
     # b = y - mx
-    b = p3.Z() - (slope * p3.X())
-    print(f"b = {b}")
     x = tip_radius - radius
     print(f"x = {x}")
     if x > p3.X():
@@ -79,7 +83,10 @@ def evolved_shape():
     y = slope * x + b
     print(f"y = {y}")
     p5 = gp_Pnt(x, 0, y)
-    p6 = gp_Pnt(p5.X(), p5.Y(), p5.Z() + tip_thickness)
+    
+    b = get_line_offset(p4, slope)
+    y = slope * x + b
+    p6 = gp_Pnt(x, 0, y)
     edge5 = BRepBuilderAPI_MakeEdge(p5, p6).Edge()
 
 
