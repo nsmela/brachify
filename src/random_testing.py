@@ -13,7 +13,7 @@ display, start_display, add_menu, add_function_to_menu = init_display()
 
 
 def evolved_shape():
-    angle = 30
+    angle = 60
     angle_rads = math.radians(angle) 
     height = 160
     length = 200
@@ -31,9 +31,9 @@ def evolved_shape():
     edge2 = BRepBuilderAPI_MakeEdge(p1,p2).Edge()
 
     direction = gp_Vec(0, 0, 1)
-    x = radius - math.cos(angle_rads) * radius_offset
-    y = math.sin(angle_rads) * 0
-    p3 = gp_Pnt(x, 0, length + y)
+    x = radius_offset - (math.cos(angle_rads) * radius_offset)
+    y = math.sin(angle_rads) * radius_offset
+    p3 = gp_Pnt(x, 0, height + y)
 
     arc = GC_MakeArcOfCircle(p1, direction, p3)
     edge3 = BRepBuilderAPI_MakeEdge(arc.Value()).Edge()
@@ -42,11 +42,8 @@ def evolved_shape():
     
     x = math.cos(math.radians(angle2))
     y = math.sin(math.radians(angle2))
-    print(angle2, x, y)
     vec = gp_Vec(x, 0, y) * tip_thickness
-    print(vec.X(), vec.Y(), vec.Z())
     p4 = gp_Pnt(p3.X() + vec.X(), p3.Y() + vec.Y(), p3.Z() + vec.Z())
-    print(p4)
     edge4 = BRepBuilderAPI_MakeEdge(p3, p4).Edge()
 
     circle_edge = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p0, gp_Dir(0,0,1)), radius))
@@ -56,17 +53,23 @@ def evolved_shape():
     straight_wire = BRepBuilderAPI_MakeWire(edge1, edge2).Wire()
     curve_wire = BRepBuilderAPI_MakeWire(edge3, edge4).Wire()
 
+    circle_centre = gp_Pnt(p1.X() + radius_offset, 0, p1.Z())
+    edgeA = BRepBuilderAPI_MakeEdge(p1, circle_centre).Edge()
+    edgeB = BRepBuilderAPI_MakeEdge(p3, circle_centre).Edge()
+    test_wire = BRepBuilderAPI_MakeWire(edgeA, edgeB).Wire()
+    display.DisplayShape(test_wire)
+
     pipe_straight = BRepFill_PipeShell(straight_wire)
     pipe_straight.Add(circle_wire)
     pipe_straight.Build()
-    display.DisplayShape(pipe_straight.Shape(), update=False)
+    display.DisplayShape(straight_wire, update=False)
 
     circle_edge = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p1, gp_Dir(0,0,1)), radius))
     circle_wire = BRepBuilderAPI_MakeWire(circle_edge.Edge()).Wire()
     pipe_curved = BRepFill_PipeShell(curve_wire)
     pipe_curved.Add(circle_wire)
     pipe_curved.Build()
-    display.DisplayShape(pipe_curved.Shape(), update=True)
+    display.DisplayShape(curve_wire, update=True)
 
 if __name__ == "__main__":
     evolved_shape()
