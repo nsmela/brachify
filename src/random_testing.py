@@ -36,6 +36,9 @@ def evolved_shape():
         slope = get_perpindicular_slope(p1, p2)
         b = get_line_offset(p1, slope)
         return slope, b
+    
+    def get_y_on_line(x, slope, b):
+        return slope * x + b
 
     # initial tube from origin to designated height
     p0 = gp_Pnt(0,0,0)
@@ -80,12 +83,12 @@ def evolved_shape():
     if x > p3.X():
         x = p3.X()
         print(f"x was too large and was changed to: {x}")
-    y = slope * x + b
+    y = get_y_on_line(x, slope, b)
     print(f"y = {y}")
     p5 = gp_Pnt(x, 0, y)
     
     b = get_line_offset(p4, slope)
-    y = slope * x + b
+    y = get_y_on_line(x, slope, b)
     p6 = gp_Pnt(x, 0, y)
     edge5 = BRepBuilderAPI_MakeEdge(p5, p6).Edge()
 
