@@ -1,7 +1,7 @@
 from OCC.Core.gp import gp_Pnt, gp_Circ, gp_Dir, gp_Ax2, gp_Vec
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakePolygon, BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace, BRepBuilderAPI_MakeSolid
 from OCC.Core.GeomAbs import GeomAbs_Arc
-from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakeEvolved
+from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakeEvolved, BRepOffsetAPI_ThruSections
 from OCC.Core.GC import GC_MakeArcOfCircle
 from OCC.Core.BRepFill import BRepFill_PipeShell
 
@@ -72,8 +72,9 @@ def evolved_shape():
         print(f"x was too large and was changed to: {x}")
     y = slope * x + b
     print(f"y = {y}")
-
-    
+    p5 = gp_Pnt(x, 0, y)
+    p6 = gp_Pnt(p5.X(), p5.Y(), p5.Z() + tip_thickness)
+    edge5 = BRepBuilderAPI_MakeEdge(p5, p6).Edge()
 
 
 
@@ -95,8 +96,7 @@ def evolved_shape():
     pipe_curved.Add(circle_wire)
     pipe_curved.Build()
     pipe_curved.MakeSolid()
-    pipe = BRepBuilderAPI_MakeSolid(pipe_curved.Shape()).Shape()
-    display.DisplayShape(pipe)
+    display.DisplayShape(pipe_curved.Shape())
 
     circle_edge = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p3, gp_Dir(vec)), tip_radius))
     circle_wire = BRepBuilderAPI_MakeWire(circle_edge.Edge()).Wire()
@@ -107,6 +107,15 @@ def evolved_shape():
     pipe_tip_shape = BRepBuilderAPI_MakeSolid(pipe_tip.Shape()).Shape()
     display.DisplayShape(pipe_tip_shape)
 
+    wire = BRepBuilderAPI_MakeWire(edge5).Wire()
+    circle_edge = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p5, gp_Dir(vec)), tip_radius))
+    circle_wire = BRepBuilderAPI_MakeWire(circle_edge.Edge()).Wire()
+    circle_edge2 = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p6, gp_Dir(vec)), tip_radius))
+    circle_wire2 = BRepBuilderAPI_MakeWire(circle_edge2.Edge()).Wire()   
+    pipe_tip2 = BRepOffsetAPI_ThruSections()
+    pipe_tip2.AddWire(circle_wire)
+    pipe_tip2.AddWire(circle_wire2)
+    display.DisplayShape(pipe_tip2.Shape())
 
 if __name__ == "__main__":
     evolved_shape()
