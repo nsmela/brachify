@@ -105,8 +105,8 @@ def evolved_shape():
     pipe_straight.Add(circle_wire)
     pipe_straight.Build()
     pipe_straight.MakeSolid()
-    #display.DisplayShape(pipe_straight.Shape())
-    display.DisplayShape(straight_wire)
+    display.DisplayShape(pipe_straight.Shape())
+    #display.DisplayShape(straight_wire)
 
     circle_edge = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p1, gp_Dir(0,0,1)), radius))
     circle_wire = BRepBuilderAPI_MakeWire(circle_edge.Edge()).Wire()
@@ -114,8 +114,8 @@ def evolved_shape():
     pipe_curved.Add(circle_wire)
     pipe_curved.Build()
     pipe_curved.MakeSolid()
-    #display.DisplayShape(pipe_curved.Shape())
-    display.DisplayShape(curve_wire)
+    display.DisplayShape(pipe_curved.Shape())
+    #display.DisplayShape(curve_wire)
 
     circle_edge = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p3, gp_Dir(vec)), tip_radius))
     circle_wire = BRepBuilderAPI_MakeWire(circle_edge.Edge()).Wire()
@@ -125,8 +125,8 @@ def evolved_shape():
     pipe_tip.Build()
     pipe_tip.MakeSolid()
     pipe_tip_shape = BRepBuilderAPI_MakeSolid(pipe_tip.Shape()).Shape()
-    #display.DisplayShape(pipe_tip_shape)
-    display.DisplayShape(wire)
+    display.DisplayShape(pipe_tip_shape)
+    #display.DisplayShape(wire)
 
     wire = BRepBuilderAPI_MakeWire(edge5).Wire()
     circle_edge = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p5, gp_Dir(vec)), tip_radius))
@@ -136,8 +136,8 @@ def evolved_shape():
     pipe_tip2 = BRepOffsetAPI_ThruSections()
     pipe_tip2.AddWire(circle_wire)
     pipe_tip2.AddWire(circle_wire2)
-    #display.DisplayShape(pipe_tip2.Shape())
-    display.DisplayShape(wire)
+    display.DisplayShape(pipe_tip2.Shape())
+    #display.DisplayShape(wire)
 
     # making polygons to fill spaces between cylinders
     # lower half
