@@ -1,4 +1,4 @@
-from OCC.Core.gp import gp_Pnt, gp_Circ, gp_Dir, gp_Ax2, gp_Vec
+from OCC.Core.gp import *
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakePolygon, BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace, BRepBuilderAPI_MakeSolid
 from OCC.Core.GeomAbs import GeomAbs_Arc
 from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakeEvolved, BRepOffsetAPI_ThruSections
@@ -93,6 +93,8 @@ def evolved_shape():
     p6 = gp_Pnt(x, 0, y)
     edge5 = BRepBuilderAPI_MakeEdge(p5, p6).Edge()
 
+    # used to calculate the ellipse
+
 
 
     
@@ -133,11 +135,29 @@ def evolved_shape():
     circle_wire = BRepBuilderAPI_MakeWire(circle_edge.Edge()).Wire()
     circle_edge2 = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p6, gp_Dir(vec)), tip_radius))
     circle_wire2 = BRepBuilderAPI_MakeWire(circle_edge2.Edge()).Wire()   
+
+    # elliptical
+    slope, b = get_perpindicular_line(p3, p4)
+    x = -radius  #  edge of the first cylinder
+    y = get_y_on_line(x, slope, b) - p5.Z()
+    x = p5.X() + radius
+    major_radius = math.sqrt(x**2 + y**2) #  calculate hypotenuse
+    minor_radius = tip_radius
+    if major_radius < minor_radius: major_radius = minor_radius + 0.1
+    print(f"\nellipse:")
+    print(f"x = {x}, y = {y}")
+    print(f"major  = {major_radius}, minor = {minor_radius}")
+
+    ellipse1 = gp_Elips(gp_Ax2(p5, gp_Dir(vec)), major_radius, minor_radius)
+    ellipse_edge1 = BRepBuilderAPI_MakeEdge(gp_Elips(gp_Ax2(p5, gp_Dir(vec)), major_radius, minor_radius)).Edge()
+    ellipse_wire1 = BRepBuilderAPI_MakeWire(ellipse_edge1).Wire()
+    ellipse_edge2 = BRepBuilderAPI_MakeEdge(gp_Elips(gp_Ax2(p6, gp_Dir(vec)), major_radius, minor_radius)).Edge()
+    ellipse_wire2 = BRepBuilderAPI_MakeWire(ellipse_edge2).Wire()
     pipe_tip2 = BRepOffsetAPI_ThruSections()
-    pipe_tip2.AddWire(circle_wire)
-    pipe_tip2.AddWire(circle_wire2)
+    pipe_tip2.AddWire(ellipse_wire1)
+    pipe_tip2.AddWire(ellipse_wire2)
     display.DisplayShape(pipe_tip2.Shape())
-    #display.DisplayShape(wire)
+    display.DisplayShape(wire)
 
     # making polygons to fill spaces between cylinders
     # lower half
@@ -151,7 +171,7 @@ def evolved_shape():
     face = BRepBuilderAPI_MakeFace(wire).Face()
     prism = BRepPrimAPI_MakePrism(face, gp_Vec(0, radius, 0)).Shape()
     prism = BRepAlgoAPI_Fuse(prism, BRepPrimAPI_MakePrism(face, gp_Vec(0, -radius, 0)).Shape()).Shape()
-    display.DisplayShape(prism)
+    #$display.DisplayShape(prism)
 
     # upper half
     edge7 = BRepBuilderAPI_MakeEdge(p3, p5).Edge()
