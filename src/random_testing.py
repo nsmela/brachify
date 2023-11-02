@@ -16,7 +16,7 @@ display, start_display, add_menu, add_function_to_menu = init_display()
 
 def evolved_shape():
     # specs
-    angle = 30
+    angle = 45
     angle_rads = math.radians(angle) 
     height = 160
     length = 200
@@ -107,8 +107,7 @@ def evolved_shape():
     pipe_straight.Add(circle_wire)
     pipe_straight.Build()
     pipe_straight.MakeSolid()
-    display.DisplayShape(pipe_straight.Shape())
-    #display.DisplayShape(straight_wire)
+    pipe = pipe_straight.Shape()
 
     circle_edge = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p1, gp_Dir(0,0,1)), radius))
     circle_wire = BRepBuilderAPI_MakeWire(circle_edge.Edge()).Wire()
@@ -116,24 +115,8 @@ def evolved_shape():
     pipe_curved.Add(circle_wire)
     pipe_curved.Build()
     pipe_curved.MakeSolid()
-    display.DisplayShape(pipe_curved.Shape())
-    #display.DisplayShape(curve_wire)
+    pipe = BRepAlgoAPI_Fuse(pipe, pipe_curved.Shape()).Shape()
 
-
-    #display.DisplayShape(wire)
-
-    wire = BRepBuilderAPI_MakeWire(edge5).Wire()
-    circle_edge = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p5, gp_Dir(vec)), tip_radius))
-    circle_wire = BRepBuilderAPI_MakeWire(circle_edge.Edge()).Wire()
-    circle_edge2 = BRepBuilderAPI_MakeEdge(gp_Circ(gp_Ax2(p6, gp_Dir(vec)), tip_radius))
-    circle_wire2 = BRepBuilderAPI_MakeWire(circle_edge2.Edge()).Wire()   
-
-    # elliptical
-
-
-    # making polygons to fill spaces between cylinders
-    # lower half
-    # edge from edge1 to bottom of tandem tips
     slope, b = get_perpindicular_line(p3, p4)
     y = get_y_on_line(0, slope, b)
     p7 = gp_Pnt(0, 0, y)
@@ -143,7 +126,8 @@ def evolved_shape():
     face = BRepBuilderAPI_MakeFace(wire).Face()
     prism = BRepPrimAPI_MakePrism(face, gp_Vec(0, radius, 0)).Shape()
     prism = BRepAlgoAPI_Fuse(prism, BRepPrimAPI_MakePrism(face, gp_Vec(0, -radius, 0)).Shape()).Shape()
-    #$display.DisplayShape(prism)
+    pipe = BRepAlgoAPI_Fuse(pipe, prism).Shape()
+    display.DisplayShape(pipe)
 
     # upper half
     ## end of curve
@@ -181,6 +165,7 @@ def evolved_shape():
     ellipse_face = BRepBuilderAPI_MakeFace(ellipse_wire).Face()
     pipe = BRepPrimAPI_MakePrism(ellipse_face, gp_Vec(0, 0, p6.Z() - p5.Z())).Shape()
     pipe_tip = BRepAlgoAPI_Fuse(pipe_tip, pipe).Shape()
+
     display.DisplayShape(pipe_tip)
     
 
