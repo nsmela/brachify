@@ -118,6 +118,7 @@ def evolved_shape():
     prism = BRepPrimAPI_MakePrism(face, gp_Vec(0, radius, 0)).Shape()
     prism = BRepAlgoAPI_Fuse(prism, BRepPrimAPI_MakePrism(face, gp_Vec(0, -radius, 0)).Shape()).Shape()
     pipe = BRepAlgoAPI_Fuse(pipe, prism).Shape()
+    
 
     # upper half
     ## end of curve

@@ -2,6 +2,7 @@ from OCC.Core.TopoDS import TopoDS_Shape, TopoDS_Compound
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeSphere, BRepPrimAPI_MakePrism
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace
 from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+from OCC.Core.BRepFill import BRepFill_PipeShell
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRep import BRep_Builder
 from OCC.Core.GC import GC_MakeArcOfCircle
@@ -16,13 +17,13 @@ def generate_tandem(
         channel_diameter: float = 4.0,
         tip_diameter: float = 8.0,
         tip_thickness: float = 4.0,
-        tip_angle = 30.0,
+        tip_angle = 60.0,
         tip_height: float = 160.0) -> TopoDS_Shape:
 
     """Calculate the edges needs on a XZ plane where we pretend Z is Y"""    
     # variables used
     tip_rads = math.radians(tip_angle)
-    curve_offset = 35.0  # used for the curve
+    curve_offset = 15.0  # used for the curve
     channel_radius = channel_diameter / 2
     tip_radius = tip_diameter / 2
 
@@ -84,39 +85,21 @@ def generate_tandem(
 
     # shapes
     shapes = []
-    shapes.append(make_symmetrical_shape(wire, channel_radius))
     shapes.append(make_cylinder(p0, p6, channel_radius))
+    shapes.append(make_symmetrical_shape(wire, channel_radius))
+    shapes.append(make_curved_pipe(p1, make_arc(p1, p2), [0, 0, 1], channel_radius))
     shapes.append(make_thru_shape(wires))
 
-    result = TopoDS_Compound()
-    builder = BRep_Builder()
-    builder.MakeCompound(result)
+    #result = TopoDS_Compound()
+    #builder = BRep_Builder()
+    #builder.MakeCompound(result)
+    #for wire in wires:
+    #    builder.Add(result, wire)
+    #for shape in shapes:
+    #    builder.Add(result, shape)
+    #    pass
 
-    # points 
-    builder.Add(result, make_point(p0))
-    builder.Add(result, make_point(p1))
-    builder.Add(result, make_point(p2))
-    builder.Add(result, make_point(p3))
-    builder.Add(result, make_point(p4))
-    builder.Add(result, make_point(p5))
-    builder.Add(result, make_point(p6))
-    builder.Add(result, make_point(p7))
-    builder.Add(result, make_point(p8))
-    builder.Add(result, make_point(p9))
-
-    # edges
-
-    # wires
-    for wire in wires:
-        #builder.Add(result, wire)
-        pass
-
-    # shapes
-    for shape in shapes:
-        builder.Add(result, shape)
-        pass
-
-    return result
+    return fuse_shapes(shapes)
 
 
 def make_edge(p1, p2):
@@ -171,6 +154,34 @@ def make_symmetrical_shape(wire, distance):
     prism = BRepPrimAPI_MakePrism(face, gp_Vec(0, distance, 0)).Shape()
     prism2 = BRepPrimAPI_MakePrism(face, gp_Vec(0, -distance, 0)).Shape()
     return BRepAlgoAPI_Fuse(prism, prism2).Shape()
+
+
+def make_curved_pipe(start_point, arc, start_direction, radius):
+    p1 = gp_Pnt(start_point[0], start_point[1], start_point[2])
+    wire = BRepBuilderAPI_MakeWire(arc).Wire()
+    direction = gp_Dir(start_direction[0], start_direction[1], start_direction[2])
+    axis = gp_Ax2(p1, direction)
+    circle = gp_Circ(axis, radius)
+    circle_edge = BRepBuilderAPI_MakeEdge(circle).Edge()
+    profile = BRepBuilderAPI_MakeWire(circle_edge).Wire()
+
+    pipe = BRepFill_PipeShell(wire)
+    pipe.Add(profile)
+    pipe.Build()
+    pipe.MakeSolid()
+    return pipe.Shape()
+
+
+def fuse_shapes(shapes: []):
+    result = None
+    for shape in shapes:
+        if result is None:
+            result = shape
+            continue
+        
+        result = BRepAlgoAPI_Fuse(result, shape).Shape()
+    
+    return result
 
 
 class Line:
