@@ -1,13 +1,15 @@
 from OCC.Core.TopoDS import TopoDS_Shape, TopoDS_Compound
-from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeSphere
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeSphere, BRepPrimAPI_MakePrism
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace
 from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_ThruSections
+from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRep import BRep_Builder
 from OCC.Core.GC import GC_MakeArcOfCircle
 from OCC.Core.gp import *
 
 import numpy as np
 import math
+
 
 # generates a custom tandem with inputed values
 def generate_tandem(
@@ -55,7 +57,7 @@ def generate_tandem(
     edges.append(make_edge([p2[0], -tip_radius, p2[2]], [p5[0], -tip_radius, p5[2]]))
     edges.append(make_arc_from_points(p5, p6, tip_radius))
     edges.append(make_edge([p2[0], tip_radius, p2[2]], [p5[0], tip_radius, p5[2]]))
-   
+
     wires = []
     wires.append(make_wire(edges))
 
@@ -71,15 +73,25 @@ def generate_tandem(
     edges.append(make_edge([p3[0], tip_radius, p3[2]], [p8[0], tip_radius, p8[2]]))
     wires.append(make_wire(edges))  
 
+    # base filling in
+    edges = []
+    p_height = line2.get_point_from_x(0)
+    edges.append(make_edge(p1, p_height))
+    edges.append(make_edge(p_height, p2))
+    edges.append(make_arc(p1, p2))
+
+    wire = make_wire(edges)
+
     # shapes
     shapes = []
+    shapes.append(make_symmetrical_shape(wire, channel_radius))
     shapes.append(make_cylinder(p0, p6, channel_radius))
     shapes.append(make_thru_shape(wires))
 
     result = TopoDS_Compound()
     builder = BRep_Builder()
     builder.MakeCompound(result)
-    
+
     # points 
     builder.Add(result, make_point(p0))
     builder.Add(result, make_point(p1))
@@ -93,19 +105,16 @@ def generate_tandem(
     builder.Add(result, make_point(p9))
 
     # edges
-    builder.Add(result, make_edge(p0, p1))
-    builder.Add(result, make_arc(p1, p2))
-    builder.Add(result, make_edge(p2, p3))
-    builder.Add(result, make_edge(p4, p6))
-    builder.Add(result, make_edge(p7, p9))
 
     # wires
     for wire in wires:
-        builder.Add(result, wire)
+        #builder.Add(result, wire)
+        pass
 
     # shapes
     for shape in shapes:
         builder.Add(result, shape)
+        pass
 
     return result
 
@@ -155,6 +164,13 @@ def make_cylinder(p1, p2, radius):
     p0 = gp_Pnt(p1[0], p1[1], p1[2])
     height = p2[2] - p1[2]
     return BRepPrimAPI_MakeCylinder(radius, height).Shape()
+
+
+def make_symmetrical_shape(wire, distance):
+    face = BRepBuilderAPI_MakeFace(wire).Face()
+    prism = BRepPrimAPI_MakePrism(face, gp_Vec(0, distance, 0)).Shape()
+    prism2 = BRepPrimAPI_MakePrism(face, gp_Vec(0, -distance, 0)).Shape()
+    return BRepAlgoAPI_Fuse(prism, prism2).Shape()
 
 
 class Line:
