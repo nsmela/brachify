@@ -5,6 +5,10 @@ from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakePrism
 from OCC.Core.GC import GC_MakeArcOfCircle
 from OCC.Core.BRepFill import BRepFill_PipeShell
 
+import sys
+#sys.path.append("src\Application\BRep\Tandem.py")
+
+from Application.BRep import Tandem
 from OCC.Display.SimpleGui import init_display
 
 import math
@@ -156,6 +160,12 @@ def evolved_shape():
     display.DisplayShape(pipe)
     
 
+def tandem_shape():
+    shape = Tandem.generate_tandem()
+    display.DisplayShape(shape)
+
+
 if __name__ == "__main__":
-    evolved_shape()
+    #evolved_shape()
+    tandem_shape()
     start_display()
