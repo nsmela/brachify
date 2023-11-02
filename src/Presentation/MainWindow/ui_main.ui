@@ -866,7 +866,7 @@ QPushButton:hover {
               <item alignment="Qt::AlignLeft|Qt::AlignTop">
                <widget class="QTabWidget" name="tandem_tabbedWidget">
                 <property name="currentIndex">
-                 <number>0</number>
+                 <number>1</number>
                 </property>
                 <widget class="QWidget" name="tandem_tab_preloaded">
                  <attribute name="title">
@@ -1151,6 +1151,13 @@ QPushButton:hover {
                          <widget class="QDoubleSpinBox" name="tandem_spinbox_tip_angle"/>
                         </item>
                        </layout>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="btn_tandem_apply">
+                       <property name="text">
+                        <string>Apply</string>
+                       </property>
                       </widget>
                      </item>
                     </layout>

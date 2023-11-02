@@ -15,6 +15,7 @@ def init(window: MainWindow):
         window.ui.btn_tandem_clear.clicked.connect(lambda: tandem.clear_tandem_settings(window))
         window.ui.btn_tandem_add_update.clicked.connect(lambda: tandem.save_tandem(window))
         window.ui.listWidget_savedTandems.itemSelectionChanged.connect(lambda: tandem.set_tandem(window))
+        window.ui.btn_tandem_apply.clicked.connect(tandem.create_tandem)
         tandem.load_tandems(window)
         
         window.tandem_height_offset = tandem.tandem_height

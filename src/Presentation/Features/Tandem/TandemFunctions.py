@@ -167,3 +167,8 @@ def update_tandem_settings(window: MainWindow, tandem: Tandem) -> None:
     window.ui.tandem_lineEdit_toolModel.setText(tandem.shape_filepath)
     window.ui.lineEdit_tandemName.setText(tandem.name)
     window.ui.btn_tandem_add_update.setObjectName("Update")
+
+
+def create_tandem(window: MainWindow):
+    window.tandem = Tandem()
+    tandemDisplay.update(window)

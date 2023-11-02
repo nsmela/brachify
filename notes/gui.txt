@@ -1,9 +1,6 @@
 # youtube videos
 ## template for modern gui
 https://www.youtube.com/watch?v=RYdAf2NH0TY
-## splash screen
-https://www.youtube.com/watch?v=Ap865V3sAdw
-
 
 # GUI
 > # TODO pyside6 install tools
@@ -12,7 +9,7 @@ https://www.youtube.com/watch?v=Ap865V3sAdw
 >designer
 
 # PySide6 converter
->./uic.exe ./Presentation/MainWindow/ui_main.ui
+>uic.exe src/Presentation/MainWindow/ui_main.ui
 >pyrcc5 ./Presentation/MainWindow/resources.qrc -o ./Presentation/MainWindow/resources_rc.py
 
 # PySide6 converter
