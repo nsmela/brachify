@@ -1,10 +1,8 @@
-# PySide6 SplashScreen
-# https://youtu.be/TsatZJfzb_Q?si=HZ1nt1eqw0AyuYWo
 import os
-
-from Presentation.SplashScreen.core import SplashScreen
-from PySide6 import QtWidgets
 import sys
+
+SPLASHSCREEN_IMAGE = "src//Presentation//SplashScreen//brachify_splash.png"
+
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -16,14 +14,20 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-app = QtWidgets.QApplication(sys.argv)
-splash = SplashScreen()
-splash.show()
 
-from Presentation.MainWindow.core import MainWindow
-window = MainWindow()
+if __name__ == "__main__":
+    from PySide6.QtWidgets import QApplication, QSplashScreen
+    from PySide6.QtGui import QPixmap
+    app = QApplication(sys.argv)  # pass console arguements to the app
+    pixmap = QPixmap(SPLASHSCREEN_IMAGE)
+    splash = QSplashScreen(pixmap)
+    splash.show()
+    #app.processEvents()
 
-window.showProperly()
+    from src.Presentation.MainWindow.core import MainWindow
+    window = MainWindow()
 
-splash.finish(window)
-sys.exit(app.exec_())
+    window.showProperly()
+
+    splash.finish(window)
+    sys.exit(app.exec())
