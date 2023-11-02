@@ -1,7 +1,5 @@
 from OCC.Core.gp import *
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakePolygon, BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace, BRepBuilderAPI_MakeSolid
-from OCC.Core.GeomAbs import GeomAbs_Arc
-from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakeEvolved, BRepOffsetAPI_ThruSections
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace, BRepBuilderAPI_MakeSolid
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakePrism
 from OCC.Core.GC import GC_MakeArcOfCircle
@@ -73,19 +71,12 @@ def evolved_shape():
     # slope formula is m = y2 - y1 / x2 - x1
     # slope perpindicular is -1 / m
     slope, b = get_perpindicular_line(p3, p4)
-    print(f"p3 = {p3.X()}, {p3.Z()}")
-    print(f"p4 = {p4.X()}, {p4.Z()}")
-    print(f"slope(m): {slope}")
-    print(f"b = {b}")
-
     # b = y - mx
     x = tip_radius - radius
-    print(f"x = {x}")
     if x > p3.X():
         x = p3.X()
         print(f"x was too large and was changed to: {x}")
     y = get_y_on_line(x, slope, b)
-    print(f"y = {y}")
     p5 = gp_Pnt(x, 0, y)
     
     b = get_line_offset(p4, slope)
@@ -94,10 +85,6 @@ def evolved_shape():
     edge5 = BRepBuilderAPI_MakeEdge(p5, p6).Edge()
 
     # used to calculate the ellipse
-
-
-
-    
     straight_wire = BRepBuilderAPI_MakeWire(edge1, edge2).Wire()
     curve_wire = BRepBuilderAPI_MakeWire(edge3).Wire()
 
@@ -127,7 +114,6 @@ def evolved_shape():
     prism = BRepPrimAPI_MakePrism(face, gp_Vec(0, radius, 0)).Shape()
     prism = BRepAlgoAPI_Fuse(prism, BRepPrimAPI_MakePrism(face, gp_Vec(0, -radius, 0)).Shape()).Shape()
     pipe = BRepAlgoAPI_Fuse(pipe, prism).Shape()
-    display.DisplayShape(pipe)
 
     # upper half
     ## end of curve
@@ -163,10 +149,11 @@ def evolved_shape():
     ellipse_edge = BRepBuilderAPI_MakeEdge(gp_Elips(gp_Ax2(p5, gp_Dir(vec)), major_radius, minor_radius)).Edge()
     ellipse_wire = BRepBuilderAPI_MakeWire(ellipse_edge).Wire()
     ellipse_face = BRepBuilderAPI_MakeFace(ellipse_wire).Face()
-    pipe = BRepPrimAPI_MakePrism(ellipse_face, gp_Vec(0, 0, p6.Z() - p5.Z())).Shape()
-    pipe_tip = BRepAlgoAPI_Fuse(pipe_tip, pipe).Shape()
+    eliipse_pipe = BRepPrimAPI_MakePrism(ellipse_face, gp_Vec(0, 0, p6.Z() - p5.Z())).Shape()
+    pipe_tip = BRepAlgoAPI_Fuse(pipe_tip, eliipse_pipe).Shape()
 
-    display.DisplayShape(pipe_tip)
+    pipe = BRepAlgoAPI_Fuse(pipe, pipe_tip).Shape()
+    display.DisplayShape(pipe)
     
 
 if __name__ == "__main__":
