@@ -4,7 +4,7 @@ from OCC.Core.Graphic3d import *
 import Presentation.Features.Tandem.TandemFunctions as tandem
 from Presentation.MainWindow.core import MainWindow
 from Core.Models.Tandem import TandemModel
-import Application.BRep.Tandem as tandemBuilder
+import Application.Tandem.Models as tandemModel
 
 TANDEM_COLOUR = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
 
@@ -16,10 +16,12 @@ def init(window: MainWindow):
         window.ui.btn_tandem_add_update.clicked.connect(lambda: tandem.save_tandem(window))
         window.ui.listWidget_savedTandems.itemSelectionChanged.connect(lambda: tandem.set_tandem(window))
         tandem.load_tandems(window)
-
+        
         window.tandem_height_offset = tandem.tandem_height
         window.tandem_rotation_offset = tandem.DEFAULT_ROTATION
 
+        #window.tandem = tandemModel.Tandem()
+    
     except Exception as error_message:
         print(f"tandem display init failed: {error_message}")
 
@@ -27,6 +29,7 @@ def init(window: MainWindow):
 ## TANDEM
 def view(window: MainWindow):
     # variables
+
 
     # set display
     window.display.default_drawer.SetFaceBoundaryDraw(True)  
@@ -77,7 +80,7 @@ def update(window: MainWindow):
         print(f"TandemView: Tandem load error: \n{error_message}")
 
     try:
-        tandem = tandemBuilder.generate_tandem_from_faces()
+        tandem = window.tandem.generate_shape()
         window.display.DisplayShape(tandem)
     except Exception as error_message:
         print(f"TandemView: Custom tandem error: \n{error_message}")

@@ -4,6 +4,7 @@ from OCC.Core.TopoDS import TopoDS_Shape
 
 from Core.Models.Tandem import TandemModel
 from Application.BRep.Helper import extend_bottom_face
+from Application.BRep.Tandem import generate_tandem
 
 
 class Tandem(TandemModel):
@@ -13,6 +14,13 @@ class Tandem(TandemModel):
         self._shape = None  # the shape used to cut from the model
         self.offset_height = 0.0  # translate offsets height
         self.rotation = 0.0  # rotation (0.0) along each axis xyz
+
+        # variables to generate a tandem
+        self.channel_diameter = 4.0
+        self.tip_diameter = 8.0
+        self.tip_thickness = 4.0
+        self.tip_angle = 45.0
+        self.tip_height = 160.0
 
     def setOffsets(self, height: float = None, rotation: float = None) -> None:
         if height is not None:
@@ -42,3 +50,16 @@ class Tandem(TandemModel):
         self._base_shape = shape
         self._shape = None
         self.shape()
+
+    def generate_shape(self):
+        shape = generate_tandem(
+            channel_diameter=self.channel_diameter,
+            tip_diameter=self.tip_diameter,
+            tip_thickness=self.tip_thickness,
+            tip_angle= self.tip_angle,
+            tip_height= self.tip_height
+        )
+        rotation = self.rotation
+        self._shape = rotate_shape(
+            shape=shape, axis=gp.OZ(), angle=rotation)
+        return self._shape
