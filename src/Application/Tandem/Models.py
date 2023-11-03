@@ -6,6 +6,13 @@ from src.Core.Models.Tandem import TandemModel
 from src.Application.BRep.Helper import extend_bottom_face
 from src.Application.BRep.Tandem import generate_tandem
 
+# Defaults
+TANDEM_CHANNEL_DIAMETER_DEFAULT = 4.0
+TANDEM_TIP_DIAMETER_DEFAULT = 8.0
+TANDEM_TIP_THICKNESS_DEFAULT = 4.0
+TANDEM_TIP_ANGLE_DEFAULT = 45.0
+TANDEM_TIP_HEIGHT_DEFAULT = 170.0
+
 
 class Tandem(TandemModel):
     def __init__(self) -> None:
@@ -16,11 +23,11 @@ class Tandem(TandemModel):
         self.rotation = 0.0  # rotation (0.0) along each axis xyz
 
         # variables to generate a tandem
-        self.channel_diameter = 4.0
-        self.tip_diameter = 8.0
-        self.tip_thickness = 4.0
-        self.tip_angle = 45.0
-        self.tip_height = 160.0
+        self.channel_diameter = TANDEM_CHANNEL_DIAMETER_DEFAULT
+        self.tip_diameter = TANDEM_TIP_DIAMETER_DEFAULT
+        self.tip_thickness = TANDEM_TIP_THICKNESS_DEFAULT
+        self.tip_angle = TANDEM_TIP_ANGLE_DEFAULT
+        self.tip_height = TANDEM_TIP_HEIGHT_DEFAULT
 
     def setOffsets(self, height: float = None, rotation: float = None) -> None:
         if height is not None:
@@ -57,7 +64,7 @@ class Tandem(TandemModel):
             tip_diameter=self.tip_diameter,
             tip_thickness=self.tip_thickness,
             tip_angle= self.tip_angle,
-            tip_height= self.tip_height
+            tip_height= self.tip_height + self.offset_height
         )
         rotation = self.rotation
         self._shape = rotate_shape(

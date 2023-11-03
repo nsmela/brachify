@@ -172,5 +172,14 @@ def update_tandem_settings(window: MainWindow, tandem: Tandem) -> None:
 
 
 def create_tandem(window: MainWindow):
-    window.tandem = Tandem()
+    print("tandem functions: creating tandem")
+    tandem = Tandem()
+    tandem.channel_diameter = float(window.ui.tandem_spinbox_channel_diameter.value())
+    tandem.tip_diameter = float(window.ui.tandem_spinbox_tip_diameter.value())   
+    tandem.tip_angle = float(window.ui.tandem_spinbox_tip_angle.value()) 
+    tandem.tip_thickness = float(window.ui.tandem_spinbox_tip_thickness.value()) 
+
+    tandem.setOffsets(window.tandem_height_offset, window.tandem_rotation_offset)
+
+    window.tandem = tandem
     tandemDisplay.update(window)

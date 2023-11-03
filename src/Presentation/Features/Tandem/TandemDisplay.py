@@ -14,7 +14,7 @@ def init(window: MainWindow):
         window.ui.btn_tandem_clear.clicked.connect(lambda: tandem.clear_tandem_settings(window))
         window.ui.btn_tandem_add_update.clicked.connect(lambda: tandem.save_tandem(window))
         window.ui.listWidget_savedTandems.itemSelectionChanged.connect(lambda: tandem.set_tandem(window))
-        window.ui.btn_tandem_apply.clicked.connect(tandem.create_tandem)
+        window.ui.btn_tandem_apply.clicked.connect(lambda: tandem.create_tandem(window))
         tandem.load_tandems(window)
         
         window.tandem_height_offset = tandem.tandem_height
@@ -31,12 +31,21 @@ def view(window: MainWindow):
     print("Tandem view!")
     # variables
 
-
     # set display
     window.display.default_drawer.SetFaceBoundaryDraw(True)  
     window.display._select_callbacks = []
     window.display.SetSelectionModeShape()
-        
+    
+    # setting custom tandem settings
+    tandem = window.tandem
+    if tandem is None: tandem = tandemModel.Tandem()
+
+    # ui elements here do not have a signal, so no need to pause them while adding values
+    window.ui.tandem_spinbox_channel_diameter.setValue(tandem.channel_diameter)
+    window.ui.tandem_spinbox_tip_diameter.setValue(tandem.tip_diameter)
+    window.ui.tandem_spinbox_tip_angle.setValue(tandem.tip_angle)
+    window.ui.tandem_spinbox_tip_thickness.setValue(tandem.tip_thickness)
+
     update(window)
 
 
