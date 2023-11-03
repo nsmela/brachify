@@ -1,13 +1,13 @@
 from PySide6 import QtCore
 from PySide6.QtWidgets import QAbstractItemView, QMainWindow
 
-from Presentation.MainWindow.ui_main_ui import Ui_MainWindow
+from src.Presentation.MainWindow.ui_main_ui import Ui_MainWindow
 
 from OCC.Display.backend import load_backend
 
 load_backend("pyside6")
 import OCC.Display.qtDisplay as qtDisplay
-from Presentation.MainWindow.CustomViewer import OrbitCameraViewer3d
+from src.Presentation.MainWindow.CustomViewer import OrbitCameraViewer3d
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 import os
@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
 
         ## PAGES
         ########################################################################
-        from Presentation.MainWindow.ui_functions import UIFunctions
+        from src.Presentation.MainWindow.ui_functions import UIFunctions
         # PAGE 1
         self.ui.btn_views_imports.clicked.connect(lambda: UIFunctions.setPage(self, UIFunctions.IMPORTS_VIEW))
 
@@ -61,7 +61,7 @@ class MainWindow(QMainWindow):
 
         ## Imports Functions
         ########################################################################
-        import Presentation.Features.Imports.ImportDisplay as importDisplay
+        import src.Presentation.Features.Imports.ImportDisplay as importDisplay
 
         importDisplay.init(self)
 
@@ -70,20 +70,20 @@ class MainWindow(QMainWindow):
 
         ## Cylinder Stuff
         ########################################################################
-        import Presentation.Features.Cylinder.CylinderDisplay as cylinderDisplay
+        import src.Presentation.Features.Cylinder.CylinderDisplay as cylinderDisplay
         self.brachyCylinder = None
         cylinderDisplay.init(self)
 
         ## Needle Channel Stuff
         ########################################################################
-        import Presentation.Features.NeedleChannels.NeedlesDisplay as needleDisplay
+        import src.Presentation.Features.NeedleChannels.NeedlesDisplay as needleDisplay
         self.needles = None
         self.isCylinderHidden = False
         needleDisplay.init(self)
 
         ## Tandem
         ########################################################################
-        import Presentation.Features.Tandem.TandemDisplay as tandem
+        import src.Presentation.Features.Tandem.TandemDisplay as tandem
         self.tandem = None
         self.tandems = {}
         self.tandem_index = -1
@@ -91,7 +91,7 @@ class MainWindow(QMainWindow):
 
         ## Exports
         ########################################################################
-        import Presentation.Features.Exports.ExportFunctions as exports
+        import src.Presentation.Features.Exports.ExportFunctions as exports
         self.ui.btn_export_stl.clicked.connect(lambda: exports.export_stl(self))
 
         ## Display variables
@@ -116,7 +116,7 @@ class MainWindow(QMainWindow):
 
     # for dragging events
     def eventFilter(self, widget, event):
-        import Presentation.Features.Imports.ImportFunctions as imports
+        import src.Presentation.Features.Imports.ImportFunctions as imports
 
         if event.type() == QtCore.QEvent.Type.DragEnter:
             event.acceptProposedAction()

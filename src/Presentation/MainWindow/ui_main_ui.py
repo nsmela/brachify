@@ -617,6 +617,11 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addWidget(self.tip_angle_frame)
 
+        self.btn_tandem_apply = QPushButton(self.custom_tandem_frame)
+        self.btn_tandem_apply.setObjectName(u"btn_tandem_apply")
+
+        self.verticalLayout_3.addWidget(self.btn_tandem_apply)
+
 
         self.verticalLayout_13.addWidget(self.custom_tandem_frame)
 
@@ -686,7 +691,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
 
         self.stackedWidget.setCurrentIndex(3)
-        self.tandem_tabbedWidget.setCurrentIndex(0)
+        self.tandem_tabbedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -729,6 +734,7 @@ class Ui_MainWindow(object):
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"tip diameter", None))
         self.label_11.setText(QCoreApplication.translate("MainWindow", u"tip thickness", None))
         self.label_13.setText(QCoreApplication.translate("MainWindow", u"tip angle", None))
+        self.btn_tandem_apply.setText(QCoreApplication.translate("MainWindow", u"Apply", None))
         self.tandem_tabbedWidget.setTabText(self.tandem_tabbedWidget.indexOf(self.tandem_tab_generated), QCoreApplication.translate("MainWindow", u"Generated", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"export", None))
         self.label_12.setText(QCoreApplication.translate("MainWindow", u"Info", None))

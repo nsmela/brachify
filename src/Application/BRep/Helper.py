@@ -10,6 +10,7 @@ from OCC.Core.gp import gp_Dir, gp_Ax2, gp_Pnt, gp_Pln, gp_Vec, gp_Circ
 from OCC.Extend.ShapeFactory import translate_shp, rotate_shape
 
 import numpy as np
+import math
 
 
 def face_is_plane(face: TopoDS_Face) -> bool:
@@ -106,6 +107,13 @@ def get_direction(p1: gp_Pnt, p2: gp_Pnt) -> gp_Dir:
     return gp_Dir(vector.X(), vector.Y(), vector.Z())
 
 
+def get_vector_from_angle(v1: gp_Vec = gp_Vec(1,0,0), angle: float = 0.0, length: float = 1.0) -> gp_Vec:
+    x = math.cos(angle)
+    y = math.sin(angle)
+    result = gp_Vec(v1.X() + x, v1.Y(), v1.Z()).Normalized()
+    return result * length
+
+
 def extend_bottom_face(shape: TopoDS_Shape) -> TopoDS_Shape:
     face = lowest_face_by_normal(shape)
     z = face[2].Z()
@@ -174,3 +182,10 @@ def circle_profile(origin: gp_Pnt, direction: gp_Vec, radius: float) -> TopoDS_F
     edge = BRepBuilderAPI_MakeEdge(circle).Edge()
     wire = BRepBuilderAPI_MakeWire(edge).Wire()
     return BRepBuilderAPI_MakeFace(wire).Face()
+
+
+def add_point_and_vector(p1: gp_Pnt, v1:gp_Vec) -> gp_Pnt:
+    return gp_Pnt(
+        p1.X() + v1.X(), 
+        p1.Y() + v1.Y(),
+        p1.Z() + v1.Z())

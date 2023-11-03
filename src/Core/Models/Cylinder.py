@@ -12,7 +12,7 @@ from OCC.Extend.ShapeFactory import translate_shp
 
 import numpy as np
 
-from Core.Models.DicomData import DicomData
+from src.Core.Models.DicomData import DicomData
 
 
 DEFAULT_LENGTH = 160.0

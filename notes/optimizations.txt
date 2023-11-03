@@ -1,0 +1,9 @@
+https://github.com/tpaviot/pythonocc-demos/blob/master/examples/core_topology_boolean_general_fuse_algorithm.py
+^ how to do faster fuses in parallel
+
+builder = BOPAlgo_Builder()
+builder.AddArgument(my_box1)
+builder.AddArgument(my_box2)
+builder.SetRunParallel(True)
+builder.Perform()  # or .PerformWithFiller(a_filler)
+

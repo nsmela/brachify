@@ -1,10 +1,10 @@
 from PySide6.QtWidgets import QFileDialog
 
-from Application.Tandem.Models import Tandem
-from Presentation.MainWindow.core import MainWindow
-import Presentation.Features.Imports.ImportFunctions as imports
-import Presentation.Features.Tandem.TandemDisplay as tandemDisplay
-from Core.Models.Tandem import TandemModel
+from src.Application.Tandem.Models import Tandem
+from src.Presentation.MainWindow.core import MainWindow
+import src.Presentation.Features.Imports.ImportFunctions as imports
+import src.Presentation.Features.Tandem.TandemDisplay as tandemDisplay
+from src.Core.Models.Tandem import TandemModel
 
 import os
 import json
@@ -128,6 +128,7 @@ def load_tandem_models(window: MainWindow, tandem: Tandem) -> None:
 
 
 def applyOffsets(window: MainWindow, height_offset: float = None, rotation: float = None) -> None:
+    print("tandem functions: applying offsets")
     if window.brachyCylinder is not None:
         tandem_height = -1 * window.brachyCylinder.diameter
 
@@ -136,6 +137,7 @@ def applyOffsets(window: MainWindow, height_offset: float = None, rotation: floa
     if rotation is not None:
         window.tandem_rotation_offset = rotation
 
+    
     if window.tandem is not None:
         window.tandem.setOffsets(window.tandem_height_offset, window.tandem_rotation_offset)
 
@@ -167,3 +169,17 @@ def update_tandem_settings(window: MainWindow, tandem: Tandem) -> None:
     window.ui.tandem_lineEdit_toolModel.setText(tandem.shape_filepath)
     window.ui.lineEdit_tandemName.setText(tandem.name)
     window.ui.btn_tandem_add_update.setObjectName("Update")
+
+
+def create_tandem(window: MainWindow):
+    print("tandem functions: creating tandem")
+    tandem = Tandem()
+    tandem.channel_diameter = float(window.ui.tandem_spinbox_channel_diameter.value())
+    tandem.tip_diameter = float(window.ui.tandem_spinbox_tip_diameter.value())   
+    tandem.tip_angle = float(window.ui.tandem_spinbox_tip_angle.value()) 
+    tandem.tip_thickness = float(window.ui.tandem_spinbox_tip_thickness.value()) 
+
+    tandem.setOffsets(window.tandem_height_offset, window.tandem_rotation_offset)
+
+    window.tandem = tandem
+    tandemDisplay.update(window)

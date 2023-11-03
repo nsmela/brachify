@@ -4,7 +4,7 @@ from OCC.Core.Graphic3d import *
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.AIS import AIS_Shape
 
-from Presentation.MainWindow.core import MainWindow
+from src.Presentation.MainWindow.core import MainWindow
 
 
 ## EXPORT

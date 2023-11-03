@@ -1,10 +1,9 @@
-from unittest import registerResult
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
 
-import Presentation.Features.Tandem.TandemFunctions as tandem
-from Presentation.MainWindow.core import MainWindow
-from Core.Models.Tandem import TandemModel
+import src.Presentation.Features.Tandem.TandemFunctions as tandem
+from src.Presentation.MainWindow.core import MainWindow
+import src.Application.Tandem.Models as tandemModel
 
 TANDEM_COLOUR = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
 
@@ -15,24 +14,38 @@ def init(window: MainWindow):
         window.ui.btn_tandem_clear.clicked.connect(lambda: tandem.clear_tandem_settings(window))
         window.ui.btn_tandem_add_update.clicked.connect(lambda: tandem.save_tandem(window))
         window.ui.listWidget_savedTandems.itemSelectionChanged.connect(lambda: tandem.set_tandem(window))
+        window.ui.btn_tandem_apply.clicked.connect(lambda: tandem.create_tandem(window))
         tandem.load_tandems(window)
-
+        
         window.tandem_height_offset = tandem.tandem_height
         window.tandem_rotation_offset = tandem.DEFAULT_ROTATION
 
+        window.tandem = tandemModel.Tandem()
+    
     except Exception as error_message:
         print(f"tandem display init failed: {error_message}")
 
 
 ## TANDEM
 def view(window: MainWindow):
+    print("Tandem view!")
     # variables
 
     # set display
     window.display.default_drawer.SetFaceBoundaryDraw(True)  
     window.display._select_callbacks = []
     window.display.SetSelectionModeShape()
-        
+    
+    # setting custom tandem settings
+    tandem = window.tandem
+    if tandem is None: tandem = tandemModel.Tandem()
+
+    # ui elements here do not have a signal, so no need to pause them while adding values
+    window.ui.tandem_spinbox_channel_diameter.setValue(tandem.channel_diameter)
+    window.ui.tandem_spinbox_tip_diameter.setValue(tandem.tip_diameter)
+    window.ui.tandem_spinbox_tip_angle.setValue(tandem.tip_angle)
+    window.ui.tandem_spinbox_tip_thickness.setValue(tandem.tip_thickness)
+
     update(window)
 
 
@@ -75,6 +88,13 @@ def update(window: MainWindow):
 
     except Exception as error_message:
         print(f"TandemView: Tandem load error: \n{error_message}")
+
+    try:
+        tandem = window.tandem.generate_shape()
+        window.display.DisplayShape(tandem)
+    except Exception as error_message:
+        print(f"TandemView: Custom tandem error: \n{error_message}")
+
 
     try:
         window.display.FitAll()
