@@ -2,9 +2,9 @@ from OCC.Extend.ShapeFactory import translate_shp, rotate_shape
 from OCC.Core.gp import gp, gp_Vec
 from OCC.Core.TopoDS import TopoDS_Shape
 
-from src.Core.Models.Tandem import TandemModel
-from src.Application.BRep.Helper import extend_bottom_face
-from src.Application.BRep.Tandem import generate_tandem
+from Core.Models.Tandem import TandemModel
+from Application.BRep.Helper import extend_bottom_face
+from Application.BRep.Tandem import generate_tandem
 
 # Defaults
 TANDEM_CHANNEL_DIAMETER_DEFAULT = 4.0

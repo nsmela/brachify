@@ -1,10 +1,10 @@
-from src.Presentation.MainWindow.core import MainWindow
-import src.Application.BRep.Helper as helper
-import src.Presentation.Features.NeedleChannels.NeedlesDisplay as needlesDisplay
-from src.Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
-import src.Presentation.Features.Tandem.TandemFunctions as tandemFunctions
-from src.Application.NeedleChannels.Models import NeedleChannel
-import src.Application.BRep.Intersections as intersect
+from   Presentation.MainWindow.core import MainWindow
+import Application.BRep.Helper as helper
+import Presentation.Features.NeedleChannels.NeedlesDisplay as needlesDisplay
+from   Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
+import Presentation.Features.Tandem.TandemFunctions as tandemFunctions
+from   Application.NeedleChannels.Models import NeedleChannel
+import Application.BRep.Intersections as intersect
 
 from OCC.Core.TopoDS import TopoDS_Shape
 

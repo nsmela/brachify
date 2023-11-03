@@ -1,5 +1,5 @@
-from src.Core.Models.Cylinder import BrachyCylinder
-from src.Core.Models.DicomData import DicomData
+from Core.Models.Cylinder import BrachyCylinder
+from Core.Models.DicomData import DicomData
 
 import numpy as np
 

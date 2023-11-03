@@ -1,9 +1,9 @@
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
 
-import src.Presentation.Features.Tandem.TandemFunctions as tandem
-from src.Presentation.MainWindow.core import MainWindow
-import src.Application.Tandem.Models as tandemModel
+import Presentation.Features.Tandem.TandemFunctions as tandem
+from Presentation.MainWindow.core import MainWindow
+import Application.Tandem.Models as tandemModel
 
 TANDEM_COLOUR = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
 

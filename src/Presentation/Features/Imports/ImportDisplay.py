@@ -3,8 +3,8 @@ from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
 from OCC.Core.TopoDS import TopoDS_Shape
 
-from src.Presentation.MainWindow.core import MainWindow
-from src.Presentation.Features.Imports.ImportFunctions import *
+from Presentation.MainWindow.core import MainWindow
+from Presentation.Features.Imports.ImportFunctions import *
 
 ## IMPORTS
 def init(window: MainWindow) -> None:

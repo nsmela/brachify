@@ -7,7 +7,7 @@ from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakePipe
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.TopoDS import TopoDS_Shape
 
-import src.Application.BRep.Helper as helper
+import Application.BRep.Helper as helper
 
 import numpy as np
 

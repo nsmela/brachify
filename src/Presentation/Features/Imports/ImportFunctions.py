@@ -3,11 +3,11 @@ from PySide6.QtWidgets import QFileDialog
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Extend.DataExchange import read_step_file, read_stl_file
 
-import src.Application.Imports.import_dicom as dicom
+import Application.Imports.import_dicom as dicom
 
-from src.Presentation.MainWindow.core import MainWindow
-import src.Presentation.Features.Cylinder.CylinderFunctions as cylFunctions
-import src.Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
+from Presentation.MainWindow.core import MainWindow
+import Presentation.Features.Cylinder.CylinderFunctions as cylFunctions
+import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
 
 import os
 

@@ -2,8 +2,8 @@ from OCC.Core.gp import gp_Pnt
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Extend.ShapeFactory import translate_shp
 
-from src.Application.BRep.Channel import *
-from src.Core.Models.NeedleChannel import NeedleChannelModel
+from Application.BRep.Channel import *
+from Core.Models.NeedleChannel import NeedleChannelModel
 
 import math
 

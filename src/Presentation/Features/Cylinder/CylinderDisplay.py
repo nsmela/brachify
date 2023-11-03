@@ -1,8 +1,8 @@
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
 
-from src.Presentation.MainWindow.core import MainWindow
-import src.Presentation.Features.Cylinder.CylinderFunctions as cylinder
+from Presentation.MainWindow.core import MainWindow
+import Presentation.Features.Cylinder.CylinderFunctions as cylinder
 
 # CYLINDER
 CYLINDER_COLOUR = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)

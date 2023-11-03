@@ -1,6 +1,6 @@
-from src.Core.Models.Cylinder import BrachyCylinder
-from src.Core.Models.DicomData import DicomData
-from src.Application.NeedleChannels.Models import NeedleChannel
+from Core.Models.Cylinder import BrachyCylinder
+from Core.Models.DicomData import DicomData
+from Application.NeedleChannels.Models import NeedleChannel
 
 import pydicom
 import numpy as np

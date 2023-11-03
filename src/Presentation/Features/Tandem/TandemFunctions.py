@@ -1,10 +1,10 @@
 from PySide6.QtWidgets import QFileDialog
 
-from src.Application.Tandem.Models import Tandem
-from src.Presentation.MainWindow.core import MainWindow
-import src.Presentation.Features.Imports.ImportFunctions as imports
-import src.Presentation.Features.Tandem.TandemDisplay as tandemDisplay
-from src.Core.Models.Tandem import TandemModel
+from   Application.Tandem.Models import Tandem
+from   Presentation.MainWindow.core import MainWindow
+import Presentation.Features.Imports.ImportFunctions as imports
+import Presentation.Features.Tandem.TandemDisplay as tandemDisplay
+from   Core.Models.Tandem import TandemModel
 
 import os
 import json
