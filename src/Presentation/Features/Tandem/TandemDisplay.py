@@ -1,10 +1,9 @@
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
 
-import Presentation.Features.Tandem.TandemFunctions as tandem
-from Presentation.MainWindow.core import MainWindow
-from Core.Models.Tandem import TandemModel
-import Application.Tandem.Models as tandemModel
+import src.Presentation.Features.Tandem.TandemFunctions as tandem
+from src.Presentation.MainWindow.core import MainWindow
+import src.Application.Tandem.Models as tandemModel
 
 TANDEM_COLOUR = Quantity_Color(0.2, 0.55, 0.55, Quantity_TOC_RGB)
 
@@ -21,7 +20,7 @@ def init(window: MainWindow):
         window.tandem_height_offset = tandem.tandem_height
         window.tandem_rotation_offset = tandem.DEFAULT_ROTATION
 
-        #window.tandem = tandemModel.Tandem()
+        window.tandem = tandemModel.Tandem()
     
     except Exception as error_message:
         print(f"tandem display init failed: {error_message}")
@@ -29,6 +28,7 @@ def init(window: MainWindow):
 
 ## TANDEM
 def view(window: MainWindow):
+    print("Tandem view!")
     # variables
 
 

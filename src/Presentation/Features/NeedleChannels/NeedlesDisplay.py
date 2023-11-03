@@ -2,8 +2,8 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
 
-import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
-from Presentation.MainWindow.core import MainWindow
+import src.Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
+from src.Presentation.MainWindow.core import MainWindow
 
 from PySide6.QtWidgets import QCheckBox
 

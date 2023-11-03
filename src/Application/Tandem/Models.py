@@ -2,9 +2,9 @@ from OCC.Extend.ShapeFactory import translate_shp, rotate_shape
 from OCC.Core.gp import gp, gp_Vec
 from OCC.Core.TopoDS import TopoDS_Shape
 
-from Core.Models.Tandem import TandemModel
-from Application.BRep.Helper import extend_bottom_face
-from Application.BRep.Tandem import generate_tandem
+from src.Core.Models.Tandem import TandemModel
+from src.Application.BRep.Helper import extend_bottom_face
+from src.Application.BRep.Tandem import generate_tandem
 
 
 class Tandem(TandemModel):

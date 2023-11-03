@@ -22,7 +22,6 @@ if __name__ == "__main__":
     pixmap = QPixmap(SPLASHSCREEN_IMAGE)
     splash = QSplashScreen(pixmap)
     splash.show()
-    #app.processEvents()
 
     from src.Presentation.MainWindow.core import MainWindow
     window = MainWindow()

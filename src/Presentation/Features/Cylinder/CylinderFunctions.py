@@ -1,10 +1,10 @@
-from Core.Models.Cylinder import BrachyCylinder
+from src.Core.Models.Cylinder import BrachyCylinder
 
-from Presentation.MainWindow.core import MainWindow
-import Presentation.Features.Cylinder.CylinderDisplay as cylinderDisplay
-import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
-import Presentation.Features.Tandem.TandemFunctions as tandemFunctions
-from Core.Models.Cylinder import BrachyCylinder
+from src.Presentation.MainWindow.core import MainWindow
+import src.Presentation.Features.Cylinder.CylinderDisplay as cylinderDisplay
+import src.Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
+import src.Presentation.Features.Tandem.TandemFunctions as tandemFunctions
+from src.Core.Models.Cylinder import BrachyCylinder
 
 DEFAULT_LENGTH = 160.0
 DEFAULT_DIAMETER = 30.0

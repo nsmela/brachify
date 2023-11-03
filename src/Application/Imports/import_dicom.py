@@ -1,12 +1,12 @@
 # the raw dicom data and how to grab relevant data from it
 
-from Core.Models.Cylinder import BrachyCylinder
-from Core.Models.DicomData import DicomData
+from src.Core.Models.Cylinder import BrachyCylinder
+from src.Core.Models.DicomData import DicomData
 
 import pydicom
 import numpy as np
 
-from Application.NeedleChannels.Models import NeedleChannel
+from src.Application.NeedleChannels.Models import NeedleChannel
 
 
 def is_rs_file(filepath: str) -> bool:

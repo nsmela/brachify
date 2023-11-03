@@ -1,10 +1,10 @@
-from Presentation.MainWindow.core import MainWindow
-import Application.BRep.Helper as helper
-import Presentation.Features.NeedleChannels.NeedlesDisplay as needlesDisplay
-from Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
-import Presentation.Features.Tandem.TandemFunctions as tandemFunctions
-from Application.NeedleChannels.Models import NeedleChannel
-import Application.BRep.Intersections as intersect
+from src.Presentation.MainWindow.core import MainWindow
+import src.Application.BRep.Helper as helper
+import src.Presentation.Features.NeedleChannels.NeedlesDisplay as needlesDisplay
+from src.Presentation.Features.NeedleChannels.needlesModel import NeedlesModel
+import src.Presentation.Features.Tandem.TandemFunctions as tandemFunctions
+from src.Application.NeedleChannels.Models import NeedleChannel
+import src.Application.BRep.Intersections as intersect
 
 from OCC.Core.TopoDS import TopoDS_Shape
 
@@ -22,6 +22,7 @@ DEFAULT_HEIGHT = 0.0
 
 
 def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
+    print("needle functions: set channels start")
     # offset each point
     if window.brachyCylinder:
         # use the brachy cylinder to offset the points
@@ -30,7 +31,6 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
         base = np.array(window.brachyCylinder.base)
         cyl_vec = tip - base  # the cylinder's original vector
         cyl_length = np.linalg.norm(cyl_vec)
-        #offset_vector = np.array([0, 0, - cyl_length])  # normalized direction from tip to base # TODO correct this
         offset_vector = np.array([0, 0, - cyl_length + 160.0])  # normalized direction from tip to base
 
         updated_tip = helper.rotate_points(tip, cyl_vec, z_up)
@@ -47,6 +47,7 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
     for i in range(len(window.needles.channels)):
         window.needles.channels[i].setOffset(window.channel_height_offset)
 
+    print("   set channels: starting")
     # channel 0 is the tandem needle channel
     for i, channel in enumerate(window.needles.channels):
         if "tandem" in channel.channelId.lower():
@@ -54,6 +55,7 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
             setNeedleDisabled(window, index=i)
             break
 
+    print("   set needles: listing needles in widget")
     # list of needles in widget
     window.ui.channelsListWidget.clear()
     for needle in window.needles.channels:
@@ -70,6 +72,7 @@ def set_channels(window: MainWindow, channels: list[NeedleChannel]) -> None:
     window.channels = checkIntersecting(window)
 
 def setActiveNeedleChannel(window: MainWindow, index: int = -1) -> None:
+    print("needle functions: set active needle channel start")
     if window.channel_active_index == index:
         return
 
@@ -94,14 +97,13 @@ def get_clicked_needle_index(window: MainWindow, shape) -> int:
 
 
 def setNeedleDisabled(window: MainWindow, index: int) -> None:
+    print("needle functions: set needle disabled")
     if index < 0 or index >= len(window.needles.channels):
         return
-
     channel = window.needles.channels[index]
     window.needles.channels[index].disabled = not channel.disabled
     window.needles.clearShape()
     window.channels = checkIntersecting(window)
-
     needlesDisplay.update(window)
 
 
@@ -120,6 +122,7 @@ def setChannelsDiameter(window: MainWindow, diameter: float = 3.0) -> None:
 
 
 def setTandemNeedle(window: MainWindow, index: int) -> None:
+    print("needle functions: set tandem needle")
     window.channel_tandem_index = index
 
     if window.channel_tandem_index is None:
@@ -136,6 +139,7 @@ def setTandemNeedle(window: MainWindow, index: int) -> None:
 
 
 def applyOffsets(window, height_offset: float) -> None:
+    print("needle functions: apply offsets")
     window.channel_height_offset = height_offset
 
     if window.needles is None or len(window.needles.channels) < 1:
@@ -155,8 +159,8 @@ def checkIntersecting(window: MainWindow) -> None:
         # intersecting channels detection
         # shapes to check if they collide with each the needle channel
         otherShapes = [channel.shape() for channel in window.needles.channels if not channel.disabled]
-        if window.tandem is not None:
-            otherShapes.append(window.tandem.shape())
+        #if window.tandem is not None:
+        #    otherShapes.append(window.tandem.shape())
 
         # intersection testing returns an array of [shape, bool] where bool is if anything intersects it
         for channel in window.needles.channels:

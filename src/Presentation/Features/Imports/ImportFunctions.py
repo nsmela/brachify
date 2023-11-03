@@ -3,11 +3,11 @@ from PySide6.QtWidgets import QFileDialog
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Extend.DataExchange import read_step_file, read_stl_file
 
-import Application.Imports.import_dicom as dicom
+import src.Application.Imports.import_dicom as dicom
 
-from Presentation.MainWindow.core import MainWindow
-import Presentation.Features.Cylinder.CylinderFunctions as cylFunctions
-import Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
+from src.Presentation.MainWindow.core import MainWindow
+import src.Presentation.Features.Cylinder.CylinderFunctions as cylFunctions
+import src.Presentation.Features.NeedleChannels.NeedleFunctions as needleFunctions
 
 import os
 
@@ -55,15 +55,18 @@ def add_dicom_folder(window: MainWindow, folder_path: str) -> None:
 
     data = dicom.load_dicom_data(rp_file, rs_file)
 
+    print("loading cylinder")
     cylinder = dicom.load_cylinder(data)
     cylFunctions.set_cylinder(window, cylinder)
 
+    print("loading needles")
     channels = dicom.load_channels(data)
+    print("setting needles")
     needleFunctions.set_channels(window, channels)
 
     window.import_default_folder = folder_path
-
-    from Presentation.MainWindow.ui_functions import UIFunctions
+    print("setting page")
+    from src.Presentation.MainWindow.ui_functions import UIFunctions
     UIFunctions.setPage(window, UIFunctions.NEEDLE_CHANNELS_VIEW)
 
 
