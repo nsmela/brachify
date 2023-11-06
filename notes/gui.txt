@@ -6,6 +6,7 @@ https://www.youtube.com/watch?v=RYdAf2NH0TY
 > # TODO pyside6 install tools
 
 # PySide6 Designer
+# https://stackoverflow.com/questions/66672292/how-compile-uic-with-pyside6
 >designer
 
 # PySide6 converter

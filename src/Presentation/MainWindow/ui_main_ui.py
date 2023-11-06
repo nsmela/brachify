@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'ui_main.ui'
+## Form generated from reading UI file 'ui_mainLAPJDi.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.2
+## Created by: Qt User Interface Compiler version 6.6.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
         MainWindow.resize(1000, 727)
         MainWindow.setMinimumSize(QSize(1000, 500))
         MainWindow.setAcceptDrops(False)
-        MainWindow.setStyleSheet(u"background-color: rgb(45, 45, 45);")
+        MainWindow.setStyleSheet(u"")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.centralwidget.setAcceptDrops(True)
@@ -39,7 +39,7 @@ class Ui_MainWindow(object):
         self.Top_Bar = QFrame(self.centralwidget)
         self.Top_Bar.setObjectName(u"Top_Bar")
         self.Top_Bar.setMaximumSize(QSize(16777215, 40))
-        self.Top_Bar.setStyleSheet(u"background-color: rgb(35, 35, 35);")
+        self.Top_Bar.setStyleSheet(u"")
         self.Top_Bar.setFrameShape(QFrame.NoFrame)
         self.Top_Bar.setFrameShadow(QFrame.Raised)
         self.horizontalLayout = QHBoxLayout(self.Top_Bar)
@@ -49,7 +49,7 @@ class Ui_MainWindow(object):
         self.frame_toggle = QFrame(self.Top_Bar)
         self.frame_toggle.setObjectName(u"frame_toggle")
         self.frame_toggle.setMaximumSize(QSize(78, 40))
-        self.frame_toggle.setStyleSheet(u"background-color: rgb(85, 170, 255);")
+        self.frame_toggle.setStyleSheet(u"")
         self.frame_toggle.setFrameShape(QFrame.StyledPanel)
         self.frame_toggle.setFrameShadow(QFrame.Raised)
         self.verticalLayout_2 = QVBoxLayout(self.frame_toggle)
@@ -78,12 +78,7 @@ class Ui_MainWindow(object):
         self.btn_views_imports.setMinimumSize(QSize(86, 0))
         self.btn_views_imports.setMaximumSize(QSize(86, 48))
         self.btn_views_imports.setStyleSheet(u"QPushButton {\n"
-"	color: rgb(255, 255, 255);\n"
-"	background-color: rgb(35, 35, 35);\n"
 "	border: 0px solid;\n"
-"}\n"
-"QPushButton:hover {\n"
-"	background-color: rgb(85, 170, 255);\n"
 "}")
 
         self.horizontalLayout_17.addWidget(self.btn_views_imports)
@@ -93,12 +88,7 @@ class Ui_MainWindow(object):
         self.btn_views_cylinder.setMinimumSize(QSize(86, 0))
         self.btn_views_cylinder.setMaximumSize(QSize(86, 48))
         self.btn_views_cylinder.setStyleSheet(u"QPushButton {\n"
-"	color: rgb(255, 255, 255);\n"
-"	background-color: rgb(35, 35, 35);\n"
 "	border: 0px solid;\n"
-"}\n"
-"QPushButton:hover {\n"
-"	background-color: rgb(85, 170, 255);\n"
 "}")
 
         self.horizontalLayout_17.addWidget(self.btn_views_cylinder)
@@ -108,12 +98,7 @@ class Ui_MainWindow(object):
         self.btn_views_channels.setMinimumSize(QSize(86, 0))
         self.btn_views_channels.setMaximumSize(QSize(86, 48))
         self.btn_views_channels.setStyleSheet(u"QPushButton {\n"
-"	color: rgb(255, 255, 255);\n"
-"	background-color: rgb(35, 35, 35);\n"
 "	border: 0px solid;\n"
-"}\n"
-"QPushButton:hover {\n"
-"	background-color: rgb(85, 170, 255);\n"
 "}")
 
         self.horizontalLayout_17.addWidget(self.btn_views_channels)
@@ -123,12 +108,7 @@ class Ui_MainWindow(object):
         self.btn_views_tandem.setMinimumSize(QSize(86, 0))
         self.btn_views_tandem.setMaximumSize(QSize(86, 48))
         self.btn_views_tandem.setStyleSheet(u"QPushButton {\n"
-"	color: rgb(255, 255, 255);\n"
-"	background-color: rgb(35, 35, 35);\n"
 "	border: 0px solid;\n"
-"}\n"
-"QPushButton:hover {\n"
-"	background-color: rgb(85, 170, 255);\n"
 "}")
 
         self.horizontalLayout_17.addWidget(self.btn_views_tandem)
@@ -138,13 +118,9 @@ class Ui_MainWindow(object):
         self.btn_views_exports.setMinimumSize(QSize(86, 0))
         self.btn_views_exports.setMaximumSize(QSize(86, 48))
         self.btn_views_exports.setStyleSheet(u"QPushButton {\n"
-"	color: rgb(255, 255, 255);\n"
-"	background-color: rgb(35, 35, 35);\n"
 "	border: 0px solid;\n"
 "}\n"
-"QPushButton:hover {\n"
-"	background-color: rgb(85, 170, 255);\n"
-"}")
+"")
 
         self.horizontalLayout_17.addWidget(self.btn_views_exports)
 
@@ -690,7 +666,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(3)
+        self.stackedWidget.setCurrentIndex(0)
         self.tandem_tabbedWidget.setCurrentIndex(1)
 
 
