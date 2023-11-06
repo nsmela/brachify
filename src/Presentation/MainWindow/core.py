@@ -3,11 +3,13 @@ from PySide6.QtWidgets import QMainWindow
 
 from Presentation.MainWindow.ui_main_ui import Ui_MainWindow
 
-from OCC.Display.backend import load_backend
+#from OCC.Display.backend import load_backend
 
 #load_backend("pyside6")
 #import OCC.Display.qtDisplay as qtDisplay
 from Presentation.MainWindow.CustomViewer import OrbitCameraViewer3d
+from .palettes import Palettes
+
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 import os
@@ -21,6 +23,7 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.isInit = False  # used to prevent others from referencing it before init
         self.ui.setupUi(self)
+        Palettes.light(self)
 
         ########################################################################
         self.button_style = self.ui.btn_views_imports.styleSheet()

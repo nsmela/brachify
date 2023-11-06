@@ -23,7 +23,7 @@
    <string>brachify</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(45, 45, 45);</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="acceptDrops">
@@ -54,7 +54,7 @@
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(35, 35, 35);</string>
+       <string notr="true"/>
       </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
@@ -87,7 +87,7 @@
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(85, 170, 255);</string>
+          <string notr="true"/>
          </property>
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
@@ -170,12 +170,7 @@
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-	color: rgb(255, 255, 255);
-	background-color: rgb(35, 35, 35);
 	border: 0px solid;
-}
-QPushButton:hover {
-	background-color: rgb(85, 170, 255);
 }</string>
             </property>
             <property name="text">
@@ -199,12 +194,7 @@ QPushButton:hover {
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-	color: rgb(255, 255, 255);
-	background-color: rgb(35, 35, 35);
 	border: 0px solid;
-}
-QPushButton:hover {
-	background-color: rgb(85, 170, 255);
 }</string>
             </property>
             <property name="text">
@@ -228,12 +218,7 @@ QPushButton:hover {
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-	color: rgb(255, 255, 255);
-	background-color: rgb(35, 35, 35);
 	border: 0px solid;
-}
-QPushButton:hover {
-	background-color: rgb(85, 170, 255);
 }</string>
             </property>
             <property name="text">
@@ -257,12 +242,7 @@ QPushButton:hover {
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-	color: rgb(255, 255, 255);
-	background-color: rgb(35, 35, 35);
 	border: 0px solid;
-}
-QPushButton:hover {
-	background-color: rgb(85, 170, 255);
 }</string>
             </property>
             <property name="text">
@@ -286,13 +266,9 @@ QPushButton:hover {
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
-	color: rgb(255, 255, 255);
-	background-color: rgb(35, 35, 35);
 	border: 0px solid;
 }
-QPushButton:hover {
-	background-color: rgb(85, 170, 255);
-}</string>
+</string>
             </property>
             <property name="text">
              <string>exports</string>
@@ -368,7 +344,7 @@ QPushButton:hover {
              <bool>false</bool>
             </property>
             <property name="currentIndex">
-             <number>3</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="page_1">
              <property name="acceptDrops">
