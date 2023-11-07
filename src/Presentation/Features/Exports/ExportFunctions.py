@@ -1,6 +1,8 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFileDialog, QListWidget, QMainWindow
 
+from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut
 from OCC.Extend.DataExchange import write_stl_file
 from OCC.Core.STEPControl import STEPControl_Writer, STEPControl_AsIs
 from OCC.Core.Interface import Interface_Static_SetCVal
@@ -9,6 +11,38 @@ from OCC.Core.IFSelect import IFSelect_RetDone
 from Presentation.MainWindow.core import MainWindow
 
 import os
+
+
+def generate_export(window: MainWindow) -> TopoDS_Shape:
+    shape = TopoDS_Shape()
+
+    try:
+        # cylinder
+        if window.brachyCylinder:
+            shape = window.brachyCylinder.shape()
+        else:
+            return shape
+
+    except Exception as error_message:
+        print(error_message)
+
+    try:
+        # needles shown
+        if window.needles:
+            shape = BRepAlgoAPI_Cut(shape, window.needles.shape()).Shape()
+
+    except Exception as error_message:
+        print(error_message)
+
+    try:
+        # tandem
+        if window.tandem:
+            shape = BRepAlgoAPI_Cut(shape, window.tandem.shape()).Shape()
+
+    except Exception as error_message:
+        print(error_message)
+
+    return shape
 
 
 def export_stl(window:MainWindow) -> None:

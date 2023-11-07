@@ -90,8 +90,9 @@ def update(window: MainWindow):
         print(f"TandemView: Tandem load error: \n{error_message}")
 
     try:
-        tandem = window.tandem.generate_shape()
-        window.display.DisplayShape(tandem)
+        #tandem = window.tandem.generate_shape()
+        #window.display.DisplayShape(tandem)
+        pass
     except Exception as error_message:
         print(f"TandemView: Custom tandem error: \n{error_message}")
 
