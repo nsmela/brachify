@@ -181,5 +181,6 @@ def create_tandem(window: MainWindow):
 
     tandem.setOffsets(window.tandem_height_offset, window.tandem_rotation_offset)
 
+    tandem._base_shape = tandem.generate_shape()
     window.tandem = tandem
     tandemDisplay.update(window)

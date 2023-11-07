@@ -1,11 +1,10 @@
-from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
 from OCC.Core.Graphic3d import *
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.AIS import AIS_Shape
 
 from Presentation.MainWindow.core import MainWindow
-
+from Presentation.Features.Exports.ExportFunctions import generate_export
 
 ## EXPORT
 def init(window: MainWindow):
@@ -22,31 +21,9 @@ def view(window: MainWindow):
 def update(window: MainWindow):
     shape = TopoDS_Shape()
 
-    try:
-        window.display.EraseAll()
+    window.display.EraseAll()
 
-        # cylinder shown
-        if window.brachyCylinder:
-            shape = window.brachyCylinder.shape()
-
-    except Exception as error_message:
-        print(error_message)
-
-    try:
-        # needles shown
-        if window.needles:
-            shape = BRepAlgoAPI_Cut(shape, window.needles.shape()).Shape()
-
-    except Exception as error_message:
-        print(error_message)
-
-    try:
-        # tandem
-        if window.tandem:
-            shape = BRepAlgoAPI_Cut(shape, window.tandem.shape()).Shape()
-
-    except Exception as error_message:
-        print(error_message)
+    shape = generate_export(window)
 
     try:
         color = Quantity_Color(0.8, 0.1, 0.1, Quantity_TOC_RGB)
