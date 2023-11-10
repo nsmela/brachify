@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'ui_mainLAPJDi.ui'
+## Form generated from reading UI file 'ui_mainVWCZUC.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.6.0
 ##
@@ -162,7 +162,7 @@ class Ui_MainWindow(object):
         font = QFont()
         font.setPointSize(40)
         self.label_1.setFont(font)
-        self.label_1.setStyleSheet(u"color: #FFF;")
+        self.label_1.setStyleSheet(u"")
         self.label_1.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_7.addWidget(self.label_1, 0, Qt.AlignTop)
@@ -218,7 +218,7 @@ class Ui_MainWindow(object):
         self.label_2 = QLabel(self.page_2)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setFont(font)
-        self.label_2.setStyleSheet(u"color: #FFF;")
+        self.label_2.setStyleSheet(u"")
         self.label_2.setAlignment(Qt.AlignCenter)
 
         self.verticallayout_6.addWidget(self.label_2, 0, Qt.AlignHCenter|Qt.AlignTop)
@@ -300,7 +300,7 @@ class Ui_MainWindow(object):
         self.label_3 = QLabel(self.page_3)
         self.label_3.setObjectName(u"label_3")
         self.label_3.setFont(font)
-        self.label_3.setStyleSheet(u"color: #FFF;")
+        self.label_3.setStyleSheet(u"")
         self.label_3.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_8.addWidget(self.label_3, 0, Qt.AlignTop)
@@ -401,7 +401,7 @@ class Ui_MainWindow(object):
         self.label_4 = QLabel(self.page_4)
         self.label_4.setObjectName(u"label_4")
         self.label_4.setFont(font)
-        self.label_4.setStyleSheet(u"color: #FFF;")
+        self.label_4.setStyleSheet(u"")
         self.label_4.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_5.addWidget(self.label_4, 0, Qt.AlignHCenter|Qt.AlignTop)
@@ -618,7 +618,7 @@ class Ui_MainWindow(object):
         self.label_5 = QLabel(self.page_5)
         self.label_5.setObjectName(u"label_5")
         self.label_5.setFont(font)
-        self.label_5.setStyleSheet(u"color: #FFF;")
+        self.label_5.setStyleSheet(u"")
         self.label_5.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_9.addWidget(self.label_5, 0, Qt.AlignHCenter|Qt.AlignTop)

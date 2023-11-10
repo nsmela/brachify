@@ -371,7 +371,7 @@
                  </font>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">color: #FFF;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>imports</string>
@@ -479,7 +479,7 @@
                  </font>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">color: #FFF;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>cylinder</string>
@@ -639,7 +639,7 @@
                  </font>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">color: #FFF;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>channels</string>
@@ -829,7 +829,7 @@
                  </font>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">color: #FFF;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>tandem</string>
@@ -1180,7 +1180,7 @@
                  </font>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">color: #FFF;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>export</string>
