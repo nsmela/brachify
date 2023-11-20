@@ -26,7 +26,7 @@ def update(window: MainWindow):
     shape = generate_export(window)
 
     try:
-        color = Quantity_Color(0.8, 0.1, 0.1, Quantity_TOC_RGB)
+        color = Quantity_Color(0.91, 0.91, 0.91, Quantity_TOC_RGB)
 
         window.display.default_drawer.SetFaceBoundaryDraw(False)
 
