@@ -96,7 +96,7 @@ class MainWindow(QMainWindow):
         ########################################################################
         import Presentation.Features.Exports.ExportFunctions as exports
         self.ui.btn_export_stl.clicked.connect(lambda: exports.export_stl(self))
-
+        self.ui.btn_export_pdf.clicked.connect(lambda: exports.export_pdf(self))
         ## Display variables
         ########################################################################
         self.display_cylinder = None
