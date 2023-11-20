@@ -1212,6 +1212,13 @@
                </widget>
               </item>
               <item>
+               <widget class="QPushButton" name="btn_export_pdf">
+                <property name="text">
+                 <string>Export PDF</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <spacer name="verticalSpacer_4">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>

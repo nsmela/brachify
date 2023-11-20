@@ -638,6 +638,11 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_9.addWidget(self.btn_export_stl)
 
+        self.btn_export_pdf = QPushButton(self.page_5)
+        self.btn_export_pdf.setObjectName(u"btn_export_pdf")
+
+        self.verticalLayout_9.addWidget(self.btn_export_pdf)
+
         self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_9.addItem(self.verticalSpacer_4)
@@ -715,6 +720,7 @@ class Ui_MainWindow(object):
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"export", None))
         self.label_12.setText(QCoreApplication.translate("MainWindow", u"Info", None))
         self.label_16.setText(QCoreApplication.translate("MainWindow", u"Data", None))
-        self.btn_export_stl.setText(QCoreApplication.translate("MainWindow", u"export STL", None))
+        self.btn_export_stl.setText(QCoreApplication.translate("MainWindow", u"Export STL", None))
+        self.btn_export_pdf.setText(QCoreApplication.translate("MainWindow", u"Export PDF", None))
     # retranslateUi
 
