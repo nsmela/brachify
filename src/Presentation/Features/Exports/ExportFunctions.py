@@ -14,7 +14,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 import numpy as np
 import subprocess
-
+from datetime import datetime
 import os
 
 
@@ -288,33 +288,30 @@ def export_pdf(window:MainWindow) -> None:
         raise AssertionError(f"wrong path provided: {pdf_output_dir}")
 
     # get the relevent info for the pdf
+
+    # get the needle centerline points from the window object
     needles = extract_points_from_channels(window.needles.channels)
+
+    # generate the interstitial needle lengths
     base = np.array([0,0,0])
     tip = np.array([0,0,160])
     radius = window.brachyCylinder.diameter/2
     length = window.brachyCylinder.length
+
     is_lengths = get_all_interstitial_lengths(needles, base, tip, radius, 0.1, length)
     
     # get the patient name and ID
-
+        #TODO: needs to be in window object (should actually be shown in the window somewhere)
     # get the plan name and ID
+        #TODO: needs to be in window object (should actually be shown in the window somewhere)
+    # Get today's date in the format "Month Day, Year"
+        #TODO: should actually be shown in the window somewhere
+    today_date = datetime.today().strftime('%B %d, %Y')
 
-    # get todays date
-
-    # get the needle centerline points from the window object
-
-    # generate the interstitial needle lengths
-
-    # generate the map on the base of the cylinder
-
-    # finally, generate the pdf itself
-    # Create a PDF document
-    # pdf = canvas.Canvas(file_name_path, pagesize=letter)
-
-    
-    # data prep
-    header_info = "Needle Information Report"
-    needle_data = process_lengths_and_create_data(is_lengths)
+    # Header information
+    header_info = "Interstitial Cylinder OR Reference Sheet"
+    patient_name = "TBD"
+    patient_id = "TBD"
 
     # Create a PDF document
     pdf = SimpleDocTemplate(file_name_path, pagesize=letter)
@@ -331,11 +328,14 @@ def export_pdf(window:MainWindow) -> None:
 
     header_text = "<u>{}</u>".format(header_info)
     content.append(Paragraph(header_text, header_style))
+    content.append(Paragraph(f"Date: {today_date}", getSampleStyleSheet()['Normal']))
+    content.append(Paragraph(f"Patient Name: {patient_name}", getSampleStyleSheet()['Normal']))
+    content.append(Paragraph(f"Patient ID: {patient_id}", getSampleStyleSheet()['Normal']))
     content.append(Paragraph("<br/>", getSampleStyleSheet()['Normal']))
 
     # Add table with needle data
     data = [["Needle Number", "Interstitial Length", "Protruding Length"]]
-    for needle_number, interstitial_length, protruding_length in needle_data:
+    for needle_number, interstitial_length, protruding_length in process_lengths_and_create_data(is_lengths):
         data.append([needle_number, interstitial_length, protruding_length])
 
     table = Table(data)
@@ -350,11 +350,8 @@ def export_pdf(window:MainWindow) -> None:
     table.setStyle(table_style)
     content.append(table)
 
-    # Build the PDF document
+    # Build and save the PDF document
     pdf.build(content)
-
-    # Save the PDF file
-    # pdf.save()
 
     # Open the generated PDF using the default PDF viewer
     try:
@@ -364,6 +361,7 @@ def export_pdf(window:MainWindow) -> None:
             subprocess.Popen(['open', file_name_path])
     except Exception as e:
         print(f"Unable to open the PDF: {e}")
+
 
     print('wait')
 
