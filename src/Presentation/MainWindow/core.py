@@ -71,6 +71,12 @@ class MainWindow(QMainWindow):
         # drag and drop      
         self.ui.centralwidget.installEventFilter(self)
 
+        ## Patient and Plan Stuff
+        ########################################################################
+        self.PatientName = ""
+        self.PatientID = ""
+        self.plan_label = ""
+
         ## Cylinder Stuff
         ########################################################################
         import Presentation.Features.Cylinder.CylinderDisplay as cylinderDisplay

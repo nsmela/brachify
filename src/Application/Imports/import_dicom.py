@@ -96,6 +96,13 @@ def load_dicom_data(rp_file: str, rs_file: str) -> DicomData:
     except Exception as error_message:
         print(f"Loading RS Dicom file failed! {rs_file}\n{error_message}")
 
+    try:
+        data.patient_name = rp_dataset.PatientName
+        data.patient_id = rp_dataset.PatientID
+        data.plan_label = rp_dataset.RTPlanLabel
+    except Exception as error_message:
+        print(f"Loading patient name/ID from RS Dicom file failed! {rs_file}\n{error_message}")
+
     print(f"{data.toString()}")
     return data
 

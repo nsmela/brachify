@@ -373,8 +373,9 @@ def export_pdf(window:MainWindow) -> None:
 
     # Header information
     header_info = "Interstitial Cylinder OR Reference Sheet"
-    patient_name = "TBD"
-    patient_id = "TBD"
+    patient_name = window.PatientName
+    patient_id = window.PatientID
+    plan_label = window.plan_label
 
     # Create a PDF document
     pdf = SimpleDocTemplate(file_name_path, pagesize=letter)
@@ -400,11 +401,16 @@ def export_pdf(window:MainWindow) -> None:
     content.append(Paragraph(f"Date: {today_date}", centered_style))
     content.append(Paragraph(f"Patient Name: {patient_name}", centered_style))
     content.append(Paragraph(f"Patient ID: {patient_id}", centered_style))
+    content.append(Paragraph(f"Plan Label: {plan_label}", centered_style))
+    content.append(Paragraph("", centered_style))  # Add a blank line
     content.append(Paragraph("", centered_style))  # Add a blank line
     content.append(Paragraph("<br/>", centered_style))
 
     # Add table with needle data
-    data = [["Needle Number", "Interstitial Length", "Protruding Length"]]
+    needle_length = 160 #TODO expose this in the exports tab as an option. 
+
+    length_label = "Protruding Length for " + str(needle_length) + "mm needle"
+    data = [["Needle Number", "Interstitial Length", length_label]]
     for needle_number, interstitial_length, protruding_length in process_lengths_and_create_data(is_lengths):
         data.append([needle_number, interstitial_length, protruding_length])
 

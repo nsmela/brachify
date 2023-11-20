@@ -2,6 +2,7 @@ class DicomData:
     def __init__(self):
         self.patient_name = None
         self.patient_id = None
+        self.plan_label = None
 
         self.cylinder_roi = None
         self.cylinder_color = None
@@ -18,6 +19,9 @@ class DicomData:
 
         if new_data.patient_id:
             self.patient_id = new_data.patient_id
+
+        if new_data.plan_label:
+            self.plan_label = new_data.plan_label
 
         if new_data.cylinder_roi:
             self.cylinder_roi = new_data.cylinder_roi

@@ -55,6 +55,12 @@ def add_dicom_folder(window: MainWindow, folder_path: str) -> None:
 
     data = dicom.load_dicom_data(rp_file, rs_file)
 
+    # Add patient and plan info to window
+    window.PatientID = data.patient_id
+    window.PatientName = data.patient_name
+    window.plan_label = data.plan_label
+    
+    # Load cylinder
     print("loading cylinder")
     cylinder = dicom.load_cylinder(data)
     cylFunctions.set_cylinder(window, cylinder)
