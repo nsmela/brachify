@@ -11,10 +11,13 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Image
+
 import numpy as np
 import subprocess
 from datetime import datetime
+import matplotlib.pyplot as plt
+
 import os
 
 
@@ -274,11 +277,65 @@ def export_pdf(window:MainWindow) -> None:
 
         return needle_data
 
+    def get_last_xy_points(needles):
+        last_xy_points = []
+
+        for needle in needles:
+            if needle and len(needle[-1]) >= 2:  # Check if the needle list is not empty and has at least 2 coordinates
+                last_point = needle[-1][:2]  # Take only the first two coordinates (x and y)
+                last_xy_points.append(last_point)
+
+        return last_xy_points
+
+    def save_points_diagram(points, circle_radius, output_filepath, has_tandem=False):
+        # Create a figure and axis
+        fig, ax = plt.subplots()
+
+        # Set axis limits to fit points inside a square with a border
+        square_size = 2 * (circle_radius + 1)  # Add a buffer of 1 to the radius
+        ax.set_xlim(-square_size / 2, square_size / 2)
+        ax.set_ylim(-square_size / 2, square_size / 2)
+
+        # Plot the circle
+        circle = plt.Circle((0, 0), circle_radius, color='black', fill=False)
+        ax.add_artist(circle)
+
+        # Plot each point as a circle with a number inside
+        for i, (x, y) in enumerate(points, start=1):
+            ax.add_artist(plt.Circle((x, y), 1, color='black', fill=False))
+            if (i == 1 and has_tandem):
+                ax.text(x, y, 'T', color='black', ha='center', va='center')
+            else:
+                ax.text(x, y, str(i), color='black', ha='center', va='center')
+
+        # Add a filled black rectangle at the top center of the big circle
+        tick_width = 0.2
+        tick_height = 1.0
+        tick_color = 'black'
+        tick_vert_offset = 0.5
+        if not has_tandem:
+            rect = plt.Rectangle((-tick_width / 2, circle_radius - tick_vert_offset - tick_height), tick_width, tick_height, color=tick_color, fill=True)
+            ax.add_artist(rect)
+
+        # Remove axis markers and numbering
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_xticklabels([])
+        ax.set_yticklabels([])
+
+        # Set axis aspect ratio to be equal
+        ax.set_aspect('equal', adjustable='box')
+
+        # Save the plot as a PNG file
+        plt.savefig(output_filepath, format='png', bbox_inches='tight')
+        plt.close()
+
+    # Ask the user where to save the pdf and what to name it.
     filename = QFileDialog.getSaveFileName(window, 'Save solid as PDF', '', "PDF files (*.pdf)")[0]
     if len(filename) == 0:
         return
 
-    # set the directory where to output the
+    # set the directory where to output the pdf
     pdf_output_dir = os.path.abspath(os.path.dirname(filename))
     filename =  os.path.basename(filename)
     file_name_path = os.path.join(pdf_output_dir, filename)
@@ -300,12 +357,18 @@ def export_pdf(window:MainWindow) -> None:
 
     is_lengths = get_all_interstitial_lengths(needles, base, tip, radius, 0.1, length)
     
+    # get basepoints
+    basepoints = get_last_xy_points(needles)
+    fn = 'basemap.png'
+    png_name_path = os.path.join(pdf_output_dir, fn)
+    save_points_diagram(basepoints, radius, png_name_path)
     # get the patient name and ID
         #TODO: needs to be in window object (should actually be shown in the window somewhere)
     # get the plan name and ID
         #TODO: needs to be in window object (should actually be shown in the window somewhere)
     # Get today's date in the format "Month Day, Year"
         #TODO: should actually be shown in the window somewhere
+    # Get today's date in the format "Month Day, Year"
     today_date = datetime.today().strftime('%B %d, %Y')
 
     # Header information
@@ -324,14 +387,21 @@ def export_pdf(window:MainWindow) -> None:
         'Header1',
         parent=getSampleStyleSheet()['Heading1'],
         fontName='Helvetica-Bold',
+        alignment=1,  # 0=Left, 1=Center, 2=Right
     )
 
     header_text = "<u>{}</u>".format(header_info)
     content.append(Paragraph(header_text, header_style))
-    content.append(Paragraph(f"Date: {today_date}", getSampleStyleSheet()['Normal']))
-    content.append(Paragraph(f"Patient Name: {patient_name}", getSampleStyleSheet()['Normal']))
-    content.append(Paragraph(f"Patient ID: {patient_id}", getSampleStyleSheet()['Normal']))
-    content.append(Paragraph("<br/>", getSampleStyleSheet()['Normal']))
+
+    # Center alignment for the following paragraphs
+    centered_style = getSampleStyleSheet()['Normal']
+    centered_style.alignment = 1  # 0=Left, 1=Center, 2=Right
+
+    content.append(Paragraph(f"Date: {today_date}", centered_style))
+    content.append(Paragraph(f"Patient Name: {patient_name}", centered_style))
+    content.append(Paragraph(f"Patient ID: {patient_id}", centered_style))
+    content.append(Paragraph("", centered_style))  # Add a blank line
+    content.append(Paragraph("<br/>", centered_style))
 
     # Add table with needle data
     data = [["Needle Number", "Interstitial Length", "Protruding Length"]]
@@ -350,6 +420,10 @@ def export_pdf(window:MainWindow) -> None:
     table.setStyle(table_style)
     content.append(table)
 
+    # Add the image to the PDF
+    img = Image(png_name_path, width=300, height=300)  # Adjust width and height as needed
+    content.append(img)
+
     # Build and save the PDF document
     pdf.build(content)
 
@@ -361,7 +435,6 @@ def export_pdf(window:MainWindow) -> None:
             subprocess.Popen(['open', file_name_path])
     except Exception as e:
         print(f"Unable to open the PDF: {e}")
-
 
     print('wait')
 
