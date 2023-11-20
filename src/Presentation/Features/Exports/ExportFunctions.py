@@ -263,16 +263,16 @@ def export_pdf(window:MainWindow) -> None:
 
         return all_points
 
-    def process_lengths_and_create_data(is_lengths):
+    def process_lengths_and_create_data(is_lengths, protrusion_lengths):
         needle_data = []
 
-        for idx, length_mm in enumerate(is_lengths, start=1):
-            # Convert length from mm to cm and round to one decimal place
+        for idx, (length_mm, protrusion_length) in enumerate(zip(is_lengths, protrusion_lengths), start=1):
+            # Convert lengths from mm to cm and round to one decimal place
             length_cm = round(length_mm / 10, 1)
+            protrusion_length_cm = round(protrusion_length / 10, 1)
 
-            # Create a tuple for needle_data with "tbd" as the second column value
-            needle_info = (f"Needle {idx}", f"{length_cm} cm", "tbd")
-
+            # Create a tuple for needle_data with protrusion length in the third column
+            needle_info = (f"Needle {idx}", f"{length_cm} cm", f"{protrusion_length_cm} cm")
             needle_data.append(needle_info)
 
         return needle_data
@@ -330,6 +330,27 @@ def export_pdf(window:MainWindow) -> None:
         plt.savefig(output_filepath, format='png', bbox_inches='tight')
         plt.close()
 
+    def calculate_cumulative_lengths(needles):
+        cumulative_lengths = []
+
+        for needle in needles:
+            cumulative_length = 0
+
+            for i in range(1, len(needle)):
+                x1, y1, z1 = map(float, needle[i - 1])
+                x2, y2, z2 = map(float, needle[i])
+                segment_length = ((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)**0.5
+                cumulative_length += segment_length
+
+            cumulative_lengths.append(cumulative_length)
+
+        return cumulative_lengths
+    
+    def calculate_protrusion_lengths(needles, needle_length):
+        cumulative_lengths = calculate_cumulative_lengths(needles)
+        protrusion_lengths = [needle_length - length for length in cumulative_lengths]
+        return protrusion_lengths
+    
     # Ask the user where to save the pdf and what to name it.
     filename = QFileDialog.getSaveFileName(window, 'Save solid as PDF', '', "PDF files (*.pdf)")[0]
     if len(filename) == 0:
@@ -357,6 +378,10 @@ def export_pdf(window:MainWindow) -> None:
 
     is_lengths = get_all_interstitial_lengths(needles, base, tip, radius, 0.1, length)
     
+    # generate the protrusion lengths
+    needle_length = 160 #TODO expose this in the exports tab as an option. 
+    protrusion_lengths = calculate_protrusion_lengths(needles, needle_length)
+
     # get basepoints
     basepoints = get_last_xy_points(needles)
     fn = 'basemap.png'
@@ -407,11 +432,10 @@ def export_pdf(window:MainWindow) -> None:
     content.append(Paragraph("<br/>", centered_style))
 
     # Add table with needle data
-    needle_length = 160 #TODO expose this in the exports tab as an option. 
-
+    #TODO: Add needle lable and channel number instead of "Needle 1" etc. 
     length_label = "Protruding Length for " + str(needle_length) + "mm needle"
-    data = [["Needle Number", "Interstitial Length", length_label]]
-    for needle_number, interstitial_length, protruding_length in process_lengths_and_create_data(is_lengths):
+    data = [["Needle Number", "Interstitial Length", length_label]] 
+    for needle_number, interstitial_length, protruding_length in process_lengths_and_create_data(is_lengths, protrusion_lengths):
         data.append([needle_number, interstitial_length, protruding_length])
 
     table = Table(data)
