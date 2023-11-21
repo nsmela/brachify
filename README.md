@@ -1,9 +1,12 @@
 # brachify
 
-## Getting Started
+## Download exe zip at:
+https://github.com/nsmela/brachify/releases
+
+## Getting Started programatically
 brachify uses the pythonocc library. Easiest setup is to use [Anaconda3](https://www.anaconda.com/download) as your python interpreter.
 
-- download code
+- download code 
 - Open Anaconda prompt with Administrator rights
 - optional: create and activate a virtual environment
 - install pythonocc using ```conda install -c conda-forge pythonocc-core```
@@ -11,4 +14,4 @@ brachify uses the pythonocc library. Easiest setup is to use [Anaconda3](https:/
 - install the dicom library pidicom using ```pip install pydicom```
 - run main.py to use the application
 
-  
+
