@@ -10,5 +10,5 @@ https://www.classcentral.com/classroom/youtube-pyqt5-pyqt6-tutorial-create-gui-w
 
 >cd C:\Users\nsmel\Documents\Programming\python\brachify
 >conda activate BrachyApp
->pyinstaller --noconfirm --onefile --console --icon "./resources/sewing-needle.ico" --name "brachify" --hidden-import "pydicom.encoders.gdcm" --hidden-import "OCC" --hidden-import "pydicom.encoders.pylibjpeg" --paths=src "./src/main.py"
+>pyinstaller --noconfirm --console --icon "./resources/sewing-needle.ico" --name "brachify" --hidden-import "pydicom.encoders.gdcm" --hidden-import "OCC" --hidden-import "pydicom.encoders.pylibjpeg" --paths=src "./src/main.py"
 

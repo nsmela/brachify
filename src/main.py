@@ -16,6 +16,7 @@ def resource_path(relative_path):
 
 
 if __name__ == "__main__":
+    print("beginning brachify")
     from PySide6.QtWidgets import QApplication, QSplashScreen
     from PySide6.QtGui import QPixmap
     app = QApplication(sys.argv)  # pass console arguements to the app
