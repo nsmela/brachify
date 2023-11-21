@@ -302,7 +302,7 @@ def export_pdf(window:MainWindow) -> None:
 
         # Plot each point as a circle with a number inside
         for i, (x, y) in enumerate(points, start=1):
-            ax.add_artist(plt.Circle((x, y), 1, color='black', fill=False))
+            ax.add_artist(plt.Circle((x, y), 1.25, color='black', fill=False))
             if (i == 1 and has_tandem):
                 ax.text(x, y, 'T', color='black', ha='center', va='center')
             else:
@@ -387,17 +387,19 @@ def export_pdf(window:MainWindow) -> None:
     fn = 'basemap.png'
     png_name_path = os.path.join(pdf_output_dir, fn)
     save_points_diagram(basepoints, radius, png_name_path)
+
     # get the patient name and ID
-        #TODO: needs to be in window object (should actually be shown in the window somewhere)
+        #TODO: should actually be shown in the window somewhere
     # get the plan name and ID
-        #TODO: needs to be in window object (should actually be shown in the window somewhere)
+        #TODO: should actually be shown in the window somewhere
     # Get today's date in the format "Month Day, Year"
         #TODO: should actually be shown in the window somewhere
+
     # Get today's date in the format "Month Day, Year"
     today_date = datetime.today().strftime('%B %d, %Y')
 
     # Header information
-    header_info = "Interstitial Cylinder OR Reference Sheet"
+    header_info = "Patient Specific Cylindrical Template Reference Sheet"
     patient_name = window.PatientName
     patient_id = window.PatientID
     plan_label = window.plan_label
@@ -413,6 +415,7 @@ def export_pdf(window:MainWindow) -> None:
         'Header1',
         parent=getSampleStyleSheet()['Heading1'],
         fontName='Helvetica-Bold',
+        fontSize=13,  # Hardcoded font size in points
         alignment=1,  # 0=Left, 1=Center, 2=Right
     )
 
@@ -423,12 +426,13 @@ def export_pdf(window:MainWindow) -> None:
     centered_style = getSampleStyleSheet()['Normal']
     centered_style.alignment = 1  # 0=Left, 1=Center, 2=Right
 
-    content.append(Paragraph(f"Date: {today_date}", centered_style))
-    content.append(Paragraph(f"Patient Name: {patient_name}", centered_style))
-    content.append(Paragraph(f"Patient ID: {patient_id}", centered_style))
-    content.append(Paragraph(f"Plan Label: {plan_label}", centered_style))
-    content.append(Paragraph("", centered_style))  # Add a blank line
-    content.append(Paragraph("", centered_style))  # Add a blank line
+    left_style = getSampleStyleSheet()['Normal']
+    left_style.alignment = 0  # 0=Left, 1=Center, 2=Right
+
+    content.append(Paragraph(f"Date: {today_date}", left_style))
+    content.append(Paragraph(f"Patient Name: {patient_name}", left_style))
+    content.append(Paragraph(f"Patient ID: {patient_id}", left_style))
+    content.append(Paragraph(f"Plan Label: {plan_label} <br/> <br/>", left_style))
     content.append(Paragraph("<br/>", centered_style))
 
     # Add table with needle data
@@ -467,10 +471,4 @@ def export_pdf(window:MainWindow) -> None:
         print(f"Unable to open the PDF: {e}")
 
     print('wait')
-
-
-
-
-    
-
 
