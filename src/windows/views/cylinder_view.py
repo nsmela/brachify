@@ -16,7 +16,29 @@ class CylinderView(QWidget):
 
     def action_apply_settings(self):
         log.debug(f"applying cylinder settings")
-        pass
+
+        model = get_app().window.cylindermodel
+        cylinder = model.cylinder
+
+        cylinder.diameter = self.ui.spinbox_diameter.value()
+        cylinder.length = self.ui.spinbox_length.value()
+        cylinder.expand_base(self.ui.cb_add_base.isChecked())  # this will force the cylinder's shape to be recalculated
+
+        model.update(cylinder)
+
+    def action_update_settings(self, cylinder: BrachyCylinder):     
+        log.debug(f"updating cylinder view's settings")
+        model = get_app().window.cylindermodel
+        
+        if model.cylinder is None: return
+
+        diameter = model.cylinder.diameter
+        length = model.cylinder.length
+        add_base = model.cylinder.expand_base
+        
+        self.ui.spinbox_diameter.setValue(diameter)
+        self.ui.spinbox_length.setValue(length)
+        self.ui.cb_add_base.checkState(add_base)
 
     def action_set_view(self, view_index: int):
         if view_index != 1: return  # this view is page 1, exit if not this view
@@ -28,10 +50,6 @@ class CylinderView(QWidget):
         # TODO Needles color
         # TODO Tandem Color
         get_app().window.displaymodel.set_shape_colour(colours)
-
-    def action_update_settings(self, cylinder: BrachyCylinder):
-        log.debug(f"updating cylinder view's settings")
-        pass
 
     def __init__(self):
         super().__init__()
@@ -45,3 +63,5 @@ class CylinderView(QWidget):
         app.signals.viewChanged.connect(self.action_set_view)
         window = app.window
         window.cylindermodel.values_changed.connect(self.action_update_settings)
+
+        self.action_update_settings(window.cylindermodel.cylinder)

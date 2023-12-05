@@ -13,7 +13,7 @@ class CylinderModel(QObject):
     values_changed = Signal(BrachyCylinder)
 
     def update(self, cylinder: BrachyCylinder):
-        self.cylinder = BrachyCylinder()
+        self.cylinder = cylinder
         self.values_changed.emit(cylinder)
         self.update_display()
 
