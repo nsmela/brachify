@@ -31,15 +31,33 @@ class DisplayModel(QObject):
             self.colours[label] = rgb
         self.update()
 
+    def set_shape_visibility(self, visibility: dict):
+        """
+        visibility is {label: bool} where True means the shape is passed to the display
+        """
+        pass
+
     def update(self):
+        """
+        To update the viewport's shapes
+        """
+
+        # remove hidden shapes
+        shapes = self.shapes
+        for label, visible in self.visibility:
+            if not visible and label in shapes.keys():
+                del shapes[label]       
+
+        # colour remaining shapes
         for label, rgb in self.colours.items():
-            if label in self.shapes.keys():
-                self.shapes[label].rgb = rgb
-        self.shapes_changed.emit(list(self.shapes.values()), True)
+            if label in shapes.keys():
+                shapes[label].rgb = rgb
+        self.shapes_changed.emit(list(shapes.values()), True)
 
     def __init__(self):
         super().__init__()
         self.colours = {}  # label: rgb
+        self.visibility = {}  # label: bool where True is visible
         self.shapes = {}  # each entry stored as (ShapeModel)
 
 
