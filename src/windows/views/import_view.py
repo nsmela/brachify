@@ -6,6 +6,11 @@ from classes.logger import log
 from classes.dicom.fileio import read_dicom_folder
 from classes.dicom.data import DicomData
 from windows.ui.import_view_ui import Ui_Import_View
+from windows.models.cylinder_model import CylinderModel
+
+COLOURS_CYLINDER = [1.0, 1.0, 0.2]
+COLOURS_CHANNELS = [0.5, 0.5, 0.5]
+COLOURS_TANDEM = [0.5, 0.5, 0.5]
 
 
 class ImportView(QWidget):
@@ -31,6 +36,15 @@ class ImportView(QWidget):
     def action_update_import_label(self, data:DicomData):
         self.ui.label_file_info.setText(data.toString())
 
+    def action_set_view(self, view_index: int):
+        if view_index != 0: return  # this view is page 0, exit if not this view
+
+        colours = {}
+        colours[CylinderModel.get_label()] = COLOURS_CYLINDER
+        # TODO Needles color
+        # TODO Tandem Color
+        get_app().window.displaymodel.set_shape_colour(colours)
+
     def setupUi(self):
         pass
 
@@ -42,7 +56,8 @@ class ImportView(QWidget):
         # signals and slots
         self.ui.btn_import_folder.pressed.connect(self.action_import_dicom_folder)
         
-        window = get_app().window
+        app = get_app()
+        app.signals.viewChanged.connect(self.action_set_view)
+        window = app.window
         window.dicommodel.values_changed.connect(self.action_update_import_label)
-
 

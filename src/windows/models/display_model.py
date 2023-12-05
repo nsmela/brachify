@@ -25,18 +25,21 @@ class DisplayModel(QObject):
             self.shapes.pop(label)
         self.update()
     
-    def set_shape_color(self, colours: dict):
+    def set_shape_colour(self, colours: dict):
         # colours is {label:rgb}
         for label, rgb in colours.items():
-            self.shapes[label].rgb = rgb
+            self.colours[label] = rgb
         self.update()
 
     def update(self):
+        for label, rgb in self.colours.items():
+            if label in self.shapes.keys():
+                self.shapes[label].rgb = rgb
         self.shapes_changed.emit(list(self.shapes.values()), True)
 
     def __init__(self):
         super().__init__()
-
+        self.colours = {}  # label: rgb
         self.shapes = {}  # each entry stored as (ShapeModel)
 
 

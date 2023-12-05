@@ -33,3 +33,6 @@ class CylinderModel(QObject):
 
         app = get_app()
         app.window.displaymodel.add_shape(shape_model)
+
+    @staticmethod
+    def get_label(): return CYLINDER_LABEL
