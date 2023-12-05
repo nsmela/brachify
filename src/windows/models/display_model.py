@@ -25,17 +25,21 @@ class DisplayModel(QObject):
             self.shapes.pop(label)
         self.update()
     
-    def set_shape_colour(self, colours: dict):
+    def set_shape_colour(self, colours: dict, update=True):
+        """
+        colours is {label: [0.5, 0.5, 0.5]}
+        """
         # colours is {label:rgb}
         for label, rgb in colours.items():
             self.colours[label] = rgb
-        self.update()
+        if update: self.update()
 
-    def set_shape_visibility(self, visibility: dict):
+    def set_shape_visibility(self, visibility: dict, update: bool = True):
         """
         visibility is {label: bool} where True means the shape is passed to the display
         """
-        pass
+        self.visibility.update(visibility)
+        if update: self.update()
 
     def update(self):
         """
