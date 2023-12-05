@@ -1,0 +1,47 @@
+from PySide6.QtWidgets import QWidget
+
+from classes.app import get_app
+from classes.logger import log
+from classes.dicom.data import DicomData
+from windows.ui.cylinder_view_ui import Ui_Cylinder_View
+from windows.models.cylinder_model import CylinderModel
+from classes.mesh.cylinder import BrachyCylinder
+
+COLOURS_CYLINDER = [0.5, 0.5, 0.5]
+COLOURS_CHANNELS = [0.5, 0.5, 0.2]
+COLOURS_TANDEM = [0.5, 0.5, 0.2]
+
+
+class CylinderView(QWidget):
+
+    def action_apply_settings(self):
+        log.debug(f"applying cylinder settings")
+        pass
+
+    def action_set_view(self, view_index: int):
+        if view_index != 1: return  # this view is page 1, exit if not this view
+
+        log.debug(f"switching to cylinder view")
+
+        colours = {}
+        colours[CylinderModel.get_label()] = COLOURS_CYLINDER
+        # TODO Needles color
+        # TODO Tandem Color
+        get_app().window.displaymodel.set_shape_colour(colours)
+
+    def action_update_settings(self, cylinder: BrachyCylinder):
+        log.debug(f"updating cylinder view's settings")
+        pass
+
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_Cylinder_View()  # the converted python file from the ui file
+        self.ui.setupUi(self)
+
+        # signals and slots
+        self.ui.btn_apply_settings.pressed.connect(self.action_apply_settings)
+
+        app = get_app()
+        app.signals.viewChanged.connect(self.action_set_view)
+        window = app.window
+        window.cylindermodel.values_changed.connect(self.action_update_settings)

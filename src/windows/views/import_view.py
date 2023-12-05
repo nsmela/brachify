@@ -1,4 +1,3 @@
-from PySide6.QtWidgets import QFileDialog
 from PySide6.QtWidgets import QWidget, QFileDialog
 
 from classes.app import get_app

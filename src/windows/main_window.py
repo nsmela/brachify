@@ -8,6 +8,7 @@ from windows.models.display_model import DisplayModel
 from windows.models.dicom_model import DicomModel
 from windows.models.cylinder_model import CylinderModel
 from windows.views.import_view import ImportView
+from windows.views.cylinder_view import CylinderView
 
 class MainWindow(QMainWindow):
 
@@ -62,6 +63,7 @@ class MainWindow(QMainWindow):
 
         # TODO views
         self.ui.page_import.layout().addWidget(ImportView())
+        self.ui.page_cylinder.layout().addWidget(CylinderView())
 
         # show this window with resizing to ensure canvas is displayed properly
         self.showWithCanvas()  # shows and then resizes the window to properly display canvas

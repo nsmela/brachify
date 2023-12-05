@@ -12,10 +12,6 @@ class CylinderModel(QObject):
 
     values_changed = Signal(BrachyCylinder)
 
-    def __init__(self):
-        super().__init__()
-        self.cylinder = None
-
     def update(self, cylinder: BrachyCylinder):
         self.cylinder = BrachyCylinder()
         self.values_changed.emit(cylinder)
@@ -33,6 +29,10 @@ class CylinderModel(QObject):
 
         app = get_app()
         app.window.displaymodel.add_shape(shape_model)
+
+    def __init__(self):
+        super().__init__()
+        self.cylinder = None
 
     @staticmethod
     def get_label(): return CYLINDER_LABEL
