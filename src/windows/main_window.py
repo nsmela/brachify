@@ -1,15 +1,12 @@
-from PySide6.QtWidgets import QMainWindow, QFileDialog
-
-from OCC.Core.BRep import BRep_Builder
+from PySide6.QtWidgets import QMainWindow
 
 from classes.logger import log
 from classes.app import get_app
 from windows.ui import main_window_ui
 from windows.views.viewport import OrbitCameraViewer3d
 from windows.models.displaymodel import DisplayModel
-from windows.views.mesh_view import Mesh_View
-from windows.views.modify_view import Modify_View
-from windows.views.export_view import Export_View
+from windows.models.dicom_model import DicomModel
+from windows.views.import_view import ImportView
 
 class MainWindow(QMainWindow):
 
@@ -32,16 +29,16 @@ class MainWindow(QMainWindow):
         # TODO connect signals to events
 
         # view signals send the new page's index
+        # TODO change the values to specific widgets?
         self.ui.btn_import_view.pressed.connect(lambda: app.signals.viewChanged.emit(0))
         self.ui.btn_dicom_view.pressed.connect(lambda: app.signals.viewChanged.emit(1))
         self.ui.btn_export_view.pressed.connect(lambda: app.signals.viewChanged.emit(2))
 
         app.signals.viewChanged.connect(self.ui.viewswidget.setCurrentIndex)
 
-        #self.ui.btn_export_shapes.pressed.connect(self.actionExportMesh)
-
         # TODO initialize models
         self.displaymodel = DisplayModel()
+        self.dicommodel = DicomModel()
 
         # initialize canvas
         self.canvas = OrbitCameraViewer3d()
@@ -55,9 +52,7 @@ class MainWindow(QMainWindow):
         self.displaymodel.shapes_changed.connect(self.canvas.update_display)
 
         # TODO views
-        self.ui.page_mesh.layout().addWidget(Mesh_View())
-        self.ui.page_modify.layout().addWidget(Modify_View())
-        self.ui.page_export.layout().addWidget(Export_View())
+        self.ui.page_import.layout().addWidget(ImportView())
 
         # show this window with resizing to ensure canvas is displayed properly
         self.showWithCanvas()  # shows and then resizes the window to properly display canvas

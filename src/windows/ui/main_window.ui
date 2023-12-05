@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>brachify</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -85,19 +85,19 @@
           </size>
          </property>
          <property name="text">
-          <string>import mesh</string>
+          <string>import</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_dicom_view">
+        <widget class="QPushButton" name="btn_cylinder_view">
          <property name="text">
-          <string>modify mesh</string>
+          <string>cylinder</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_export_view">
+        <widget class="QPushButton" name="btn_channels_view">
          <property name="minimumSize">
           <size>
            <width>80</width>
@@ -111,7 +111,21 @@
           </size>
          </property>
          <property name="text">
-          <string>export mesh</string>
+          <string>channels</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_tandem_view">
+         <property name="text">
+          <string>tandem</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_export_view">
+         <property name="text">
+          <string>export</string>
          </property>
         </widget>
        </item>
@@ -167,9 +181,9 @@
           <item>
            <widget class="QStackedWidget" name="viewswidget">
             <property name="currentIndex">
-             <number>3</number>
+             <number>4</number>
             </property>
-            <widget class="QWidget" name="page_mesh">
+            <widget class="QWidget" name="page_import">
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <property name="spacing">
                <number>0</number>
@@ -188,14 +202,17 @@
               </property>
              </layout>
             </widget>
-            <widget class="QWidget" name="page_modify">
+            <widget class="QWidget" name="page_cylinder">
              <layout class="QVBoxLayout" name="verticalLayout"/>
             </widget>
-            <widget class="QWidget" name="page_export">
+            <widget class="QWidget" name="page_channels">
              <layout class="QVBoxLayout" name="verticalLayout_3"/>
             </widget>
-            <widget class="QWidget" name="page_3">
+            <widget class="QWidget" name="page_tandem">
              <layout class="QVBoxLayout" name="verticalLayout_4"/>
+            </widget>
+            <widget class="QWidget" name="page_export">
+             <layout class="QVBoxLayout" name="verticalLayout_8"/>
             </widget>
            </widget>
           </item>
@@ -203,7 +220,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QWidget" name="displayviewwidget" native="true">
+        <widget class="QWidget" name="display_view_widget" native="true">
          <property name="minimumSize">
           <size>
            <width>600</width>

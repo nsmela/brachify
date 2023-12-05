@@ -48,15 +48,25 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.btn_import_view)
 
-        self.btn_dicom_view = QPushButton(self.top_menu_bar)
-        self.btn_dicom_view.setObjectName(u"btn_dicom_view")
+        self.btn_cylinder_view = QPushButton(self.top_menu_bar)
+        self.btn_cylinder_view.setObjectName(u"btn_cylinder_view")
 
-        self.horizontalLayout.addWidget(self.btn_dicom_view)
+        self.horizontalLayout.addWidget(self.btn_cylinder_view)
+
+        self.btn_channels_view = QPushButton(self.top_menu_bar)
+        self.btn_channels_view.setObjectName(u"btn_channels_view")
+        self.btn_channels_view.setMinimumSize(QSize(80, 0))
+        self.btn_channels_view.setMaximumSize(QSize(80, 16777215))
+
+        self.horizontalLayout.addWidget(self.btn_channels_view)
+
+        self.btn_tandem_view = QPushButton(self.top_menu_bar)
+        self.btn_tandem_view.setObjectName(u"btn_tandem_view")
+
+        self.horizontalLayout.addWidget(self.btn_tandem_view)
 
         self.btn_export_view = QPushButton(self.top_menu_bar)
         self.btn_export_view.setObjectName(u"btn_export_view")
-        self.btn_export_view.setMinimumSize(QSize(80, 0))
-        self.btn_export_view.setMaximumSize(QSize(80, 16777215))
 
         self.horizontalLayout.addWidget(self.btn_export_view)
 
@@ -81,42 +91,47 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.viewswidget = QStackedWidget(self.left_menu_bar)
         self.viewswidget.setObjectName(u"viewswidget")
-        self.page_mesh = QWidget()
-        self.page_mesh.setObjectName(u"page_mesh")
-        self.verticalLayout_7 = QVBoxLayout(self.page_mesh)
+        self.page_import = QWidget()
+        self.page_import.setObjectName(u"page_import")
+        self.verticalLayout_7 = QVBoxLayout(self.page_import)
         self.verticalLayout_7.setSpacing(0)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
-        self.viewswidget.addWidget(self.page_mesh)
-        self.page_modify = QWidget()
-        self.page_modify.setObjectName(u"page_modify")
-        self.verticalLayout = QVBoxLayout(self.page_modify)
+        self.viewswidget.addWidget(self.page_import)
+        self.page_cylinder = QWidget()
+        self.page_cylinder.setObjectName(u"page_cylinder")
+        self.verticalLayout = QVBoxLayout(self.page_cylinder)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.viewswidget.addWidget(self.page_modify)
+        self.viewswidget.addWidget(self.page_cylinder)
+        self.page_channels = QWidget()
+        self.page_channels.setObjectName(u"page_channels")
+        self.verticalLayout_3 = QVBoxLayout(self.page_channels)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.viewswidget.addWidget(self.page_channels)
+        self.page_tandem = QWidget()
+        self.page_tandem.setObjectName(u"page_tandem")
+        self.verticalLayout_4 = QVBoxLayout(self.page_tandem)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.viewswidget.addWidget(self.page_tandem)
         self.page_export = QWidget()
         self.page_export.setObjectName(u"page_export")
-        self.verticalLayout_3 = QVBoxLayout(self.page_export)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_8 = QVBoxLayout(self.page_export)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
         self.viewswidget.addWidget(self.page_export)
-        self.page_3 = QWidget()
-        self.page_3.setObjectName(u"page_3")
-        self.verticalLayout_4 = QVBoxLayout(self.page_3)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.viewswidget.addWidget(self.page_3)
 
         self.verticalLayout_2.addWidget(self.viewswidget)
 
 
         self.horizontalLayout_2.addWidget(self.left_menu_bar)
 
-        self.displayviewwidget = QWidget(self.bodywidget)
-        self.displayviewwidget.setObjectName(u"displayviewwidget")
-        self.displayviewwidget.setMinimumSize(QSize(600, 540))
-        self.gridLayout = QGridLayout(self.displayviewwidget)
+        self.display_view_widget = QWidget(self.bodywidget)
+        self.display_view_widget.setObjectName(u"display_view_widget")
+        self.display_view_widget.setMinimumSize(QSize(600, 540))
+        self.gridLayout = QGridLayout(self.display_view_widget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
 
-        self.horizontalLayout_2.addWidget(self.displayviewwidget)
+        self.horizontalLayout_2.addWidget(self.display_view_widget)
 
 
         self.verticalLayout_5.addWidget(self.bodywidget)
@@ -125,16 +140,18 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.viewswidget.setCurrentIndex(0)
+        self.viewswidget.setCurrentIndex(4)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.btn_import_view.setText(QCoreApplication.translate("MainWindow", u"import mesh", None))
-        self.btn_dicom_view.setText(QCoreApplication.translate("MainWindow", u"modify mesh", None))
-        self.btn_export_view.setText(QCoreApplication.translate("MainWindow", u"export mesh", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"brachify", None))
+        self.btn_import_view.setText(QCoreApplication.translate("MainWindow", u"import", None))
+        self.btn_cylinder_view.setText(QCoreApplication.translate("MainWindow", u"cylinder", None))
+        self.btn_channels_view.setText(QCoreApplication.translate("MainWindow", u"channels", None))
+        self.btn_tandem_view.setText(QCoreApplication.translate("MainWindow", u"tandem", None))
+        self.btn_export_view.setText(QCoreApplication.translate("MainWindow", u"export", None))
     # retranslateUi
 

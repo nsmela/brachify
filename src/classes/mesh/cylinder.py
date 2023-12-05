@@ -15,7 +15,7 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut, BRepAlgoAPI_Fuse
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeTorus
 
 from Core.Models.DicomData import DicomData
-from classes.mesh.helper import face_is_plane, geom_plane_from_face, add
+from classes.mesh.helper import face_is_plane, geom_plane_from_face
 
 DEFAULT_LENGTH = 160.0
 

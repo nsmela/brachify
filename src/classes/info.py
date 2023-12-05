@@ -2,10 +2,10 @@
 
 from pathlib import Path 
 
-APP_NAME = "3D Viewer App"
+APP_NAME = "brachify"
 VERSION_MAJOR = "0"
 VERION_MINOR = "3"
-APP_VERSION = " alpha"
+APP_VERSION = "alpha"
 
 # Application Paths
 DIR_PATH = Path(__file__).parent  # src folder location

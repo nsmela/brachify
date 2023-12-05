@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'modify_mesh_view.ui'
+## Form generated from reading UI file 'import_view.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.5.2
 ##
@@ -18,15 +18,15 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QLabel, QPushButton, QSizePolicy,
     QSpacerItem, QVBoxLayout, QWidget)
 
-class Ui_Modify_View(object):
-    def setupUi(self, Modify_View):
-        if not Modify_View.objectName():
-            Modify_View.setObjectName(u"Modify_View")
-        Modify_View.resize(240, 400)
-        self.verticalLayout = QVBoxLayout(Modify_View)
+class Ui_Import_View(object):
+    def setupUi(self, Import_View):
+        if not Import_View.objectName():
+            Import_View.setObjectName(u"Import_View")
+        Import_View.resize(240, 400)
+        self.verticalLayout = QVBoxLayout(Import_View)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.label_title = QLabel(Modify_View)
+        self.label_title = QLabel(Import_View)
         self.label_title.setObjectName(u"label_title")
         font = QFont()
         font.setPointSize(32)
@@ -34,30 +34,30 @@ class Ui_Modify_View(object):
 
         self.verticalLayout.addWidget(self.label_title)
 
-        self.btn_add_sphere = QPushButton(Modify_View)
-        self.btn_add_sphere.setObjectName(u"btn_add_sphere")
+        self.btn_import_folder = QPushButton(Import_View)
+        self.btn_import_folder.setObjectName(u"btn_import_folder")
 
-        self.verticalLayout.addWidget(self.btn_add_sphere)
+        self.verticalLayout.addWidget(self.btn_import_folder)
 
-        self.btn_remove_sphere = QPushButton(Modify_View)
-        self.btn_remove_sphere.setObjectName(u"btn_remove_sphere")
+        self.label_file_info = QLabel(Import_View)
+        self.label_file_info.setObjectName(u"label_file_info")
 
-        self.verticalLayout.addWidget(self.btn_remove_sphere)
+        self.verticalLayout.addWidget(self.label_file_info)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
 
-        self.retranslateUi(Modify_View)
+        self.retranslateUi(Import_View)
 
-        QMetaObject.connectSlotsByName(Modify_View)
+        QMetaObject.connectSlotsByName(Import_View)
     # setupUi
 
-    def retranslateUi(self, Modify_View):
-        Modify_View.setWindowTitle(QCoreApplication.translate("Modify_View", u"Form", None))
-        self.label_title.setText(QCoreApplication.translate("Modify_View", u"modify", None))
-        self.btn_add_sphere.setText(QCoreApplication.translate("Modify_View", u"add sphere", None))
-        self.btn_remove_sphere.setText(QCoreApplication.translate("Modify_View", u"remove sphere", None))
+    def retranslateUi(self, Import_View):
+        Import_View.setWindowTitle(QCoreApplication.translate("Import_View", u"Form", None))
+        self.label_title.setText(QCoreApplication.translate("Import_View", u"import files", None))
+        self.btn_import_folder.setText(QCoreApplication.translate("Import_View", u"import dicom folder", None))
+        self.label_file_info.setText(QCoreApplication.translate("Import_View", u"No model(s) loaded", None))
     # retranslateUi
 

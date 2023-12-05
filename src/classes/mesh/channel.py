@@ -2,15 +2,24 @@ import numpy as np
 
 from OCC.Core.Geom import Geom_BezierCurve
 from OCC.Core.TColgp import TColgp_Array1OfPnt
-from OCC.Core.gp import gp_Pnt, gp_Dir, gp_Circ, gp_Ax2
-from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace
+from OCC.Core.gp import gp_Pnt, gp_Ax2
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCone, BRepPrimAPI_MakeSphere
 from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_MakePipe
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.TopoDS import TopoDS_Shape
 
+import classes.mesh.helper as helper
 
 NEEDLE_LENGTH = 2.50
+
+
+class NeedleChannel:
+    def __init__(self, number: str, id: str, points):
+        self.channelNumber = number
+        self.channelId = id
+        self.points = points
+        self.rawPoints = points
 
 
 def rounded_channel(channel_points, offset: float = 0.0, diameter: float = 3.0) -> TopoDS_Shape:

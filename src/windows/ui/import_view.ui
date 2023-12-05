@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Mesh_View</class>
- <widget class="QWidget" name="Mesh_View">
+ <class>Import_View</class>
+ <widget class="QWidget" name="Import_View">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -34,19 +34,19 @@
       </font>
      </property>
      <property name="text">
-      <string>mesh</string>
+      <string>import files</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="btn_import_mesh">
+    <widget class="QPushButton" name="btn_import_folder">
      <property name="text">
-      <string>import mesh</string>
+      <string>import dicom folder</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="label_mesh_info">
+    <widget class="QLabel" name="label_file_info">
      <property name="text">
       <string>No model(s) loaded</string>
      </property>
