@@ -11,7 +11,7 @@ from classes.mesh.channel import NeedleChannel
 
 def read_dicom_folder(folder_path: str):
         """Used to import a folder, check it for relevant dicom files, and set up the app for the data"""
-        files = Path(folder_path).glob('**.*.dcm')
+        files = [ p for p in Path(folder_path).glob('**/*.dcm') if p.is_file()]
 
         log.debug(f"Found {files} in {folder_path}")
 

@@ -42,6 +42,10 @@ class RadiotherapyApp(QApplication):
             from windows.main_window import MainWindow
             self.window = MainWindow()
 
+            # these were seperated from the MainWindow __init__ to ease signal connections
+            self.window.initModels()
+            self.window.initViews()
+
             # TODO process args like autoloading a file or project
 
             return True

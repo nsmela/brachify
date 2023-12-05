@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QWidget, QFileDialog
 from classes.app import get_app
 from classes.logger import log
 from classes.dicom.fileio import read_dicom_folder
+from classes.dicom.data import DicomData
 from windows.ui.import_view_ui import Ui_Import_View
 
 
@@ -27,6 +28,9 @@ class ImportView(QWidget):
 
         window.dicommodel.update(data)
 
+    def action_update_import_label(self, data:DicomData):
+        self.ui.label_file_info.setText(data.toString())
+
     def setupUi(self):
         pass
 
@@ -36,4 +40,9 @@ class ImportView(QWidget):
         self.ui.setupUi(self)
 
         # signals and slots
-        self.ui.btn_import_mesh.pressed.connect(self.action_import_dicom_folder)
+        self.ui.btn_import_folder.pressed.connect(self.action_import_dicom_folder)
+        
+        window = get_app().window
+        window.dicommodel.values_changed.connect(self.action_update_import_label)
+
+

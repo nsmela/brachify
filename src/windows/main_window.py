@@ -31,18 +31,22 @@ class MainWindow(QMainWindow):
         # view signals send the new page's index
         # TODO change the values to specific widgets?
         self.ui.btn_import_view.pressed.connect(lambda: app.signals.viewChanged.emit(0))
-        self.ui.btn_dicom_view.pressed.connect(lambda: app.signals.viewChanged.emit(1))
-        self.ui.btn_export_view.pressed.connect(lambda: app.signals.viewChanged.emit(2))
+        self.ui.btn_cylinder_view.pressed.connect(lambda: app.signals.viewChanged.emit(1))
+        self.ui.btn_channels_view.pressed.connect(lambda: app.signals.viewChanged.emit(2))
+        self.ui.btn_tandem_view.pressed.connect(lambda: app.signals.viewChanged.emit(3))
+        self.ui.btn_export_view.pressed.connect(lambda: app.signals.viewChanged.emit(4))
 
         app.signals.viewChanged.connect(self.ui.viewswidget.setCurrentIndex)
 
+    def initModels(self):
         # TODO initialize models
         self.displaymodel = DisplayModel()
         self.dicommodel = DicomModel()
 
+    def initViews(self):
         # initialize canvas
         self.canvas = OrbitCameraViewer3d()
-        self.ui.displayviewwidget.layout().addWidget(self.canvas)
+        self.ui.display_view_widget.layout().addWidget(self.canvas)
         self.canvas.InitDriver()
         self.display = self.canvas._display
 
