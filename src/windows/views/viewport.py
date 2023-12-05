@@ -6,7 +6,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 from classes.app import get_app
 from classes.logger import log
-from windows.models.shapemodel import ShapeModel
+from windows.models.shape_model import ShapeModel
 
 class qtBaseViewer(QtWidgets.QWidget):
     """The base Qt Widget for an OCC viewer"""

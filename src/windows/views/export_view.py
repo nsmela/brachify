@@ -5,7 +5,6 @@ from PySide6.QtWidgets import QWidget, QFileDialog
 from classes.app import get_app
 from classes.logger import log
 from classes.mesh.fileio import write_3d_file
-from windows.models.shapemodel import ShapeModel
 from windows.ui.export_view_ui import Ui_Export_View
 
 

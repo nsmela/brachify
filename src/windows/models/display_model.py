@@ -1,5 +1,5 @@
 from PySide6.QtCore import QObject, Signal
-from .shapemodel import ShapeModel
+from .shape_model import ShapeModel
 
 
 class DisplayModel(QObject):
