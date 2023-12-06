@@ -7,6 +7,7 @@ from classes.logger import log
 from classes.dicom.data import DicomData
 from classes.mesh.cylinder import BrachyCylinder
 from classes.mesh.channel import NeedleChannel
+import classes.mesh.helper as helper
 
 
 def read_dicom_folder(folder_path: str):
@@ -115,9 +116,10 @@ def load_dicom_data(rp_file: str, rs_file: str) -> DicomData:
         diameter = round(diameter, 1)
 
         middle_index = int(len(data.cylinder_contour) / 2)
-        data.cylinder_tip = data.cylinder_contour[middle_index]
 
+        data.cylinder_tip = data.cylinder_contour[middle_index]
         data.cylinder_base = point1 + (difference / 2)
+        data.cylinder_direction = data.cylinder_tip - data.cylinder_base
 
         # channels info
         if data.channels_rois:
@@ -138,6 +140,28 @@ def load_dicom_data(rp_file: str, rs_file: str) -> DicomData:
                 ]
                 channel_contour_points.append(points)
             data.channel_contours = channel_contour_points
+
+            channel_paths = []
+            # use the brachy cylinder to offset the points
+            # z axis reference, the direction we want the cylinder and needles to go
+            z_up = np.array([0, 0, 1])
+            tip = data.cylinder_tip
+            base = data.cylinder_base
+            cyl_vec = data.cylinder_direction
+            cyl_length = np.linalg.norm(cyl_vec)
+            
+            # normalized direction from tip to base
+            from classes.mesh.cylinder import DEFAULT_LENGTH
+            offset_vector = np.array([0, 0, - cyl_length + DEFAULT_LENGTH])
+
+            updated_base = helper.rotate_points(base, cyl_vec, z_up)
+            for i, c in enumerate(channel_contour_points):
+                new_points = np.array(c)
+                new_points = helper.rotate_points(new_points, cyl_vec, z_up)
+                new_points = np.array(new_points) - updated_base
+                new_points = new_points + offset_vector
+                channel_paths.append(list(list(points) for points in new_points))
+            data.channel_paths = channel_paths
 
     except Exception as error_message:
         log.error(f"Loading RS Dicom file failed! {rs_file}\n{error_message}")

@@ -11,14 +11,15 @@ class DicomData:
         self.cylinder_roi = None
         self.cylinder_color = None
         self.cylinder_contour = None
-        self.cylinder_tip = [0, 0, 0]
-        self.cylinder_base = [0, 0, 0]
-        self.cylinder_direction = [0, 0, 1]
+        self.cylinder_tip = None
+        self.cylinder_base = None
+        self.cylinder_direction = None
 
         self.channels_rois = None
         self.channels_labels = None
         self.channels_colors = None
         self.channel_contours = None
+        self.channel_paths = None
 
     def update(self, new_data):
         if new_data.patient_name:

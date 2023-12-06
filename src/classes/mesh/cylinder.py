@@ -23,13 +23,6 @@ DEFAULT_LENGTH = 160.0
 
 class BrachyCylinder:
 
-    def getDirection(self):
-        direction = self.tip - self.base
-        length = np.linalg.norm(direction)
-        log.debug(
-            f"Cylinder's direction: {direction[0]}, {direction[1]}, {direction[2]} length: {length}")
-        return direction, length
-
     def shape(self) -> TopoDS_Shape:
         if self._shape:
             return self._shape
@@ -83,10 +76,8 @@ class BrachyCylinder:
         self._shape = None
         self._shape = self.shape()
 
-    def __init__(self, tip, base, diameter: float = 30.0, expand_base: bool = False):
+    def __init__(self, diameter: float = 30.0, expand_base: bool = False):
         self.length = DEFAULT_LENGTH
-        self.tip = np.array(tip)
-        self.base = np.array(base)
         self.diameter = diameter
         self.expand_base = expand_base
         self._shape = None
@@ -100,13 +91,9 @@ def get_brachy_cylinder(data: DicomData) -> BrachyCylinder:
                        (difference[1]) ** 2 + (difference[2]) ** 2)
     diameter = round(diameter, 1)
 
-    middle_index = int(len(data.cylinder_contour) / 2)
-    tip = data.cylinder_contour[middle_index]
-
-    base = point1 + (difference / 2)
     log.debug(
-        f"Cylinder results: \n Diameter: {diameter}\n Tip: {tip}\n Base: {base}")
-    return BrachyCylinder(tip=tip, base=base, diameter=diameter)
+        f"Cylinder results: \n Diameter: {diameter}")
+    return BrachyCylinder(diameter=diameter)
 
 
 def add_base(shape: TopoDS_Solid, radius1: float, radius2: float):
