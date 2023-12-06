@@ -12,15 +12,20 @@ class CylinderModel(QObject):
 
     values_changed = Signal(BrachyCylinder)
 
-    def update(self, cylinder: BrachyCylinder):
-        self.cylinder = cylinder
-        self.values_changed.emit(cylinder)
-        self.update_display()
-
+    # Slot
     def load_data(self, data: DicomData):
         self.cylinder = get_brachy_cylinder(data)
+        self.update()
+
+    # trigger signals
+    def update(self):
         self.values_changed.emit(self.cylinder)
-        self.update_display()
+        self.update_display()       
+
+    # from CylinderView -> action_apply_settings
+    def update_cylinder(self, cylinder: BrachyCylinder):
+        self.cylinder = cylinder
+        self.update()
 
     def update_display(self):
         shape_model = ShapeModel(
@@ -29,6 +34,11 @@ class CylinderModel(QObject):
 
         app = get_app()
         app.window.displaymodel.add_shape(shape_model)
+
+    # Slotted to app -> signals -> height_changed(float)
+    def update_height_offset(self, height_offset: float):
+        self.cylinder.setLength(height_offset)
+        self.update()
 
     def __init__(self):
         super().__init__()

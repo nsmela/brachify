@@ -8,8 +8,6 @@ class AppSignals(QObject):
     and then referencing the signal in app.signals    
     """
 
-    importMeshFile = Signal(str)  
-    clearLoadedModel = Signal()  # when the viewport's contents are cleared
-    displayUpdated = Signal()  # when the 3d viewport is updated
+    height_changed = Signal(float)  # height offset for cylinder
     exportFile = Signal(str)  # need to export the mesh
     viewChanged = Signal(int)  # set the page for the viewwidget

@@ -25,7 +25,7 @@ class CylinderView(QWidget):
         cylinder.expand_base = self.ui.cb_add_base.isChecked()  # this will force the cylinder's shape to be recalculated
         cylinder.shape()
 
-        model.update(cylinder)
+        model.update_cylinder(cylinder)
 
     def action_update_settings(self, cylinder: BrachyCylinder):     
         log.debug(f"updating cylinder view's settings")
