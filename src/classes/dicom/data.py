@@ -51,7 +51,6 @@ class DicomData:
 
         if self.cylinder_roi:
             text += f"Cylinder ROI Number {self.cylinder_roi}\n Cylinder Color {self.cylinder_color}\n"
-            text += f" Points: {self.cylinder_contour}\n"
         else:
             text += "No Cylinder Data!\n"
 
@@ -60,9 +59,6 @@ class DicomData:
             for i in range(len(self.channels_rois)):
                 text += f" Channel {self.channels_rois[i]}\n"
                 text += f" Channel Color {self.channels_colors[i]}\n"
-                text += f" Points: \n"
-                for point in self.channel_contours[i]:
-                    text += f"  {point}\n"
         else:
             text += "\nNo Channel Data!\n"
 
