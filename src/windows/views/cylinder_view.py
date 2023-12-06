@@ -22,7 +22,8 @@ class CylinderView(QWidget):
 
         cylinder.diameter = self.ui.spinbox_diameter.value()
         cylinder.length = self.ui.spinbox_length.value()
-        cylinder.expand_base(self.ui.cb_add_base.isChecked())  # this will force the cylinder's shape to be recalculated
+        cylinder.expand_base = self.ui.cb_add_base.isChecked()  # this will force the cylinder's shape to be recalculated
+        cylinder.shape()
 
         model.update(cylinder)
 
