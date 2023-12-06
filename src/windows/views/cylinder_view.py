@@ -7,9 +7,9 @@ from windows.ui.cylinder_view_ui import Ui_Cylinder_View
 from windows.models.cylinder_model import CylinderModel
 from classes.mesh.cylinder import BrachyCylinder
 
-COLOURS_CYLINDER = [0.5, 0.5, 0.5]
-COLOURS_CHANNELS = [0.5, 0.5, 0.2]
-COLOURS_TANDEM = [0.5, 0.5, 0.2]
+COLOURS_CYLINDER = [0.2, 0.55, 0.55,]
+COLOURS_CHANNELS = [0.5, 0.5, 0.4]
+COLOURS_TANDEM = [0.5, 0.5, 0.4]
 
 
 class CylinderView(QWidget):
