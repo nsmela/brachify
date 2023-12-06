@@ -106,6 +106,19 @@ def load_dicom_data(rp_file: str, rs_file: str) -> DicomData:
             cylinder_contour.ContourSequence[0].ContourData[i + 2]]
             for i in range(0, len(cylinder_contour.ContourSequence[0].ContourData), 3)]
 
+        # cylinder offsets
+        point1 = np.asarray(data.cylinder_contour[0])
+        point2 = np.asarray(data.cylinder_contour[-1])
+        difference = point2 - point1
+        diameter = np.sqrt((difference[0]) ** 2 +
+                        (difference[1]) ** 2 + (difference[2]) ** 2)
+        diameter = round(diameter, 1)
+
+        middle_index = int(len(data.cylinder_contour) / 2)
+        data.cylinder_tip = data.cylinder_contour[middle_index]
+
+        data.cylinder_base = point1 + (difference / 2)
+
         # channels info
         if data.channels_rois:
             channel_contours = list(filter(lambda sequence: (sequence.ReferencedROINumber in data.channels_rois),

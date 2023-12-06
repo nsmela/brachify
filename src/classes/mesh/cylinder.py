@@ -15,6 +15,7 @@ from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut, BRepAlgoAPI_Fuse
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeTorus
 
 from classes.dicom.data import DicomData
+from classes.logger import log
 from classes.mesh.helper import face_is_plane, geom_plane_from_face
 
 DEFAULT_LENGTH = 160.0
@@ -25,7 +26,7 @@ class BrachyCylinder:
     def getDirection(self):
         direction = self.tip - self.base
         length = np.linalg.norm(direction)
-        print(
+        log.debug(
             f"Cylinder's direction: {direction[0]}, {direction[1]}, {direction[2]} length: {length}")
         return direction, length
 
@@ -103,7 +104,7 @@ def get_brachy_cylinder(data: DicomData) -> BrachyCylinder:
     tip = data.cylinder_contour[middle_index]
 
     base = point1 + (difference / 2)
-    print(
+    log.debug(
         f"Cylinder results: \n Diameter: {diameter}\n Tip: {tip}\n Base: {base}")
     return BrachyCylinder(tip=tip, base=base, diameter=diameter)
 

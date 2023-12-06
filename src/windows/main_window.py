@@ -6,6 +6,7 @@ from windows.ui import main_window_ui
 from windows.views.viewport import OrbitCameraViewer3d
 from windows.models.display_model import DisplayModel
 from windows.models.dicom_model import DicomModel
+from windows.models.channels_model import ChannelsModel
 from windows.models.cylinder_model import CylinderModel
 from windows.views.import_view import ImportView
 from windows.views.cylinder_view import CylinderView
@@ -45,9 +46,11 @@ class MainWindow(QMainWindow):
         self.displaymodel = DisplayModel()
         self.dicommodel = DicomModel()
         self.cylindermodel = CylinderModel()
+        self.channelsmodel = ChannelsModel()
 
         # TODO connect models to signals
         self.dicommodel.values_changed.connect(self.cylindermodel.load_data)
+        self.dicommodel.values_changed.connect(self.channelsmodel.load_data)
 
     def initViews(self):
         # initialize canvas

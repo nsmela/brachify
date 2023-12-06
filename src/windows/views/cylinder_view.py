@@ -39,7 +39,7 @@ class CylinderView(QWidget):
         
         self.ui.spinbox_diameter.setValue(diameter)
         self.ui.spinbox_length.setValue(length)
-        self.ui.cb_add_base.checkState(add_base)
+        self.ui.cb_add_base.setChecked(add_base)
 
     def action_set_view(self, view_index: int):
         if view_index != 1: return  # this view is page 1, exit if not this view

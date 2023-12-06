@@ -2,7 +2,7 @@ class DicomData:
     """
     Stores relevant data from a dicom dataset
     """
-    
+
     def __init__(self):
         self.patient_name = None
         self.patient_id = None
@@ -11,6 +11,9 @@ class DicomData:
         self.cylinder_roi = None
         self.cylinder_color = None
         self.cylinder_contour = None
+        self.cylinder_tip = [0, 0, 0]
+        self.cylinder_base = [0, 0, 0]
+        self.cylinder_direction = [0, 0, 1]
 
         self.channels_rois = None
         self.channels_labels = None

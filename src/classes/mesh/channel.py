@@ -17,11 +17,14 @@ NEEDLE_LENGTH = 2.50
 
 class NeedleChannel:
     def __init__(self, number: str, label: str, points):
-        self.channel_number = number
-        self.channel_label = label
+        self.number = number
+        self.label = label
         self.points = points
         self.points_raw = points
         self._shape = None
+
+        self._offset = 0.0
+        self._diameter = 3.0
 
     def shape(self) -> TopoDS_Shape:
         if self._shape:
