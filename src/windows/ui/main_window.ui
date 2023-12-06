@@ -167,27 +167,71 @@
         <widget class="QWidget" name="left_menu_bar" native="true">
          <property name="minimumSize">
           <size>
-           <width>240</width>
+           <width>250</width>
            <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>240</width>
+           <width>260</width>
            <height>16777215</height>
           </size>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <widget class="QStackedWidget" name="viewswidget">
             <property name="currentIndex">
-             <number>4</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="page_import">
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <property name="spacing">
                <number>0</number>
               </property>
+              <property name="leftMargin">
+               <number>4</number>
+              </property>
+              <property name="topMargin">
+               <number>4</number>
+              </property>
+              <property name="rightMargin">
+               <number>4</number>
+              </property>
+              <property name="bottomMargin">
+               <number>4</number>
+              </property>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_cylinder">
+             <layout class="QVBoxLayout" name="verticalLayout">
+              <property name="leftMargin">
+               <number>4</number>
+              </property>
+              <property name="topMargin">
+               <number>4</number>
+              </property>
+              <property name="rightMargin">
+               <number>4</number>
+              </property>
+              <property name="bottomMargin">
+               <number>4</number>
+              </property>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_channels">
+             <layout class="QVBoxLayout" name="verticalLayout_3">
               <property name="leftMargin">
                <number>0</number>
               </property>
@@ -202,17 +246,37 @@
               </property>
              </layout>
             </widget>
-            <widget class="QWidget" name="page_cylinder">
-             <layout class="QVBoxLayout" name="verticalLayout"/>
-            </widget>
-            <widget class="QWidget" name="page_channels">
-             <layout class="QVBoxLayout" name="verticalLayout_3"/>
-            </widget>
             <widget class="QWidget" name="page_tandem">
-             <layout class="QVBoxLayout" name="verticalLayout_4"/>
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+             </layout>
             </widget>
             <widget class="QWidget" name="page_export">
-             <layout class="QVBoxLayout" name="verticalLayout_8"/>
+             <layout class="QVBoxLayout" name="verticalLayout_8">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+             </layout>
             </widget>
            </widget>
           </item>

@@ -52,6 +52,9 @@ class Ui_Cylinder_View(object):
 
         self.spinbox_length = QSpinBox(Cylinder_View)
         self.spinbox_length.setObjectName(u"spinbox_length")
+        self.spinbox_length.setMinimumSize(QSize(86, 0))
+        self.spinbox_length.setMinimum(60)
+        self.spinbox_length.setMaximum(300)
 
         self.formLayout.setWidget(2, QFormLayout.FieldRole, self.spinbox_length)
 
