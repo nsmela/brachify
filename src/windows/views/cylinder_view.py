@@ -20,10 +20,19 @@ class CylinderView(QWidget):
         model = get_app().window.cylindermodel
         cylinder = model.cylinder
 
-        cylinder.diameter = self.ui.spinbox_diameter.value()
-        cylinder.length = self.ui.spinbox_length.value()
-        cylinder.expand_base = self.ui.cb_add_base.isChecked()  # this will force the cylinder's shape to be recalculated
-        cylinder.shape()
+        diameter = self.ui.spinbox_diameter.value()
+        length = self.ui.spinbox_length.value()
+        add_base = self.ui.cb_add_base.isChecked()
+
+        if cylinder.length != length:
+            cylinder.length = length
+
+            # send the new offset signal
+            offset = length - BrachyCylinder.default_length() 
+            get_app().signals.height_changed.emit(offset)
+
+        cylinder.diameter = diameter
+        cylinder.enableBase(add_base)  # this will force the cylinder's shape to be recalculated
 
         model.update_cylinder(cylinder)
 

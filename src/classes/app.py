@@ -11,27 +11,6 @@ def get_app():
 
 class RadiotherapyApp(QApplication):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.args = super().arguments()
-        self.errors = []
-        self.signals = AppSignals()
-
-        try:
-            from classes.info import APP_NAME, DIR_PATH
-            from classes.logger import log
-            log.info(f"Starting {APP_NAME}")
-
-        except ImportError as error_message:
-            print(f"logging module unable to import! \n{error_message}")
-            raise
-
-        except Exception as error_message:
-            print(f"Unable to start logging. \n{error_message}")
-            raise
-
-        self.path = DIR_PATH
-
     def gui(self):
         """
         Initialize the GUI and the Main Window
@@ -54,4 +33,28 @@ class RadiotherapyApp(QApplication):
             from classes.logger import log
             log.critical(f"Main window start failed: {error_message}")
             return False
+    
+    @property 
+    def signals(self) -> AppSignals:
+        return self._signals
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.args = super().arguments()
+        self.errors = []
+        self._signals = AppSignals()
+
+        try:
+            from classes.info import APP_NAME, DIR_PATH
+            from classes.logger import log
+            log.info(f"Starting {APP_NAME}")
+
+        except ImportError as error_message:
+            print(f"logging module unable to import! \n{error_message}")
+            raise
+
+        except Exception as error_message:
+            print(f"Unable to start logging. \n{error_message}")
+            raise
+
+        self.path = DIR_PATH

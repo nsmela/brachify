@@ -22,6 +22,9 @@ DEFAULT_LENGTH = 160.0
 
 
 class BrachyCylinder:
+    
+    @staticmethod
+    def default_length() -> float: return DEFAULT_LENGTH
 
     def shape(self) -> TopoDS_Shape:
         if self._shape:

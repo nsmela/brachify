@@ -12,7 +12,7 @@ class CylinderModel(QObject):
 
     values_changed = Signal(BrachyCylinder)
 
-    # Slot
+    # Slotted to Dicom Model's update
     def load_data(self, data: DicomData):
         self.cylinder = get_brachy_cylinder(data)
         self.update()

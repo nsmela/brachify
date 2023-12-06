@@ -19,6 +19,7 @@ class ChannelsModel(QObject):
 
     values_changed = Signal()
 
+    # Slotted to Dicom Model's update
     def load_data(self, data: DicomData):
         self.channels = []
         log.debug("### Importing RP Data ###")
@@ -36,6 +37,10 @@ class ChannelsModel(QObject):
         self.values_changed.emit()
         self.update_display()
 
+    def update(self):
+        self.values_changed.emit()
+        self.update_display()
+
     def update_display(self):
         shapes = [ShapeModel(
             label=f"{CHANNELS_LABEL}{channel.number}",
@@ -44,6 +49,10 @@ class ChannelsModel(QObject):
 
         app = get_app()
         app.window.displaymodel.add_shapes(shapes)
+
+    def update_height_offset(self, height_offset: float):
+        log.debug(f"updating channels height offset")
+        pass
 
     def __init__(self):
         super().__init__()

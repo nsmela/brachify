@@ -52,6 +52,9 @@ class MainWindow(QMainWindow):
         self.dicommodel.values_changed.connect(self.cylindermodel.load_data)
         self.dicommodel.values_changed.connect(self.channelsmodel.load_data)
 
+        app = get_app()
+        app.signals.height_changed.connect(self.channelsmodel.update_height_offset)
+
     def initViews(self):
         # initialize canvas
         self.canvas = OrbitCameraViewer3d()
