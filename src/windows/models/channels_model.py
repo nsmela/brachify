@@ -25,7 +25,7 @@ class ChannelsModel(QObject):
         for i in range(len(data.channels_rois)):
             channel_number = f"{data.channels_rois[i]}"
             channel_id = f"Channel {data.channels_labels[i]}"
-            points = data.channel_contours[i]
+            points = data.channel_paths[i]
 
             # to print the list fo points without quotes
             points_list = f"Raw points: {points}"
