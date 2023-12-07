@@ -30,9 +30,8 @@ class NeedleChannel:
         if self._shape:
             return self._shape
 
-        self._shape = rounded_channel(
-            self.points, self._offset, self._diameter)
-        #  self._shape = generate_curved_channel(self.points, self._offset, self._diameter)
+        self._shape = rounded_channel(self.points, self._offset, self._diameter)
+        
         return self._shape
 
     def setChannel(self, height: float = 0.0, diameter: float = 3.0) -> None:
@@ -46,7 +45,7 @@ class NeedleChannel:
         self._shape = None
         self.shape()
 
-    def setOffset(self, height: float = 0.0) -> None:
+    def set_offset(self, height: float = 0.0) -> None:
         self._offset = height
         self._shape = None
         self.shape()
@@ -91,7 +90,7 @@ def rounded_channel(channel_points, offset: float = 0.0, diameter: float = 3.0) 
     # and convert into a gp_Pnt
     points = []
     for point in channel_points:
-        points.append(gp_Pnt(point[0], point[1], point[2] - offset))
+        points.append(gp_Pnt(point[0], point[1], point[2] + offset))
 
     radius = diameter / 2
 

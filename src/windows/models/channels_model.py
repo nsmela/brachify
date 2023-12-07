@@ -52,7 +52,11 @@ class ChannelsModel(QObject):
 
     def update_height_offset(self, height_offset: float):
         log.debug(f"updating channels height offset")
-        pass
+        for i, channel in enumerate(self.channels):
+            new_channel = channel
+            new_channel.set_offset(height_offset)
+            self.channels[i] = new_channel
+        self.update()
 
     def __init__(self):
         super().__init__()
