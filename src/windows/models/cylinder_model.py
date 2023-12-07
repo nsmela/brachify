@@ -7,7 +7,6 @@ from windows.models.shape_model import ShapeModel, ShapeTypes
 
 CYLINDER_LABEL = "cylinder"
 
-
 class CylinderModel(QObject):
 
     values_changed = Signal(BrachyCylinder)

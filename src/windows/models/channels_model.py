@@ -53,8 +53,11 @@ class ChannelsModel(QObject):
                 label=channel_id, 
                 points=points)
             self.channels[needle.label]= needle
-        self.values_changed.emit()
-        self.update_display()
+        self.update()
+
+    def on_view_changed(self):
+        self.selected_channels = []
+        self.update()
 
     def set_diameter(self, diameter: float):
         for i in range(len(self.channels)):
@@ -92,6 +95,8 @@ class ChannelsModel(QObject):
         self.channels = {}
         self.diameter = NeedleChannel.default_diameter()
         self.selected_channels = []
+        
+        get_app().signals.viewChanged.connect(self.on_view_changed)
 
     @staticmethod
     def get_label(): return CHANNELS_LABEL

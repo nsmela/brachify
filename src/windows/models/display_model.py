@@ -58,6 +58,7 @@ class DisplayModel(QObject):
 
         # colour remaining shapes
         for shape in shapes.values():
+            if shape.selected: shape.type = ShapeTypes.SELECTED
             shape.rgb = self.colours[shape.type]
         self.shapes_changed.emit(list(shapes.values()), True)
 

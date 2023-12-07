@@ -11,7 +11,8 @@ from windows.models.shape_model import ShapeTypes
 colours = {
     ShapeTypes.CYLINDER: [0.2, 0.55, 0.55],
     ShapeTypes.CHANNEL: [0.5, 0.5, 0.4],
-    ShapeTypes.TANDEM: [0.5, 0.5, 0.4]}
+    ShapeTypes.TANDEM: [0.5, 0.5, 0.4],
+    ShapeTypes.SELECTED: [0.5, 0.5, 0.2]}
 
 
 class CylinderView(QWidget):

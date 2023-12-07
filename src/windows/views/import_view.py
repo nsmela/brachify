@@ -11,7 +11,8 @@ from windows.models.shape_model import ShapeTypes
 colours = {
     ShapeTypes.CYLINDER: [1.0, 1.0, 0.2],
     ShapeTypes.CHANNEL: [0.5, 0.5, 0.5],
-    ShapeTypes.TANDEM: [0.5, 0.5, 0.5]}
+    ShapeTypes.TANDEM: [0.5, 0.5, 0.5],
+    ShapeTypes.SELECTED: [0.5, 0.5, 0.2]}
 
 
 class ImportView(QWidget):

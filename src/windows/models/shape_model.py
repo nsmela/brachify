@@ -11,6 +11,7 @@ class ShapeTypes(Enum):
     CYLINDER = auto()
     CHANNEL = auto()
     TANDEM = auto()
+    SELECTED = auto()
     
 
 class ShapeModel:
