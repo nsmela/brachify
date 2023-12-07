@@ -25,6 +25,4 @@ class ShapeModel:
         # flags
         self.selected = False
         self.transparent = False
-        self.disabled = False
-        self.colliding = False
 

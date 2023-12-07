@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QWidget, QListWidgetItem
 
 from classes.app import get_app
 from classes.logger import log
@@ -16,6 +16,15 @@ colours = {
 
 class ChannelsView(QWidget):
 
+    def action_select_channel(self, item: QListWidgetItem):
+        log.debug(f"selecting {item.text()} channel")
+
+        self.ui.listwidget_channels.blockSignals(True)
+
+        model = get_app().window.channelsmodel
+        model.set_selected_channels(item.text())
+        self.ui.listwidget_channels.blockSignals(False)
+
     def action_set_diameter(self):
         diameter = self.ui.spinbox_diameter.value()
         log.debug(f"setting channel diameters to: {diameter}")
@@ -31,8 +40,16 @@ class ChannelsView(QWidget):
     def action_update_settings(self):
         log.debug(f"updating channels view")
         
+        # diameter spin box
         model = get_app().window.channelsmodel
         self.ui.spinbox_diameter.setValue(model.diameter)
+
+        # channels list
+        self.ui.listwidget_channels.clear()               
+        for row, channel in enumerate(model.channels.values()):
+            new_item = QListWidgetItem()
+            new_item.setText(channel.label)
+            self.ui.listwidget_channels.insertItem(row, new_item)
         
     def __init__(self):
         super().__init__()
@@ -41,6 +58,7 @@ class ChannelsView(QWidget):
 
         # signals and slots
         self.ui.btn_apply_diameter.pressed.connect(self.action_set_diameter)
+        self.ui.listwidget_channels.currentItemChanged.connect(self.action_select_channel)
 
         app = get_app()
         app.signals.viewChanged.connect(self.action_set_view)

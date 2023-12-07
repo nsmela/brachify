@@ -48,7 +48,7 @@ class OrbitCameraViewer3d(qtBaseViewer):
 
         loggedinfo = "shapes: "
         for shape in shapes:
-            loggedinfo += f"\nShape: {shape.label}, rgb: {shape.rgb}"
+            loggedinfo += f"\n{shape.label}: Type:{shape.type.name} Selected: {shape.selected} rgb: {shape.rgb} Transparent: {shape.transparent}"
             colour = Quantity_Color(
                 shape.rgb[0], shape.rgb[1], shape.rgb[2], Quantity_TOC_RGB)
             self._display.DisplayShape(shape.shape, color=colour, update=False)
