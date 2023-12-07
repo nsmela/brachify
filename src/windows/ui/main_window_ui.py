@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(882, 687)
+        MainWindow.resize(887, 696)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_5 = QVBoxLayout(self.centralwidget)
@@ -82,7 +82,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2 = QHBoxLayout(self.bodywidget)
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 4, 4)
         self.left_menu_bar = QWidget(self.bodywidget)
         self.left_menu_bar.setObjectName(u"left_menu_bar")
         self.left_menu_bar.setMinimumSize(QSize(250, 0))

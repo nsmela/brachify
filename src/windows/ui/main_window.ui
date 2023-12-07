@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>882</width>
-    <height>687</height>
+    <width>887</width>
+    <height>696</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -158,10 +158,10 @@
         <number>0</number>
        </property>
        <property name="rightMargin">
-        <number>0</number>
+        <number>4</number>
        </property>
        <property name="bottomMargin">
-        <number>0</number>
+        <number>4</number>
        </property>
        <item>
         <widget class="QWidget" name="left_menu_bar" native="true">
