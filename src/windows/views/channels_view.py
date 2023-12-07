@@ -32,6 +32,7 @@ class ChannelsView(QWidget):
         log.debug(f"updating channels view")
         
         model = get_app().window.channelsmodel
+        self.ui.spinbox_diameter.setValue(model.diameter)
         
     def __init__(self):
         super().__init__()
