@@ -13,18 +13,13 @@ from OCC.Core.TopoDS import TopoDS_Shape
 import classes.mesh.helper as helper
 
 NEEDLE_LENGTH = 2.50
+DEFAULT_DIAMETER = 3.0
 
 
 class NeedleChannel:
-    def __init__(self, number: str, label: str, points):
-        self.number = number
-        self.label = label
-        self.points = points
-        self.points_raw = points
-        self._shape = None
 
-        self._offset = 0.0
-        self._diameter = 3.0
+    @staticmethod
+    def default_diameter() -> float: return DEFAULT_DIAMETER
 
     def shape(self) -> TopoDS_Shape:
         if self._shape:
@@ -77,6 +72,16 @@ class NeedleChannel:
             print(f"Large angle! corrected to {angle}")
 
         return angle
+    
+    def __init__(self, number: str, label: str, points):
+        self.number = number
+        self.label = label
+        self.points = points
+        self.points_raw = points
+        self._shape = None
+
+        self._offset = 0.0
+        self._diameter = DEFAULT_DIAMETER
 
 def rounded_channel(channel_points, offset: float = 0.0, diameter: float = 3.0) -> TopoDS_Shape:
     """

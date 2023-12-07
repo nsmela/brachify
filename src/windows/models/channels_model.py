@@ -26,10 +26,18 @@ class ChannelsModel(QObject):
             points_list = f"Raw points: {points}"
             log.debug(points_list.replace("'", ""))
 
-            needle = NeedleChannel(number=channel_number, label=channel_id, points=points)
+            needle = NeedleChannel(
+                number=channel_number, 
+                label=channel_id, 
+                points=points)
             self.channels.append(needle)
         self.values_changed.emit()
         self.update_display()
+
+    def set_diameter(self, diameter: float):
+        for i in range(len(self.channels)):
+            self.channels[i].setDiameter(diameter)  # set diameter and calculate shape
+        self.update()
 
     def update(self):
         self.values_changed.emit()
@@ -37,7 +45,7 @@ class ChannelsModel(QObject):
 
     def update_display(self):
         shapes = [ShapeModel(
-            label=f"{CHANNELS_LABEL}{channel.number}",
+            label=channel.label,
             shape=channel.shape(),
             shape_type=ShapeTypes.CHANNEL
         ) for channel in self.channels]
@@ -56,6 +64,7 @@ class ChannelsModel(QObject):
     def __init__(self):
         super().__init__()
         self.channels = []
+        self.diameter = NeedleChannel.default_diameter()
 
     @staticmethod
     def get_label(): return CHANNELS_LABEL

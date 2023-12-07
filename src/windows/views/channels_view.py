@@ -16,6 +16,11 @@ colours = {
 
 class ChannelsView(QWidget):
 
+    def action_set_diameter(self):
+        diameter = self.ui.spinbox_diameter.value()
+        log.debug(f"setting channel diameters to: {diameter}")
+        get_app().window.channelsmodel.set_diameter(diameter)
+
     def action_set_view(self, view_index: int):
         if view_index != 2:
             return  # this view is page 1, exit if not this view
@@ -34,7 +39,7 @@ class ChannelsView(QWidget):
         self.ui.setupUi(self)
 
         # signals and slots
-        
+        self.ui.btn_apply_diameter.pressed.connect(self.action_set_diameter)
 
         app = get_app()
         app.signals.viewChanged.connect(self.action_set_view)
