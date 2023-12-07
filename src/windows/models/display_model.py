@@ -1,5 +1,10 @@
 from PySide6.QtCore import QObject, Signal
-from .shape_model import ShapeModel
+from .shape_model import ShapeModel, ShapeTypes
+
+default_colours = {
+    ShapeTypes.CYLINDER: [1.0, 1.0, 1.0],
+    ShapeTypes.CHANNEL: [0.2, 0.55, 0.55],
+    ShapeTypes.TANDEM: [1.0, 1.0, 1.0]}
 
 
 class DisplayModel(QObject):
@@ -27,11 +32,10 @@ class DisplayModel(QObject):
     
     def set_shape_colour(self, colours: dict, update=True):
         """
-        colours is {label: [0.5, 0.5, 0.5]}
+        colours is {ShapeTypes: [0.5, 0.5, 0.5]}
         """
-        # colours is {label:rgb}
-        for label, rgb in colours.items():
-            self.colours[label] = rgb
+        self.colours = colours
+        
         if update: self.update()
 
     def set_shape_visibility(self, visibility: dict, update: bool = True):
@@ -53,14 +57,13 @@ class DisplayModel(QObject):
                 del shapes[label]       
 
         # colour remaining shapes
-        for label, rgb in self.colours.items():
-            if label in shapes.keys():
-                shapes[label].rgb = rgb
+        for shape in shapes.values():
+            shape.rgb = self.colours[shape.type]
         self.shapes_changed.emit(list(shapes.values()), True)
 
     def __init__(self):
         super().__init__()
-        self.colours = {}  # label: rgb
+        self.colours = default_colours
         self.visibility = {}  # label: bool where True is visible
         self.shapes = {}  # each entry stored as (ShapeModel)
 

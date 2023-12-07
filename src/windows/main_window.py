@@ -10,6 +10,7 @@ from windows.models.channels_model import ChannelsModel
 from windows.models.cylinder_model import CylinderModel
 from windows.views.import_view import ImportView
 from windows.views.cylinder_view import CylinderView
+from windows.views.channels_view import ChannelsView
 
 class MainWindow(QMainWindow):
 
@@ -70,6 +71,7 @@ class MainWindow(QMainWindow):
         # TODO views
         self.ui.page_import.layout().addWidget(ImportView())
         self.ui.page_cylinder.layout().addWidget(CylinderView())
+        self.ui.page_channels.layout().addWidget(ChannelsView())
 
         # show this window with resizing to ensure canvas is displayed properly
         self.showWithCanvas()  # shows and then resizes the window to properly display canvas

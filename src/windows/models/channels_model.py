@@ -4,16 +4,10 @@ from classes.app import get_app
 from classes.dicom.data import DicomData
 from classes.mesh.channel import NeedleChannel
 from classes.logger import log
-from windows.models.shape_model import ShapeModel
+from windows.models.shape_model import ShapeModel, ShapeTypes
 
 CHANNELS_LABEL = "applicator_"
 
-CYLINDER_COLOUR = [0.0, 0.0, 0.0]
-TANDEM_COLOUR = [0.0, 0.0, 0.0]
-CHANNEL_COLOUR_STANDARD = [0.2, 0.55, 0.55]
-CHANNEL_COLOUR_ACTIVE = [0.2, 0.95, 0.55]
-CHANNEL_COLOUR_COLLIDING = [0.95, 0.1, 0.1]
-CHANNEL_COLOUR_DISABLED = [0.05, 0.05, 0.05]
 
 class ChannelsModel(QObject):
 
@@ -44,7 +38,8 @@ class ChannelsModel(QObject):
     def update_display(self):
         shapes = [ShapeModel(
             label=f"{CHANNELS_LABEL}{channel.number}",
-            shape=channel.shape()
+            shape=channel.shape(),
+            shape_type=ShapeTypes.CHANNEL
         ) for channel in self.channels]
 
         app = get_app()
@@ -61,3 +56,6 @@ class ChannelsModel(QObject):
     def __init__(self):
         super().__init__()
         self.channels = []
+
+    @staticmethod
+    def get_label(): return CHANNELS_LABEL

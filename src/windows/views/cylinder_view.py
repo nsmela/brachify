@@ -6,10 +6,12 @@ from classes.dicom.data import DicomData
 from windows.ui.cylinder_view_ui import Ui_Cylinder_View
 from windows.models.cylinder_model import CylinderModel
 from classes.mesh.cylinder import BrachyCylinder
+from windows.models.shape_model import ShapeTypes
 
-COLOURS_CYLINDER = [0.2, 0.55, 0.55,]
-COLOURS_CHANNELS = [0.5, 0.5, 0.4]
-COLOURS_TANDEM = [0.5, 0.5, 0.4]
+colours = {
+    ShapeTypes.CYLINDER: [0.2, 0.55, 0.55],
+    ShapeTypes.CHANNEL: [0.5, 0.5, 0.4],
+    ShapeTypes.TANDEM: [0.5, 0.5, 0.4]}
 
 
 class CylinderView(QWidget):
@@ -54,11 +56,6 @@ class CylinderView(QWidget):
         if view_index != 1: return  # this view is page 1, exit if not this view
 
         log.debug(f"switching to cylinder view")
-
-        colours = {}
-        colours[CylinderModel.get_label()] = COLOURS_CYLINDER
-        # TODO Needles color
-        # TODO Tandem Color
         get_app().window.displaymodel.set_shape_colour(colours)
 
     def __init__(self):

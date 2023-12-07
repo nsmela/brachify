@@ -3,7 +3,7 @@ from PySide6.QtCore import QObject, Signal
 from classes.app import get_app
 from classes.dicom.data import DicomData
 from classes.mesh.cylinder import BrachyCylinder, get_brachy_cylinder
-from windows.models.shape_model import ShapeModel
+from windows.models.shape_model import ShapeModel, ShapeTypes
 
 CYLINDER_LABEL = "cylinder"
 
@@ -30,7 +30,8 @@ class CylinderModel(QObject):
     def update_display(self):
         shape_model = ShapeModel(
             label=CYLINDER_LABEL, 
-            shape=self.cylinder.shape())
+            shape=self.cylinder.shape(),
+            shape_type=ShapeTypes.CYLINDER)
 
         app = get_app()
         app.window.displaymodel.add_shape(shape_model)

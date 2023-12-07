@@ -6,10 +6,12 @@ from classes.dicom.fileio import read_dicom_folder
 from classes.dicom.data import DicomData
 from windows.ui.import_view_ui import Ui_Import_View
 from windows.models.cylinder_model import CylinderModel
+from windows.models.shape_model import ShapeTypes
 
-COLOURS_CYLINDER = [1.0, 1.0, 0.2]
-COLOURS_CHANNELS = [0.5, 0.5, 0.5]
-COLOURS_TANDEM = [0.5, 0.5, 0.5]
+colours = {
+    ShapeTypes.CYLINDER: [1.0, 1.0, 0.2],
+    ShapeTypes.CHANNEL: [0.5, 0.5, 0.5],
+    ShapeTypes.TANDEM: [0.5, 0.5, 0.5]}
 
 
 class ImportView(QWidget):
@@ -38,10 +40,7 @@ class ImportView(QWidget):
     def action_set_view(self, view_index: int):
         if view_index != 0: return  # this view is page 0, exit if not this view
 
-        colours = {}
-        colours[CylinderModel.get_label()] = COLOURS_CYLINDER
-        # TODO Needles color
-        # TODO Tandem Color
+        log.debug(f"setting display view")
         get_app().window.displaymodel.set_shape_colour(colours)
 
     def setupUi(self):
