@@ -1,5 +1,8 @@
 from PySide6.QtCore import QObject, Signal
+
 from .shape_model import ShapeModel, ShapeTypes
+from classes.app import get_app
+from classes.logger import log
 
 default_colours = {
     ShapeTypes.CYLINDER: [1.0, 1.0, 1.0],
@@ -18,6 +21,21 @@ class DisplayModel(QObject):
     def add_shapes(self, shapes:list):
         for shape in shapes:
             self.shapes[shape.label] = shape
+        self.update()
+
+    def set_selected_shapes(self, shapes):
+        log.debug(f"selecting {shapes} \n\n{shapes[0].DumpJsonToString()}")
+        label = ""
+
+        # each shape is set to not selected 
+        # then set to selected if found
+        for label, old_shape in self.shapes.items():
+            self.shapes[label].selected = False  # if not found, stay False
+            if shapes[0].IsEqual(old_shape.shape):
+                self.shapes[old_shape.label].selected = True
+                continue
+
+        log.debug(f"shape matches {label}")
         self.update()
 
     def remove_shape(self, label:str):
@@ -58,8 +76,10 @@ class DisplayModel(QObject):
 
         # colour remaining shapes
         for shape in shapes.values():
-            if shape.selected: shape.type = ShapeTypes.SELECTED
-            shape.rgb = self.colours[shape.type]
+            if shape.selected: 
+                shape.rgb = self.colours[ShapeTypes.SELECTED]
+            else: 
+                shape.rgb = self.colours[shape.type]
         self.shapes_changed.emit(list(shapes.values()), True)
 
     def __init__(self):
@@ -68,4 +88,5 @@ class DisplayModel(QObject):
         self.visibility = {}  # label: bool where True is visible
         self.shapes = {}  # each entry stored as (ShapeModel)
 
-
+        # signals and slots
+        # connected under initViews() in MainWindow class
