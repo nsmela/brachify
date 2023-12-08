@@ -7,7 +7,8 @@ from classes.logger import log
 default_colours = {
     ShapeTypes.CYLINDER: [1.0, 1.0, 1.0],
     ShapeTypes.CHANNEL: [0.2, 0.55, 0.55],
-    ShapeTypes.TANDEM: [1.0, 1.0, 1.0]}
+    ShapeTypes.TANDEM: [1.0, 1.0, 1.0],
+    ShapeTypes.SELECTED: [0.2, 0.55, 0.55]}
 
 
 class DisplayModel(QObject):

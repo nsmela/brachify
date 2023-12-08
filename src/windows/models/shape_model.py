@@ -1,4 +1,4 @@
-from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Core.TopoDS import TopoDS_Shape, TopoDS_Compound
 from enum import Enum, auto, unique
 
 
@@ -16,6 +16,17 @@ class ShapeTypes(Enum):
 
 class ShapeModel:
 
+    def isMatch(self, compounds: list) -> bool:
+        for compound in compounds:
+            # skip objects that are not 
+            if type(compound) is not \
+            type(TopoDS_Compound) and type(TopoDS_Shape): 
+                continue
+
+            if compound.IsEqual(self.shape): return True
+        
+        return False
+
     def __init__(self, label: str, shape: TopoDS_Shape, shape_type: ShapeTypes):
 
         self.label = label
@@ -26,4 +37,5 @@ class ShapeModel:
         # flags
         self.selected = False
         self.transparent = False
+    
 

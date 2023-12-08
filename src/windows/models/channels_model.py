@@ -1,5 +1,7 @@
 from PySide6.QtCore import QObject, Signal
 
+from OCC.Core.TopoDS import TopoDS_Compound
+
 from classes.app import get_app
 from classes.dicom.data import DicomData
 from classes.mesh.channel import NeedleChannel
@@ -15,24 +17,34 @@ class ChannelsModel(QObject):
 
     def set_selected_channels(self, *args):
         log.debug(f"setting selected channels")
+        self.selected_channels =[]
         if len(args) < 1: raise ValueError("no arguements made!")
         
         # if using indexes to match to the channel's label
-        if type(args[0]) is type(int):
-            channel_labels = []
+        if type(args[0]) is type(int):  # index of the selected channel(s)
             channels = [channel.label for channel in self.channels.values()]
             for index in args:
-                channel_labels.append(channels[index])
-
-            self.selected_channels = channel_labels
+                self.selected_channels.append(channels[index])
             self.update()
             return None
-        elif type(args[0] is type(str)):
+
+        elif type(args[0] is type(str)):  # label of selected channel
             self.selected_channels = args
             self.update()
             return None
+        
         else:
-            raise ValueError("value wasn't an int!")
+            raise ValueError(f"wrong value type {type(args[0])}")
+    
+    def set_selected_shapes(self, *args):
+        log.debug(f"setting selected shapes")
+        self.selected_channels =[]
+        for compound in args[0]:
+            for label, needle in self.channels.items():
+                if compound.IsEqual(needle.shape()):
+                    self.selected_channels.append(label)
+                    break
+        self.update()
 
     # Slotted to Dicom Model's update
     def load_data(self, data: DicomData):
