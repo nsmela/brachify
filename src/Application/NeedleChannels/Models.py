@@ -22,7 +22,7 @@ class NeedleChannel(NeedleChannelModel):
             return self._shape
 
         self._shape = rounded_channel(
-            self.points, self._offset, self._diameter)
+            self.points, -self._offset, self._diameter)
         #  self._shape = generate_curved_channel(self.points, self._offset, self._diameter)
         return self._shape
 
