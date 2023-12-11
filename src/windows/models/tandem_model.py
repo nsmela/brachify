@@ -49,6 +49,10 @@ class TandemModel(QObject):
     def set_height_offset(self, height_offset:float):
         pass
 
+    def shape(self):
+        # extend the base shape, rotate it, and return the result
+        pass
+
     def __init__(self) -> None:
         super().__init__()
         self.base_shape = None  # base shape before extending due to height offset
