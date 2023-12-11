@@ -31,12 +31,22 @@ class ChannelsView(QWidget):
         log.debug(f"setting channel diameters to: {diameter}")
         get_app().window.channelsmodel.set_diameter(diameter)
 
+    def action_set_tandem(self):
+        log.debug(f"setting channel's tandem status")
+        model = get_app().window.channelsmodel
+        channel_label = model.get_selected_channel()
+        model.set_tandem(channel_label)
+
     def action_set_view(self, view_index: int):
         if view_index != 2:
             return  # this view is page 1, exit if not this view
 
         log.debug(f"switching to channels view")
         get_app().window.displaymodel.set_shape_colour(colours)
+
+    def action_toggle_channel_disable(self):
+        log.debug(f"toggling channel's disabled status")
+        pass
 
     def action_update_settings(self):
         log.debug(f"updating channels view")
@@ -51,6 +61,25 @@ class ChannelsView(QWidget):
             new_item = QListWidgetItem()
             new_item.setText(channel.label)
             self.ui.listwidget_channels.insertItem(row, new_item)
+
+        # selected channel
+        channel = model.get_selected_channel()
+
+        # enable/disable buttons if any channel is selected
+        any_selected = channel != None
+        self.ui.btn_enable.setEnabled(any_selected)
+        self.ui.btn_set_tandem.setEnabled(any_selected)
+        
+        label = model.get_selected_channel()
+        is_disabled = model.is_channel_disabled(label)
+        is_tandem = model.is_channel_tandem(label)
+
+
+        if is_disabled: self.ui.btn_enable.setText("Enable")
+        else: self.ui.btn_enable.setText("Disable")
+
+        if is_tandem: self.ui.btn_set_tandem.setText("Clear Tandem")
+        else: self.ui.btn_set_tandem.setText("Set as Tandem")
         
     def __init__(self):
         super().__init__()
@@ -60,6 +89,8 @@ class ChannelsView(QWidget):
         # signals and slots
         self.ui.btn_apply_diameter.pressed.connect(self.action_set_diameter)
         self.ui.listwidget_channels.currentItemChanged.connect(self.action_select_channel)
+        self.ui.btn_enable.pressed.connect(self.action_toggle_channel_disable)
+        self.ui.btn_set_tandem.pressed.connect(self.action_set_tandem)
 
         app = get_app()
         app.signals.viewChanged.connect(self.action_set_view)
