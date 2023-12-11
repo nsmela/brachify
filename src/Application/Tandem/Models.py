@@ -8,8 +8,8 @@ from Application.BRep.Tandem import generate_tandem
 
 # Defaults
 TANDEM_CHANNEL_DIAMETER_DEFAULT = 4.0
-TANDEM_TIP_DIAMETER_DEFAULT = 8.0
-TANDEM_TIP_THICKNESS_DEFAULT = 4.0
+TANDEM_TIP_DIAMETER_DEFAULT = 4.0
+TANDEM_TIP_THICKNESS_DEFAULT = 12.0
 TANDEM_TIP_ANGLE_DEFAULT = 45.0
 TANDEM_TIP_HEIGHT_DEFAULT = 170.0
 
@@ -21,6 +21,7 @@ class Tandem(TandemModel):
         self._shape = None  # the shape used to cut from the model
         self.offset_height = 0.0  # translate offsets height
         self.rotation = 0.0  # rotation (0.0) along each axis xyz
+        self.tandem_defined_bool = False
 
         # variables to generate a tandem
         self.channel_diameter = TANDEM_CHANNEL_DIAMETER_DEFAULT
@@ -50,7 +51,7 @@ class Tandem(TandemModel):
             self._shape = rotate_shape(
                 shape=self._base_shape, axis=gp.OZ(), angle=rotation)
             self._shape = translate_shp(self._shape, offset)
-            self._shape = extend_bottom_face(self._shape)
+            # self._shape = extend_bottom_face(self._shape)
         return self._shape
 
     def import_shape(self, shape: TopoDS_Shape) -> None:

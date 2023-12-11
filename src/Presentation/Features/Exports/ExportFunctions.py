@@ -302,11 +302,11 @@ def export_pdf(window:MainWindow) -> None:
 
         # Plot each point as a circle with a number inside
         for i, (x, y) in enumerate(points, start=1):
-            ax.add_artist(plt.Circle((x, y), 1.25, color='black', fill=False))
+            ax.add_artist(plt.Circle((x, -y), 1.25, color='black', fill=False))
             if (i == 1 and has_tandem):
-                ax.text(x, y, 'T', color='black', ha='center', va='center')
+                ax.text(x, -y, 'T', color='black', ha='center', va='center')
             else:
-                ax.text(x, y, str(i), color='black', ha='center', va='center')
+                ax.text(x, -y, str(i), color='black', ha='center', va='center')
 
         # Add a filled black rectangle at the top center of the big circle
         tick_width = 0.2
