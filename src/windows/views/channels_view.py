@@ -37,9 +37,14 @@ class ChannelsView(QWidget):
 
     def action_set_tandem(self):
         log.debug(f"setting channel's tandem status")
+
         model = get_app().window.channelsmodel
         channel_label = model.get_selected_channel()
-        model.set_tandem(channel_label)
+
+        # set or clear the tandem channel
+        label = None
+        if channel_label != model.tandem_channel: label = channel_label
+        model.set_tandem(label)
 
     def action_set_view(self, view_index: int):
         log.debug(f"action: set channel view")
@@ -53,7 +58,9 @@ class ChannelsView(QWidget):
 
     def action_toggle_channel_disable(self):
         log.debug(f"toggling channel's disabled status")
-        pass
+        model = get_app().window.channelsmodel
+        channel_label = model.get_selected_channel()   
+        model.toggle_channel_enabled(channel_label)
 
     def action_update_settings(self):
         if not self.is_active: return  # this view isn't displayed
@@ -95,7 +102,7 @@ class ChannelsView(QWidget):
         
     def on_view_open(self):
             self.is_active = True
-            
+
             canvas = get_app().window.canvas
             channelsmodel = get_app().window.channelsmodel
             canvas.sig_topods_selected.connect(channelsmodel.set_selected_shapes)

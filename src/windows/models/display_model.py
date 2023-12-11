@@ -16,12 +16,16 @@ class DisplayModel(QObject):
     shapes_changed = Signal(list, bool)
 
     def add_shape(self, shape: ShapeModel):
-        self.shapes[shape.label] = shape
+        if not shape.enabled: del self.shapes[shape.label]
+        else: self.shapes[shape.label] = shape
         self.update()
 
     def add_shapes(self, shapes:list):
         for shape in shapes:
-            self.shapes[shape.label] = shape
+            if not shape.enabled:  # if disabled, remove the shape all together 
+                if shape.label in self.shapes:
+                    del self.shapes[shape.label]
+            else: self.shapes[shape.label] = shape
         self.update()
 
     def set_selected_shapes(self, shapes):
@@ -69,19 +73,14 @@ class DisplayModel(QObject):
         To update the viewport's shapes
         """
 
-        # remove hidden shapes
-        shapes = self.shapes
-        for label, visible in self.visibility:
-            if not visible and label in shapes.keys():
-                del shapes[label]       
-
+        shapes = self.shapes.values()
         # colour remaining shapes
-        for shape in shapes.values():
+        for shape in shapes:
             if shape.selected: 
                 shape.rgb = self.colours[ShapeTypes.SELECTED]
             else: 
                 shape.rgb = self.colours[shape.type]
-        self.shapes_changed.emit(list(shapes.values()), True)
+        self.shapes_changed.emit(list(shapes), True)
 
     def __init__(self):
         super().__init__()

@@ -44,6 +44,11 @@ class ChannelsModel(QObject):
                 label=channel_id, 
                 points=points)
             self.channels[needle.label]= needle
+
+            #set tandem channel
+            label = channel_id.lower()
+            if "tandem" in label: self.tandem_channel = channel_id
+
         self.update()
 
     def on_view_changed(self):
@@ -94,6 +99,15 @@ class ChannelsModel(QObject):
         self.tandem_channel = label
         self.update()
 
+    def toggle_channel_enabled(self, label: str):
+        log.debug(f"Toggling channel enable")
+        if label in self.disabled_channels:
+            self.disabled_channels.remove(label)
+        else:
+            self.disabled_channels.append(label)
+        log.debug(f"{self.disabled_channels}")
+        self.update()
+
     def update(self):
         self.values_changed.emit()
         self.update_display()
@@ -108,6 +122,10 @@ class ChannelsModel(QObject):
         # set selected shapes
         for shape in shapes:
             shape.selected = shape.label in self.selected_channels
+
+        # set shape's enabled
+        for shape in shapes:
+            shape.enabled = not self.is_channel_disabled(shape.label)
 
         app = get_app()
         app.window.displaymodel.add_shapes(shapes)

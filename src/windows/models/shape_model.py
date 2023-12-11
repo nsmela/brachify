@@ -37,5 +37,6 @@ class ShapeModel:
         # flags
         self.selected = False
         self.transparent = False
+        self.enabled = True
     
 
