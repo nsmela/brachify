@@ -67,7 +67,6 @@ class MainWindow(QMainWindow):
         self.display.FitAll()
 
         self.displaymodel.shapes_changed.connect(self.canvas.update_display)
-        self.canvas.sig_topods_selected.connect(self.channelsmodel.set_selected_shapes)
 
         # TODO views
         self.ui.page_import.layout().addWidget(ImportView())

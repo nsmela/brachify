@@ -43,14 +43,16 @@ class OrbitCameraViewer3d(qtBaseViewer):
     sig_topods_selected = QtCore.Signal(list)
 
     def update_display(self, shapes: list, resize: bool = True):
+        log.debug(f"updating viewport with {len(shapes)} shapes")
         # clear all the shapes
         self._display.Context.RemoveAll(True)
 
-        loggedinfo = "shapes: "
+        loggedinfo = ""
         for shape in shapes:
-            loggedinfo += f"\n{shape.label}: Type:{shape.type.name} Selected: {shape.selected} rgb: {shape.rgb} Transparent: {shape.transparent}"
+            if shape.selected:
+                loggedinfo += f"\n    {shape.label}: Type:{shape.type.name} Selected: {shape.selected} rgb: {shape.rgb} Transparent: {shape.transparent}"
             colour = Quantity_Color(
-                shape.rgb[0], shape.rgb[1], shape.rgb[2], Quantity_TOC_RGB)
+                    shape.rgb[0], shape.rgb[1], shape.rgb[2], Quantity_TOC_RGB)
             self._display.DisplayShape(shape.shape, color=colour, update=False)
 
         self._display.Repaint()

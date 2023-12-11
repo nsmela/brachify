@@ -18,15 +18,19 @@ colours = {
 class ChannelsView(QWidget):
 
     def action_select_channel(self, item: QListWidgetItem):
-        log.debug(f"selecting {item.text()} channel")
+        log.debug(f"action: select channel")
+        if type(item) is type(None): return None
+        else: label = item.text()
 
-        self.ui.listwidget_channels.blockSignals(True)
-
-        model = get_app().window.channelsmodel
-        model.set_selected_channels(item.text())
-        self.ui.listwidget_channels.blockSignals(False)
+        log.debug(f"selecting {label} channel")
+        try:
+            model = get_app().window.channelsmodel
+            model.set_selected_channels(label)
+        except Exception as error_message:
+            log.critical(f"failed selecting channel from list view: \n{error_message}")
 
     def action_set_diameter(self):
+        log.debug(f"action: set channel diameter")
         diameter = self.ui.spinbox_diameter.value()
         log.debug(f"setting channel diameters to: {diameter}")
         get_app().window.channelsmodel.set_diameter(diameter)
@@ -38,17 +42,33 @@ class ChannelsView(QWidget):
         model.set_tandem(channel_label)
 
     def action_set_view(self, view_index: int):
+        log.debug(f"action: set channel view")
         if view_index != 2:
+            self.is_active = False
+            try:
+                canvas = get_app().window.canvas
+                channelsmodel = get_app().window.channelsmodel
+                canvas.sig_topods_selected.disconnect(channelsmodel.set_selected_shapes)
+            except RuntimeError as error_message:
+                log.warning(f"{error_message}")
             return  # this view is page 1, exit if not this view
 
-        log.debug(f"switching to channels view")
-        get_app().window.displaymodel.set_shape_colour(colours)
+        if not self.is_active:
+            log.debug(f"switching to channels view")
+            self.is_active = True
+            canvas = get_app().window.canvas
+            channelsmodel = get_app().window.channelsmodel
+            canvas.sig_topods_selected.connect(channelsmodel.set_selected_shapes)
+            get_app().window.displaymodel.set_shape_colour(colours)
+            self.action_update_settings()
 
     def action_toggle_channel_disable(self):
         log.debug(f"toggling channel's disabled status")
         pass
 
     def action_update_settings(self):
+        if not self.is_active: return  # this view isn't displayed
+
         log.debug(f"updating channels view")
         
         # diameter spin box
@@ -56,24 +76,27 @@ class ChannelsView(QWidget):
         self.ui.spinbox_diameter.setValue(model.diameter)
 
         # channels list
-        self.ui.listwidget_channels.clear()               
+        selected_channel = model.get_selected_channel()
+        self.ui.listwidget_channels.blockSignals(True)  # prevents accidently emitting signals
+        self.ui.listwidget_channels.clear()          
         for row, channel in enumerate(model.channels.values()):
             new_item = QListWidgetItem()
             new_item.setText(channel.label)
             self.ui.listwidget_channels.insertItem(row, new_item)
+            if selected_channel is not None and \
+               selected_channel == channel.label:
+                self.ui.listwidget_channels.setCurrentRow(row)
+        self.ui.listwidget_channels.blockSignals(False)
 
         # selected channel
-        channel = model.get_selected_channel()
-
         # enable/disable buttons if any channel is selected
-        any_selected = channel != None
+        any_selected = selected_channel != None
         self.ui.btn_enable.setEnabled(any_selected)
         self.ui.btn_set_tandem.setEnabled(any_selected)
         
         label = model.get_selected_channel()
         is_disabled = model.is_channel_disabled(label)
         is_tandem = model.is_channel_tandem(label)
-
 
         if is_disabled: self.ui.btn_enable.setText("Enable")
         else: self.ui.btn_enable.setText("Disable")
@@ -85,6 +108,7 @@ class ChannelsView(QWidget):
         super().__init__()
         self.ui = Ui_Channels_View()  # the converted python file from the ui file
         self.ui.setupUi(self)
+        self.is_active = False
 
         # signals and slots
         self.ui.btn_apply_diameter.pressed.connect(self.action_set_diameter)

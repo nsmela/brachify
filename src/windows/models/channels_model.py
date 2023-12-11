@@ -15,15 +15,15 @@ class ChannelsModel(QObject):
 
     values_changed = Signal()
 
+    def get_selected_channel(self) -> str:
+        if not self.selected_channels: return None
+        return self.selected_channels[0]
+    
     def is_channel_disabled(self, label: str) -> bool:
         return label in self.disabled_channels
     
     def is_channel_tandem(self, label:str) -> bool:
         return label == self.tandem_channel
-
-    def get_selected_channel(self) -> str:
-        if not self.selected_channels: return None
-        return self.selected_channels[0]
 
     # Slotted to Dicom Model's update
     def load_data(self, data: DicomData):
@@ -78,13 +78,17 @@ class ChannelsModel(QObject):
     
     def set_selected_shapes(self, *args):
         log.debug(f"setting selected shapes")
-        self.selected_channels =[]
-        for compound in args[0]:
-            for label, needle in self.channels.items():
-                if compound.IsEqual(needle.shape()):
-                    self.selected_channels.append(label)
-                    break
-        self.update()
+
+        try:
+            self.selected_channels =[]
+            for compound in args[0]:
+                for label, needle in self.channels.items():
+                    if compound.IsEqual(needle.shape()):
+                        self.selected_channels.append(label)
+                        break
+            self.update()
+        except Exception as error_message:
+            log.critical(f"error while setting selected shapes from viewport:\n{error_message}")
 
     def set_tandem(self, label:str) -> None:
         self.tandem_channel = label
