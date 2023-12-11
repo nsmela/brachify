@@ -42,10 +42,12 @@ class ImportView(QWidget):
         if view_index != 0: return  # this view is page 0, exit if not this view
 
         log.debug(f"setting display view")
-        get_app().window.displaymodel.set_shape_colour(colours)
+        self.on_view_open()
 
-    def setupUi(self):
-        pass
+    def on_view_open(self):
+        displaymodel = get_app().window.displaymodel
+        displaymodel.set_shape_colour(colours)
+        displaymodel.set_transparent(False, True)
 
     def __init__(self):
         super().__init__()

@@ -109,12 +109,19 @@ class ChannelsView(QWidget):
             channelsmodel = get_app().window.channelsmodel
             canvas.sig_topods_selected.connect(channelsmodel.set_selected_shapes)
 
-            get_app().window.displaymodel.set_shape_colour(colours)
+            displaymodel = get_app().window.displaymodel
+            displaymodel.set_shape_colour(colours)
+            displaymodel.set_transparent(True)
+            channelsmodel.update()
+
             self.action_update_settings()
 
     def on_view_close(self):
         self.is_active = False
         try:
+            displaymodel = get_app().window.displaymodel
+            displaymodel.set_transparent(False)
+            
             canvas = get_app().window.canvas
             channelsmodel = get_app().window.channelsmodel
             canvas.sig_topods_selected.disconnect(channelsmodel.set_selected_shapes)

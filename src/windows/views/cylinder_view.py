@@ -57,7 +57,12 @@ class CylinderView(QWidget):
         if view_index != 1: return  # this view is page 1, exit if not this view
 
         log.debug(f"switching to cylinder view")
-        get_app().window.displaymodel.set_shape_colour(colours)
+        self.on_view_open()
+
+    def on_view_open(self):
+        displaymodel = get_app().window.displaymodel
+        displaymodel.set_shape_colour(colours)
+        displaymodel.set_transparent(False, True)
 
     def __init__(self):
         super().__init__()

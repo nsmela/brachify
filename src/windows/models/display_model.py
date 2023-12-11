@@ -52,7 +52,7 @@ class DisplayModel(QObject):
         for label in labels:
             self.shapes.pop(label)
         self.update()
-    
+
     def set_shape_colour(self, colours: dict, update=True):
         """
         colours is {ShapeTypes: [0.5, 0.5, 0.5]}
@@ -66,6 +66,12 @@ class DisplayModel(QObject):
         visibility is {label: bool} where True means the shape is passed to the display
         """
         self.visibility.update(visibility)
+        if update: self.update()
+
+    def set_transparent(self, is_transparent:bool, update: bool = False):
+        for label in self.shapes:
+            self.shapes[label].transparent = is_transparent
+        
         if update: self.update()
 
     def update(self):

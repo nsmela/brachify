@@ -1,6 +1,7 @@
-from OCC.Display import OCCViewer
-from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Core.Graphic3d import Graphic3d_NOM_TRANSPARENT
 from OCC.Core.Quantity import Quantity_Color, Quantity_TOC_RGB
+from OCC.Core.TopoDS import TopoDS_Shape
+from OCC.Display import OCCViewer
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
@@ -53,7 +54,9 @@ class OrbitCameraViewer3d(qtBaseViewer):
                 loggedinfo += f"\n    {shape.label}: Type:{shape.type.name} Selected: {shape.selected} rgb: {shape.rgb} Transparent: {shape.transparent}"
             colour = Quantity_Color(
                     shape.rgb[0], shape.rgb[1], shape.rgb[2], Quantity_TOC_RGB)
-            self._display.DisplayShape(shape.shape, color=colour, update=False)
+            
+            if shape.transparent: self._display.DisplayShape(shape.shape, color=colour, material=Graphic3d_NOM_TRANSPARENT, update=False)
+            else: self._display.DisplayShape(shape.shape, color=colour, update=False)
 
         self._display.Repaint()
         # set the grid model
