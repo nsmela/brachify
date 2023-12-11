@@ -19,7 +19,7 @@ class TandemView(QWidget):
         log.debug(f"action: set tandem view")
         if view_index != 3:
             self.on_view_close()
-            return  # this view is page 1, exit if not this view
+            return  # this view is page 3, exit if not this view
 
         if not self.is_active:
             log.debug(f"switching to tandem view")
@@ -29,6 +29,7 @@ class TandemView(QWidget):
         pass
 
     def on_view_open(self):
+        log.debug(f"on view open")
         self.is_active = True
 
         displaymodel = get_app().window.displaymodel
@@ -38,6 +39,9 @@ class TandemView(QWidget):
         self.action_update_settings()
 
     def on_view_close(self):
+        if not self.is_active: return
+        log.debug(f"on view close")
+
         self.is_active = False
 
         displaymodel = get_app().window.displaymodel

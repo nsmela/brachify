@@ -101,20 +101,24 @@ class ChannelsView(QWidget):
         else: self.ui.btn_set_tandem.setText("Set as Tandem")
         
     def on_view_open(self):
-            self.is_active = True
+        log.debug(f"on view open")
+        self.is_active = True
 
-            canvas = get_app().window.canvas
-            channelsmodel = get_app().window.channelsmodel
-            canvas.sig_topods_selected.connect(channelsmodel.set_selected_shapes)
+        canvas = get_app().window.canvas
+        channelsmodel = get_app().window.channelsmodel
+        canvas.sig_topods_selected.connect(channelsmodel.set_selected_shapes)
 
-            displaymodel = get_app().window.displaymodel
-            displaymodel.set_shape_colour(colours)
-            displaymodel.set_transparent(True)
-            channelsmodel.update()
+        displaymodel = get_app().window.displaymodel
+        displaymodel.set_shape_colour(colours)
+        displaymodel.set_transparent(True)
+        channelsmodel.update()
 
-            self.action_update_settings()
+        self.action_update_settings()
 
     def on_view_close(self):
+        if not self.is_active: return
+        log.debug(f"on view close")
+
         self.is_active = False
         try:
             displaymodel = get_app().window.displaymodel

@@ -39,7 +39,7 @@ class CylinderView(QWidget):
 
         model.update_cylinder(cylinder)
 
-    def action_update_settings(self, cylinder: BrachyCylinder):     
+    def action_update_settings(self, cylinder: BrachyCylinder):    
         log.debug(f"updating cylinder view's settings")
         model = get_app().window.cylindermodel
         
@@ -60,9 +60,10 @@ class CylinderView(QWidget):
         self.on_view_open()
 
     def on_view_open(self):
+        log.debug(f"on view open")
         displaymodel = get_app().window.displaymodel
         displaymodel.set_shape_colour(colours)
-        displaymodel.set_transparent(False, True)
+        displaymodel.set_transparent(False, False)
 
     def __init__(self):
         super().__init__()
