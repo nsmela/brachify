@@ -1,4 +1,6 @@
-from PySide6.QtWidgets import QWidget, QListWidgetItem
+from PySide6 import QtCore
+from PySide6.QtGui import QStandardItem, QFont
+from PySide6.QtWidgets import QWidget, QListWidgetItem, QPushButton, QHBoxLayout, QLabel, QSpacerItem, QSizePolicy
 
 from classes.app import get_app
 from classes.logger import log
@@ -78,7 +80,7 @@ class ChannelsView(QWidget):
         for row, channel in enumerate(model.channels.values()):
             new_item = QListWidgetItem()
             new_item.setText(channel.label)
-            self.ui.listwidget_channels.insertItem(row, new_item)
+            self.ui.listwidget_channels.addItem(new_item)
             if selected_channel is not None and \
                selected_channel == channel.label:
                 self.ui.listwidget_channels.setCurrentRow(row)
