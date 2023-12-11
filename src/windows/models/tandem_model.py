@@ -11,19 +11,50 @@ from classes.logger import log
 from classes.mesh.channel import NeedleChannel
 from windows.models.shape_model import ShapeModel, ShapeTypes
 
-CHANNELS_LABEL = "tandem"
+TANDEM_LABEL = "tandem"
 # Defaults
 TANDEM_CHANNEL_DIAMETER_DEFAULT = 4.0
-TANDEM_TIP_DIAMETER_DEFAULT = 8.0
-TANDEM_TIP_THICKNESS_DEFAULT = 4.0
+TANDEM_TIP_DIAMETER_DEFAULT = 12.0
+TANDEM_TIP_THICKNESS_DEFAULT = 10.0
 TANDEM_TIP_ANGLE_DEFAULT = 45.0
 TANDEM_TIP_HEIGHT_DEFAULT = 170.0
 
 
 class TandemModel(QObject):
 
+    values_changed = Signal()
+
+    def clear_tandem(self):
+        # remove tandem from the display
+        pass
+
+    def import_tandem(self):
+        pass
+
+    def generate_tandem(self):
+        pass
+
+    def set_tandem_channel(self, channel:NeedleChannel):
+        # TODO: calculate rotation
+        pass
+
+    def set_tandem_settings(self, channel_diameter, tip_diameter, tip_thickness, tip_angle):
+        pass
+
+    def update(self):
+        # TODO process chape
+        # send shape to display
+        pass
+
+    def set_height_offset(self, height_offset:float):
+        pass
+
     def __init__(self) -> None:
         super().__init__()
+        self.base_shape = None  # base shape before extending due to height offset
+        self.height_offset = 0.0
+        self.rotation = 0.0
+
         self._base_shape = None  # file imported
         self._shape = None  # the shape used to cut from the model
         self.offset_height = 0.0  # translate offsets height
@@ -77,3 +108,6 @@ class TandemModel(QObject):
         self._shape = rotate_shape(
             shape=shape, axis=gp.OZ(), angle=rotation)
         return self._shape
+
+    @staticmethod
+    def get_label(): return TANDEM_LABEL
