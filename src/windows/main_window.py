@@ -13,6 +13,7 @@ from windows.views.import_view import ImportView
 from windows.views.cylinder_view import CylinderView
 from windows.views.channels_view import ChannelsView
 from windows.views.tandem_view import TandemView
+from windows.models.navigation_model import NavigationModel
 
 class MainWindow(QMainWindow):
 
@@ -42,7 +43,7 @@ class MainWindow(QMainWindow):
         self.ui.btn_tandem_view.pressed.connect(lambda: app.signals.viewChanged.emit(3))
         self.ui.btn_export_view.pressed.connect(lambda: app.signals.viewChanged.emit(4))
 
-        app.signals.viewChanged.connect(self.ui.viewswidget.setCurrentIndex)
+        #app.signals.viewChanged.connect(self.ui.viewswidget.setCurrentIndex)
 
     def initModels(self):
         # TODO initialize models
@@ -72,10 +73,11 @@ class MainWindow(QMainWindow):
         self.displaymodel.shapes_changed.connect(self.canvas.update_display)
 
         # TODO views
-        self.ui.page_import.layout().addWidget(ImportView())
-        self.ui.page_cylinder.layout().addWidget(CylinderView())
-        self.ui.page_channels.layout().addWidget(ChannelsView())
-        self.ui.page_tandem.layout().addWidget(TandemView())
+        self.navigationmodel = NavigationModel()
+        #self.ui.page_import.layout().addWidget(ImportView())
+        #self.ui.page_cylinder.layout().addWidget(CylinderView())
+        #self.ui.page_channels.layout().addWidget(ChannelsView())
+        #self.ui.page_tandem.layout().addWidget(TandemView())
 
         # show this window with resizing to ensure canvas is displayed properly
         self.showWithCanvas()  # shows and then resizes the window to properly display canvas

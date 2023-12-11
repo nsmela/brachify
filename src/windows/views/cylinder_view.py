@@ -53,11 +53,9 @@ class CylinderView(QWidget):
         self.ui.spinbox_length.setValue(length)
         self.ui.cb_add_base.setChecked(add_base)
 
-    def action_set_view(self, view_index: int):
-        if view_index != 1: return  # this view is page 1, exit if not this view
-
-        log.debug(f"switching to cylinder view")
-        self.on_view_open()
+    def on_view_close(self):
+        log.debug(f"on view close")
+        pass
 
     def on_view_open(self):
         log.debug(f"on view open")
@@ -74,7 +72,7 @@ class CylinderView(QWidget):
         self.ui.btn_apply_settings.pressed.connect(self.action_apply_settings)
 
         app = get_app()
-        app.signals.viewChanged.connect(self.action_set_view)
+        #app.signals.viewChanged.connect(self.action_set_view)
         window = app.window
         window.cylindermodel.values_changed.connect(self.action_update_settings)
 

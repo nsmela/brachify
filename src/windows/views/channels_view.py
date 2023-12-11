@@ -46,16 +46,6 @@ class ChannelsView(QWidget):
         if channel_label != model.tandem_channel: label = channel_label
         model.set_tandem(label)
 
-    def action_set_view(self, view_index: int):
-        log.debug(f"action: set channel view")
-        if view_index != 2:
-            self.on_view_close()
-            return  # this view is page 1, exit if not this view
-
-        if not self.is_active:
-            log.debug(f"switching to channels view")
-            self.on_view_open()
-
     def action_toggle_channel_disable(self):
         log.debug(f"toggling channel's disabled status")
         model = get_app().window.channelsmodel
@@ -99,6 +89,20 @@ class ChannelsView(QWidget):
 
         if is_tandem: self.ui.btn_set_tandem.setText("Clear Tandem")
         else: self.ui.btn_set_tandem.setText("Set as Tandem")
+
+    def on_view_close(self):
+        log.debug(f"on view close")
+
+        self.is_active = False
+        try:
+            displaymodel = get_app().window.displaymodel
+            displaymodel.set_transparent(False)
+            
+            canvas = get_app().window.canvas
+            channelsmodel = get_app().window.channelsmodel
+            canvas.sig_topods_selected.disconnect(channelsmodel.set_selected_shapes)
+        except RuntimeError as error_message:  # incase the signal isn't connected
+            log.warning(f"{error_message}")
         
     def on_view_open(self):
         log.debug(f"on view open")
@@ -115,21 +119,6 @@ class ChannelsView(QWidget):
 
         self.action_update_settings()
 
-    def on_view_close(self):
-        if not self.is_active: return
-        log.debug(f"on view close")
-
-        self.is_active = False
-        try:
-            displaymodel = get_app().window.displaymodel
-            displaymodel.set_transparent(False)
-            
-            canvas = get_app().window.canvas
-            channelsmodel = get_app().window.channelsmodel
-            canvas.sig_topods_selected.disconnect(channelsmodel.set_selected_shapes)
-        except RuntimeError as error_message:  # incase the signal isn't connected
-            log.warning(f"{error_message}")
-
     def __init__(self):
         super().__init__()
         self.ui = Ui_Channels_View()  # the converted python file from the ui file
@@ -143,7 +132,7 @@ class ChannelsView(QWidget):
         self.ui.btn_set_tandem.pressed.connect(self.action_set_tandem)
 
         app = get_app()
-        app.signals.viewChanged.connect(self.action_set_view)
+        #app.signals.viewChanged.connect(self.action_set_view)
 
         window = app.window
         window.channelsmodel.values_changed.connect(self.action_update_settings)

@@ -38,13 +38,12 @@ class ImportView(QWidget):
     def action_update_import_label(self, data:DicomData):
         self.ui.label_file_info.setText(data.toString())
 
-    def action_set_view(self, view_index: int):
-        if view_index != 0: return  # this view is page 0, exit if not this view
-
-        log.debug(f"setting display view")
-        self.on_view_open()
+    def on_view_close(self):
+        log.debug(f"on view close")
+        pass
 
     def on_view_open(self):
+        log.debug(f"on view open")
         displaymodel = get_app().window.displaymodel
         displaymodel.set_shape_colour(colours)
         displaymodel.set_transparent(False, True)
@@ -58,7 +57,7 @@ class ImportView(QWidget):
         self.ui.btn_import_folder.pressed.connect(self.action_import_dicom_folder)
         
         app = get_app()
-        app.signals.viewChanged.connect(self.action_set_view)
+        #app.signals.viewChanged.connect(self.action_set_view)
         window = app.window
         window.dicommodel.values_changed.connect(self.action_update_import_label)
 

@@ -28,6 +28,15 @@ class TandemView(QWidget):
     def action_update_settings(self):
         pass
 
+    def on_view_close(self):
+        if not self.is_active: return
+        log.debug(f"on view close")
+
+        self.is_active = False
+
+        displaymodel = get_app().window.displaymodel
+        displaymodel.set_transparent(False)
+
     def on_view_open(self):
         log.debug(f"on view open")
         self.is_active = True
@@ -38,15 +47,6 @@ class TandemView(QWidget):
 
         self.action_update_settings()
 
-    def on_view_close(self):
-        if not self.is_active: return
-        log.debug(f"on view close")
-
-        self.is_active = False
-
-        displaymodel = get_app().window.displaymodel
-        displaymodel.set_transparent(False)
-
     def __init__(self):
         super().__init__()
         self.ui = Ui_Tandem_View()  # the converted python file from the ui file
@@ -56,7 +56,7 @@ class TandemView(QWidget):
 
         # signals and slots
         app = get_app()
-        app.signals.viewChanged.connect(self.action_set_view)
+        #app.signals.viewChanged.connect(self.action_set_view)
 
         window = app.window
         #window.channelsmodel.values_changed.connect(self.action_update_settings)
