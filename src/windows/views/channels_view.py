@@ -44,23 +44,12 @@ class ChannelsView(QWidget):
     def action_set_view(self, view_index: int):
         log.debug(f"action: set channel view")
         if view_index != 2:
-            self.is_active = False
-            try:
-                canvas = get_app().window.canvas
-                channelsmodel = get_app().window.channelsmodel
-                canvas.sig_topods_selected.disconnect(channelsmodel.set_selected_shapes)
-            except RuntimeError as error_message:
-                log.warning(f"{error_message}")
+            self.on_view_close()
             return  # this view is page 1, exit if not this view
 
         if not self.is_active:
             log.debug(f"switching to channels view")
-            self.is_active = True
-            canvas = get_app().window.canvas
-            channelsmodel = get_app().window.channelsmodel
-            canvas.sig_topods_selected.connect(channelsmodel.set_selected_shapes)
-            get_app().window.displaymodel.set_shape_colour(colours)
-            self.action_update_settings()
+            self.on_view_open()
 
     def action_toggle_channel_disable(self):
         log.debug(f"toggling channel's disabled status")
@@ -104,6 +93,25 @@ class ChannelsView(QWidget):
         if is_tandem: self.ui.btn_set_tandem.setText("Clear Tandem")
         else: self.ui.btn_set_tandem.setText("Set as Tandem")
         
+    def on_view_open(self):
+            self.is_active = True
+            
+            canvas = get_app().window.canvas
+            channelsmodel = get_app().window.channelsmodel
+            canvas.sig_topods_selected.connect(channelsmodel.set_selected_shapes)
+
+            get_app().window.displaymodel.set_shape_colour(colours)
+            self.action_update_settings()
+
+    def on_view_close(self):
+        self.is_active = False
+        try:
+            canvas = get_app().window.canvas
+            channelsmodel = get_app().window.channelsmodel
+            canvas.sig_topods_selected.disconnect(channelsmodel.set_selected_shapes)
+        except RuntimeError as error_message:  # incase the signal isn't connected
+            log.warning(f"{error_message}")
+
     def __init__(self):
         super().__init__()
         self.ui = Ui_Channels_View()  # the converted python file from the ui file
