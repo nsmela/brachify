@@ -8,9 +8,11 @@ from windows.models.display_model import DisplayModel
 from windows.models.dicom_model import DicomModel
 from windows.models.channels_model import ChannelsModel
 from windows.models.cylinder_model import CylinderModel
+from windows.models.tandem_model import TandemModel
 from windows.views.import_view import ImportView
 from windows.views.cylinder_view import CylinderView
 from windows.views.channels_view import ChannelsView
+from windows.views.tandem_view import TandemView
 
 class MainWindow(QMainWindow):
 
@@ -48,6 +50,7 @@ class MainWindow(QMainWindow):
         self.dicommodel = DicomModel()
         self.cylindermodel = CylinderModel()
         self.channelsmodel = ChannelsModel()
+        self.tandemmodel = TandemModel()
 
         # TODO connect models to signals
         self.dicommodel.values_changed.connect(self.cylindermodel.load_data)
@@ -72,6 +75,7 @@ class MainWindow(QMainWindow):
         self.ui.page_import.layout().addWidget(ImportView())
         self.ui.page_cylinder.layout().addWidget(CylinderView())
         self.ui.page_channels.layout().addWidget(ChannelsView())
+        self.ui.page_tandem.layout().addWidget(TandemView())
 
         # show this window with resizing to ensure canvas is displayed properly
         self.showWithCanvas()  # shows and then resizes the window to properly display canvas

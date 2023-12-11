@@ -1,6 +1,4 @@
-from PySide6 import QtCore
-from PySide6.QtGui import QStandardItem, QFont
-from PySide6.QtWidgets import QWidget, QListWidgetItem, QPushButton, QHBoxLayout, QLabel, QSpacerItem, QSizePolicy
+from PySide6.QtWidgets import QWidget, QListWidgetItem
 
 from classes.app import get_app
 from classes.logger import log
