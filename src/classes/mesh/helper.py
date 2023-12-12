@@ -126,10 +126,6 @@ def translate_shape(shape: TopoDS_Shape, vector: gp_Vec) -> TopoDS_Shape:
     return translate_shp(shape, vector).Shape()
 
 
-def rotate_shape(shape: TopoDS_Shape, rotation: gp_Vec) -> TopoDS_Shape:
-    pass
-
-
 def rotate_points(points, v_1, v_2):
     # V1 is the current vector which the coordinate system is aligned to
     # V2 is the vector we want the system aligned to

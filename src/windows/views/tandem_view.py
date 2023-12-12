@@ -15,49 +15,59 @@ colours = {
 
 class TandemView(QWidget):
 
-    def action_set_view(self, view_index: int):
-        log.debug(f"action: set tandem view")
-        if view_index != 3:
-            self.on_view_close()
-            return  # this view is page 3, exit if not this view
+    def action_clear_tandem(self):
+        pass
 
-        if not self.is_active:
-            log.debug(f"switching to tandem view")
-            self.on_view_open()
+    def action_generate_tandem(self):
+        log.debug(f"sending command to generate a tandem")
+        self.tandemmodel.generate_tandem(
+            channel_diameter=self.ui.sp_channel_diameter.value(),
+            tip_diameter=self.ui.sp_tip_diameter.value(),
+            tip_thickness=self.ui.sp_tip_thickness.value(),
+            tip_angle=self.ui.sp_tip_angle.value()
+        )
 
-    def action_update_settings(self):
+    def action_import_tandem(self):
         pass
 
     def on_view_close(self):
-        if not self.is_active: return
         log.debug(f"on view close")
-
-        self.is_active = False
 
         displaymodel = get_app().window.displaymodel
         displaymodel.set_transparent(False)
 
     def on_view_open(self):
         log.debug(f"on view open")
-        self.is_active = True
 
         displaymodel = get_app().window.displaymodel
         displaymodel.set_shape_colour(colours)
         displaymodel.set_transparent(True)
 
-        self.action_update_settings()
+        self.update_settings()
+
+    def update_settings(self):
+        log.debug(f"updating settings")
+        channel_diameter = self.tandemmodel.channel_diameter
+        self.ui.sp_channel_diameter.setValue(channel_diameter)
+
+        tip_diameter = self.tandemmodel.tip_diameter
+        self.ui.sp_tip_diameter.setValue(tip_diameter)
+
+        tip_thickness = self.tandemmodel.tip_thickness
+        self.ui.sp_tip_thickness.setValue(tip_thickness)
+
+        tip_angle = self.tandemmodel.tip_angle
+        self.ui.sp_tip_angle.setValue(tip_angle)
 
     def __init__(self):
         super().__init__()
         self.ui = Ui_Tandem_View()  # the converted python file from the ui file
         self.ui.setupUi(self)
-        self.is_active = False
         self.tandemmodel = get_app().window.tandemmodel
 
         # signals and slots
-        app = get_app()
-        #app.signals.viewChanged.connect(self.action_set_view)
+        self.ui.btn_apply.pressed.connect(self.action_generate_tandem)
+        self.ui.btn_clear_generate.pressed.connect(self.action_clear_tandem)
+        self.ui.btn_clear_import.pressed.connect(self.action_clear_tandem)
 
-        window = app.window
-        #window.channelsmodel.values_changed.connect(self.action_update_settings)
-        self.action_update_settings
+        self.update_settings()

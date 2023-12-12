@@ -132,7 +132,6 @@ class ChannelsView(QWidget):
         self.ui.btn_set_tandem.pressed.connect(self.action_set_tandem)
 
         app = get_app()
-        #app.signals.viewChanged.connect(self.action_set_view)
 
         window = app.window
         window.channelsmodel.values_changed.connect(self.action_update_settings)

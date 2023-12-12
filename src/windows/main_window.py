@@ -59,6 +59,7 @@ class MainWindow(QMainWindow):
 
         app = get_app()
         app.signals.height_changed.connect(self.channelsmodel.update_height_offset)
+        app.signals.height_changed.connect(self.tandemmodel.update_height_offset)
 
     def initViews(self):
         # initialize canvas
@@ -74,10 +75,6 @@ class MainWindow(QMainWindow):
 
         # TODO views
         self.navigationmodel = NavigationModel()
-        #self.ui.page_import.layout().addWidget(ImportView())
-        #self.ui.page_cylinder.layout().addWidget(CylinderView())
-        #self.ui.page_channels.layout().addWidget(ChannelsView())
-        #self.ui.page_tandem.layout().addWidget(TandemView())
 
         # show this window with resizing to ensure canvas is displayed properly
         self.showWithCanvas()  # shows and then resizes the window to properly display canvas

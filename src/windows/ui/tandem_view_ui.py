@@ -50,10 +50,10 @@ class Ui_Tandem_View(object):
 
         self.formLayout_2.setWidget(1, QFormLayout.SpanningRole, self.label_5)
 
-        self.btn_clear_mesh = QPushButton(self.tab_import)
-        self.btn_clear_mesh.setObjectName(u"btn_clear_mesh")
+        self.btn_clear_import = QPushButton(self.tab_import)
+        self.btn_clear_import.setObjectName(u"btn_clear_import")
 
-        self.formLayout_2.setWidget(0, QFormLayout.FieldRole, self.btn_clear_mesh)
+        self.formLayout_2.setWidget(0, QFormLayout.FieldRole, self.btn_clear_import)
 
         self.tabWidget.addTab(self.tab_import, "")
         self.tab_generate = QWidget()
@@ -67,7 +67,7 @@ class Ui_Tandem_View(object):
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.formLayout.setItem(10, QFormLayout.SpanningRole, self.verticalSpacer)
+        self.formLayout.setItem(11, QFormLayout.SpanningRole, self.verticalSpacer)
 
         self.label = QLabel(self.tab_generate)
         self.label.setObjectName(u"label")
@@ -110,6 +110,11 @@ class Ui_Tandem_View(object):
 
         self.formLayout.setWidget(4, QFormLayout.FieldRole, self.sp_tip_angle)
 
+        self.btn_clear_generate = QPushButton(self.tab_generate)
+        self.btn_clear_generate.setObjectName(u"btn_clear_generate")
+
+        self.formLayout.setWidget(10, QFormLayout.SpanningRole, self.btn_clear_generate)
+
         self.tabWidget.addTab(self.tab_generate, "")
 
         self.verticalLayout.addWidget(self.tabWidget)
@@ -134,7 +139,7 @@ class Ui_Tandem_View(object):
         self.label_title.setText(QCoreApplication.translate("Tandem_View", u"tandem", None))
         self.btn_import.setText(QCoreApplication.translate("Tandem_View", u"import", None))
         self.label_5.setText(QCoreApplication.translate("Tandem_View", u"Model Details", None))
-        self.btn_clear_mesh.setText(QCoreApplication.translate("Tandem_View", u"clear", None))
+        self.btn_clear_import.setText(QCoreApplication.translate("Tandem_View", u"clear", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_import), QCoreApplication.translate("Tandem_View", u"import", None))
         self.btn_apply.setText(QCoreApplication.translate("Tandem_View", u"apply", None))
         self.label.setText(QCoreApplication.translate("Tandem_View", u"channel diameter", None))
@@ -145,6 +150,7 @@ class Ui_Tandem_View(object):
         self.sp_tip_thickness.setSuffix(QCoreApplication.translate("Tandem_View", u" mm", None))
         self.label_4.setText(QCoreApplication.translate("Tandem_View", u"tip angle", None))
         self.sp_tip_angle.setSuffix(QCoreApplication.translate("Tandem_View", u" mm", None))
+        self.btn_clear_generate.setText(QCoreApplication.translate("Tandem_View", u"clear", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_generate), QCoreApplication.translate("Tandem_View", u"generate", None))
     # retranslateUi
 

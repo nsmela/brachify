@@ -1,7 +1,5 @@
 import math
-import numpy as np
 
-from OCC.Core.BRep import BRep_Builder
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace
 from OCC.Core.BRepFill import BRepFill_PipeShell
@@ -9,7 +7,7 @@ from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_ThruSections
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeSphere, BRepPrimAPI_MakePrism
 from OCC.Core.GC import GC_MakeArcOfCircle
 from OCC.Core.gp import *
-from OCC.Core.TopoDS import TopoDS_Shape, TopoDS_Compound
+from OCC.Core.TopoDS import TopoDS_Shape
 
 
 # generates a custom tandem with inputed values
