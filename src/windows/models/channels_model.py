@@ -51,7 +51,7 @@ class ChannelsModel(QObject):
 
             #set tandem channel
             label = channel_id.lower()
-            if "tandem" in label: self.tandem_channel = channel_id
+            if "tandem" in label: self.set_tandem(channel_id)
 
         self.update()
 
@@ -100,7 +100,14 @@ class ChannelsModel(QObject):
             log.critical(f"error while setting selected shapes from viewport:\n{error_message}")
 
     def set_tandem(self, label:str) -> None:
+        old_label = self.tandem_channel
+        if old_label and old_label in self.disabled_channels:
+            self.disabled_channels.remove(old_label)
+
         self.tandem_channel = label
+        if not label in self.disabled_channels:
+            self.disabled_channels.append(label)
+
         self.update()
 
     def toggle_channel_enabled(self, label: str):
