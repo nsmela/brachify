@@ -54,7 +54,7 @@ class NeedleChannel:
     # ref:
     # https://stackoverflow.com/questions/2827393/angles-between-two-n-dimensional-vectors-in-python/13849249#13849249
     # https://stackoverflow.com/questions/42258637/how-to-know-the-angle-between-two-vectors
-    def getRotation(self):
+    def get_rotation(self):
         # calculate the sin angle on the xy plane using 0,0 and the highest point in the list of points
         v1 = [1.0, 0.0, self.points[0][2]]
         v2 = self.points[0]

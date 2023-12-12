@@ -6,7 +6,6 @@ from PySide6.QtCore import QObject, Signal
 
 from classes.app import get_app
 from classes.logger import log
-from classes.mesh.channel import NeedleChannel
 from classes.mesh.helper import extend_bottom_face
 from classes.mesh.tandem import generate_tandem
 from windows.models.shape_model import ShapeModel, ShapeTypes
@@ -52,9 +51,15 @@ class TandemModel(QObject):
     def import_tandem(self, filepath: str):
         pass
 
-    def set_tandem_channel(self, channel: NeedleChannel):
-        log.debug(f"getting rotation from {channel}")
-        self.rotation = channel.getRotation()
+    def get_tandem_channel(self):
+        log.debug(f"getting rotation from tandem channel")
+        channelsmodel = get_app().window.channelsmodel
+        tandem_channel = channelsmodel.get_tandem_channel()
+
+        rotation = 0.0
+        if tandem_channel: rotation = tandem_channel.get_rotation()
+        self.rotation = rotation
+
         self.update()
 
     def update(self):
@@ -98,7 +103,7 @@ class TandemModel(QObject):
 
     def __init__(self) -> None:
         super().__init__()
-        self.base_shape = None  # base shape before extending due to height offset
+        self._base_shape = None  # base shape before extending due to height offset
         self.height_offset = 0.0
         self.rotation = 0.0
 
@@ -108,8 +113,11 @@ class TandemModel(QObject):
         self.tip_thickness = TANDEM_TIP_THICKNESS_DEFAULT
         self.tip_angle = TANDEM_TIP_ANGLE_DEFAULT
 
-        # references
+        # signals and slots
         app = get_app()
+        app.window.channelsmodel.values_changed.connect(self.get_tandem_channel)
+
+        # references
         self.displaymodel = app.window.displaymodel
 
     @staticmethod
