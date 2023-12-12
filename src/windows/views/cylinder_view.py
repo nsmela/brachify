@@ -10,8 +10,8 @@ from windows.models.shape_model import ShapeTypes
 
 colours = {
     ShapeTypes.CYLINDER: [0.2, 0.55, 0.55],
-    ShapeTypes.CHANNEL: [0.5, 0.5, 0.4],
-    ShapeTypes.TANDEM: [0.5, 0.5, 0.4],
+    ShapeTypes.CHANNEL: [1.0, 1.0, 1.0],
+    ShapeTypes.TANDEM: [1.0, 1.0, 1.0],
     ShapeTypes.SELECTED: [0.5, 0.5, 0.2]}
 
 
@@ -55,13 +55,14 @@ class CylinderView(QWidget):
 
     def on_view_close(self):
         log.debug(f"on view close")
-        pass
 
     def on_view_open(self):
         log.debug(f"on view open")
         displaymodel = get_app().window.displaymodel
         displaymodel.set_shape_colour(colours)
-        displaymodel.set_transparent(False, False)
+        displaymodel.set_transparent(True, False)
+
+        get_app().window.cylindermodel.update_display()
 
     def __init__(self):
         super().__init__()
