@@ -9,9 +9,9 @@ from windows.models.cylinder_model import CylinderModel
 from windows.models.shape_model import ShapeTypes
 
 colours = {
-    ShapeTypes.CYLINDER: [1.0, 1.0, 0.2],
-    ShapeTypes.CHANNEL: [0.5, 0.5, 0.5],
-    ShapeTypes.TANDEM: [0.5, 0.5, 0.5],
+    ShapeTypes.CYLINDER: [0.2, 0.55, 0.55],
+    ShapeTypes.CHANNEL: [0.2, 0.55, 0.55],
+    ShapeTypes.TANDEM: [0.2, 0.55, 0.55],
     ShapeTypes.SELECTED: [0.5, 0.5, 0.2]}
 
 
@@ -34,6 +34,7 @@ class ImportView(QWidget):
         window = app.window
 
         window.dicommodel.update(data)
+        window.displaymodel.set_transparent(True, True)
 
     def action_update_import_label(self, data:DicomData):
         self.ui.label_file_info.setText(data.toString())
@@ -46,7 +47,7 @@ class ImportView(QWidget):
         log.debug(f"on view open")
         displaymodel = get_app().window.displaymodel
         displaymodel.set_shape_colour(colours)
-        displaymodel.set_transparent(False, True)
+        displaymodel.set_transparent(True, True)
 
     def __init__(self):
         super().__init__()

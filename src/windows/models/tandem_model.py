@@ -60,8 +60,6 @@ class TandemModel(QObject):
         if tandem_channel: rotation = tandem_channel.get_rotation()
         self.rotation = rotation
 
-        self.update()
-
     def update(self):
         log.debug(f"updating")
         self.values_changed.emit()

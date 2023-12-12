@@ -26,7 +26,13 @@ class NavigationModel():
         window.ui.page_channels.layout().addWidget(self.views[2])
         window.ui.page_tandem.layout().addWidget(self.views[3])
 
+        # signals
         app.signals.viewChanged.connect(self.set_page)
+
+        # initializing the first page
+        self.views[0].on_view_open()
+        get_app().window.ui.viewswidget.setCurrentIndex(0)
+
         log.debug(f"Navigation model initialized")
 
     def set_page(self, page:int):

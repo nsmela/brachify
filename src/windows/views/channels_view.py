@@ -53,8 +53,6 @@ class ChannelsView(QWidget):
         model.toggle_channel_enabled(channel_label)
 
     def action_update_settings(self):
-        if not self.is_active: return  # this view isn't displayed
-
         log.debug(f"updating channels view")
         
         # diameter spin box
@@ -92,12 +90,7 @@ class ChannelsView(QWidget):
 
     def on_view_close(self):
         log.debug(f"on view close")
-
-        self.is_active = False
-        try:
-            displaymodel = get_app().window.displaymodel
-            displaymodel.set_transparent(False)
-            
+        try:         
             canvas = get_app().window.canvas
             channelsmodel = get_app().window.channelsmodel
             canvas.sig_topods_selected.disconnect(channelsmodel.set_selected_shapes)
@@ -106,7 +99,6 @@ class ChannelsView(QWidget):
         
     def on_view_open(self):
         log.debug(f"on view open")
-        self.is_active = True
 
         canvas = get_app().window.canvas
         channelsmodel = get_app().window.channelsmodel

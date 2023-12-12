@@ -7,8 +7,8 @@ from windows.ui.tandem_view_ui import Ui_Tandem_View
 from windows.models.shape_model import ShapeTypes
 
 colours = {
-    ShapeTypes.CYLINDER: [0.5, 0.5, 0.4],
-    ShapeTypes.CHANNEL: [0.5, 0.5, 0.4],
+    ShapeTypes.CYLINDER: [1.0, 1.0, 1.0],
+    ShapeTypes.CHANNEL: [1.0, 1.0, 1.0],
     ShapeTypes.TANDEM: [0.2, 0.55, 0.55],
     ShapeTypes.SELECTED: [0.5, 0.5, 0.2]}
 
@@ -31,7 +31,6 @@ class TandemView(QWidget):
     def action_import_tandem(self):
         log.debug(f"action: import a tandem")
         # file dialog to choose file
-        pass
 
     def on_view_close(self):
         log.debug(f"on view close")
@@ -45,8 +44,9 @@ class TandemView(QWidget):
         displaymodel = get_app().window.displaymodel
         displaymodel.set_shape_colour(colours)
         displaymodel.set_transparent(True)
-        self.update_settings()
         self.tandemmodel.update_display()
+
+        self.update_settings()
 
     def update_settings(self):
         log.debug(f"updating settings")
