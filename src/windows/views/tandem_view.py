@@ -1,8 +1,7 @@
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QWidget, QFileDialog
 
 from classes.app import get_app
 from classes.logger import log
-from classes.dicom.data import DicomData
 from windows.ui.tandem_view_ui import Ui_Tandem_View
 from windows.models.shape_model import ShapeTypes
 
@@ -31,6 +30,15 @@ class TandemView(QWidget):
     def action_import_tandem(self):
         log.debug(f"action: import a tandem")
         # file dialog to choose file
+        filename = QFileDialog.getOpenFileName(self, 'Select Tandem Tool Model', "", "Supported files (*.stl *.3mf *.obj *.stp *.step)")[0]
+
+        if not filename:  # no folder selected?
+            log.info("no valid filename selected for importing")
+            return
+
+        log.info(f"file {filename} has been selected")
+        
+        self.tandemmodel.import_tandem(filename)
 
     def on_view_close(self):
         log.debug(f"on view close")
@@ -62,6 +70,9 @@ class TandemView(QWidget):
         tip_angle = self.tandemmodel.tip_angle
         self.ui.sp_tip_angle.setValue(tip_angle)
 
+        filepath = self.tandemmodel.filepath
+        self.ui.label_5.setText(f"Model filepath:\n{filepath}")
+
     def __init__(self):
         super().__init__()
         self.ui = Ui_Tandem_View()  # the converted python file from the ui file
@@ -71,6 +82,7 @@ class TandemView(QWidget):
         # signals and slots
         self.ui.btn_apply.pressed.connect(self.action_generate_tandem)
         self.ui.btn_clear_generate.pressed.connect(self.action_clear_tandem)
+        self.ui.btn_import.pressed.connect(self.action_import_tandem)
         self.ui.btn_clear_import.pressed.connect(self.action_clear_tandem)
 
         self.update_settings()

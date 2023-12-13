@@ -6,6 +6,7 @@ from PySide6.QtCore import QObject, Signal
 
 from classes.app import get_app
 from classes.logger import log
+from classes.mesh.fileio import read_3d_file
 from classes.mesh.helper import extend_bottom_face
 from classes.mesh.tandem import generate_tandem
 from windows.models.shape_model import ShapeModel, ShapeTypes
@@ -46,10 +47,14 @@ class TandemModel(QObject):
             tip_angle=self.tip_angle,
             tip_height= TANDEM_TIP_HEIGHT_DEFAULT
         )
+
+        self.filepath = ""
+
         self.update()
 
     def import_tandem(self, filepath: str):
-        pass
+        self._base_shape = read_3d_file(filepath)
+        self.update()
 
     def get_tandem_channel(self):
         log.debug(f"getting rotation from tandem channel")
@@ -104,6 +109,7 @@ class TandemModel(QObject):
         self._base_shape = None  # base shape before extending due to height offset
         self.height_offset = 0.0
         self.rotation = 0.0
+        self.filepath = ""
 
         # generated tandem settings
         self.channel_diameter = TANDEM_CHANNEL_DIAMETER_DEFAULT

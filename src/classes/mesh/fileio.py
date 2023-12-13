@@ -4,12 +4,9 @@ from OCC.Extend.DataExchange import read_step_file, read_stl_file
 from OCC.Extend.DataExchange import write_step_file, write_stl_file
 from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Extend.DataExchange import write_stl_file
-from OCC.Core.STEPControl import STEPControl_Writer, STEPControl_AsIs
-from OCC.Core.Interface import Interface_Static_SetCVal
-from OCC.Core.IFSelect import IFSelect_RetDone
 
 
-def read_3d_file(filename: str, *args, **kwargs):
+def read_3d_file(filename: str, *args, **kwargs) -> TopoDS_Shape:
     """import a model file and generate a shape for it"""
     filepath = Path(filename)
 
