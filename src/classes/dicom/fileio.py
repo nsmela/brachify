@@ -86,6 +86,9 @@ def load_dicom_data(rp_file: str, rs_file: str) -> DicomData:
             roi.ReferencedROINumber for roi in rp_dataset.ApplicationSetupSequence[0].ChannelSequence]
         data.channels_labels = [
             roi.SourceApplicatorID for roi in rp_dataset.ApplicationSetupSequence[0].ChannelSequence]
+        data.patient_name = rp_dataset.PatientName.family_name
+        data.patient_id = rp_dataset.PatientID
+        data.plan_label = rp_dataset.RTPlanLabel
     except Exception as error_message:
         log.error(f"Loading RP Dicom file failed! {rp_file}\n{error_message}")
 
