@@ -1,0 +1,16 @@
+from datetime import datetime
+import matplotlib.pyplot as plt
+import numpy as np
+import subprocess
+
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.pdfgen import canvas
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Image
+
+
+def generate_cylinder_points(base, tip, radius, spacing, length):
+    """"
+    
+    """

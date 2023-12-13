@@ -1,12 +1,3 @@
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QFileDialog, QListWidget, QMainWindow
-from OCC.Core.TopoDS import TopoDS_Shape
-from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut
-from OCC.Extend.DataExchange import write_stl_file
-from OCC.Core.STEPControl import STEPControl_Writer, STEPControl_AsIs
-from OCC.Core.Interface import Interface_Static_SetCVal
-from OCC.Core.IFSelect import IFSelect_RetDone
-from Presentation.MainWindow.core import MainWindow
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
@@ -18,156 +9,81 @@ import subprocess
 from datetime import datetime
 import matplotlib.pyplot as plt
 
-import os
-
-
-def generate_export(window: MainWindow) -> TopoDS_Shape:
-    shape = TopoDS_Shape()
-
-    try:
-        # cylinder
-        if window.brachyCylinder:
-            shape = window.brachyCylinder.shape()
-        else:
-            return shape
-
-    except Exception as error_message:
-        print(error_message)
-
-    try:
-        # needles shown
-        if window.needles:
-            shape = BRepAlgoAPI_Cut(shape, window.needles.shape()).Shape()
-
-    except Exception as error_message:
-        print(error_message)
-
-    try:
-        # tandem
-        if window.tandem:
-            shape = BRepAlgoAPI_Cut(shape, window.tandem.shape()).Shape()
-
-    except Exception as error_message:
-        print(error_message)
-
-    return shape
-
-
-def export_stl(window:MainWindow) -> None:
-    # ref: https://github.com/tpaviot/pythonocc-demos/blob/master/examples/core_export_stl.py
-    filename = QFileDialog.getSaveFileName(window, 'Save solid as STL', '', "STL files (*.stl)")[0]
-    if len(filename) == 0:
-        return
-
-    # set the directory where to output the
-    stl_output_dir = os.path.abspath(os.path.dirname(filename))
-    filename =  os.path.basename(filename)
-    # make sure the path exists otherwise OCE get confused
-    if not os.path.isdir(stl_output_dir):
-        raise AssertionError(f"wrong path provided: {stl_output_dir}")
-
-    # then we change the mesh resolution, and export as binary
-    stl_high_resolution_file = os.path.join(stl_output_dir, filename)
-    # we set the format to binary
-    write_stl_file(
-        window.display_export,
-        stl_high_resolution_file,
-        mode="binary",
-        linear_deflection=0.5,
-        angular_deflection=0.3,)
-
-
-def export_step(window:MainWindow):
-    # ref: https://github.com/tpaviot/pythonocc-demos/blob/master/examples/core_export_step_ap203.py
-    filename = QFileDialog.getSaveFileName(window, 'Save solid as STEP', '', "STEP files (*.step)")[0]
-    if len(filename) == 0:
-        return
-    
-    # set the directory where to output the
-    step_output_dir = os.path.abspath(os.path.dirname(filename))
-    filepath = os.path.basename(filename)
-    
-    # make sure the path exists otherwise OCE get confused
-    if not os.path.isdir(step_output_dir):
-        raise AssertionError(f"wrong path provided: {step_output_dir}")
-
-    output_filepath = os.path.join(step_output_dir, filepath)
-    # initialize the STEP exporter
-    step_writer = STEPControl_Writer()
-    dd = step_writer.WS().TransferWriter().FinderProcess()
-    print(dd)
-
-    Interface_Static_SetCVal("write.step.schema", "AP203")
-
-    # transfer shapes and write file
-    shape = window.display_export
-    step_writer.Transfer(shape, STEPControl_AsIs)
-    status = step_writer.Write(output_filepath)
-
-    if status != IFSelect_RetDone:
-        raise AssertionError("load failed")
-
-def export_pdf(window:MainWindow) -> None:
+def export_pdf(window: MainWindow) -> None:
 
     def generate_cyl_pts(base, tip, radius, spacing, CylLen=160):
-            # Example usage:
-            # base = np.array([0,0,0])
-            # tip = np.array([0,0,160])
-            # radius = 15
-            # spacing = 0.1  
-            # linepoints = np.array([[0,1,125],[0,0,127]]) #example start and endpoint for the first (needle tip) needle segment
-            # cylinder_points, normals = generate_cyl_pts(base,tip,radius,spacing,CylLen=160)
+         # Example usage:
+         # base = np.array([0,0,0])
+         # tip = np.array([0,0,160])
+         # radius = 15
+          # spacing = 0.1
+         # linepoints = np.array([[0,1,125],[0,0,127]]) #example start and endpoint for the first (needle tip) needle segment
+         # cylinder_points, normals = generate_cyl_pts(base,tip,radius,spacing,CylLen=160)
 
-            vec = np.array(tip-base)
-            vec_normalized = vec / np.sqrt(vec[0] ** 2 + vec[1] ** 2 + vec[2] ** 2)
-            len_straight = CylLen-radius
+         vec = np.array(tip-base)
+          vec_normalized = vec / \
+              np.sqrt(vec[0] ** 2 + vec[1] ** 2 + vec[2] ** 2)
+           len_straight = CylLen-radius
             NumStepsStraight = int(np.ceil(len_straight / spacing))
             end_straight_section = base + vec_normalized * len_straight
-            CenterLineStraight = np.linspace(base, end_straight_section, NumStepsStraight, endpoint=False)
+            CenterLineStraight = np.linspace(
+                base, end_straight_section, NumStepsStraight, endpoint=False)
             num_thetas = int(np.ceil(2*np.pi*radius/spacing))
-            thetas = np.linspace(0,2*np.pi,num_thetas,endpoint=False)
+            thetas = np.linspace(0, 2*np.pi, num_thetas, endpoint=False)
 
             # Step 2: Generate the Straight Part of the Cylinder
-            CylinderRing = np.ones((num_thetas,3))
+            CylinderRing = np.ones((num_thetas, 3))
             CylinderRing[:, 0] = CylinderRing[:, 0] * radius * np.sin(thetas)
             CylinderRing[:, 1] = CylinderRing[:, 1] * radius * np.cos(thetas)
-            CylinderStraight = np.ones((NumStepsStraight,num_thetas,3))
+            CylinderStraight = np.ones((NumStepsStraight, num_thetas, 3))
             CylinderStraight[:] = CylinderRing
-            CylinderStraight[:,:,2] = CylinderStraight[:,:,2]*CenterLineStraight[:,2,np.newaxis]
+            CylinderStraight[:, :, 2] = CylinderStraight[:,
+                :, 2]*CenterLineStraight[:, 2, np.newaxis]
 
             # Step 3: Generate the Dome
             num_phis = int(np.ceil(np.pi/2*radius/spacing))
-            phis = np.linspace(0,np.pi/2,num_phis)
+            phis = np.linspace(0, np.pi/2, num_phis)
             dome_radii = np.cos(phis)*radius
 
-            dome_pts = np.ones((num_phis,num_thetas,3))
-            dome_pts[:,:,0] = dome_pts[:,:,0] * np.sin(thetas) * dome_radii[:,np.newaxis]
-            dome_pts[:,:,1] = dome_pts[:,:,1] * np.cos(thetas) * dome_radii[:,np.newaxis]
-            dome_pts[:,:,2] = dome_pts[:,:,2]* np.sin(phis)[:,np.newaxis] * radius + len_straight
+            dome_pts = np.ones((num_phis, num_thetas, 3))
+            dome_pts[:, :, 0] = dome_pts[:, :, 0] * \
+                np.sin(thetas) * dome_radii[:, np.newaxis]
+            dome_pts[:, :, 1] = dome_pts[:, :, 1] * \
+                np.cos(thetas) * dome_radii[:, np.newaxis]
+            dome_pts[:, :, 2] = dome_pts[:, :, 2] * \
+                np.sin(phis)[:, np.newaxis] * radius + len_straight
 
             # Step 4: Generate the Straight Part Normals
             vec_ring = CylinderRing - base
-            vec_ring[:,2] = 0.5 # give each of the z component normals a bit of positive slope.
-            vec_ring = vec_ring / np.sqrt(np.einsum("ij,ij->i",vec_ring, vec_ring))[:,np.newaxis]
-            vecs = np.ones((NumStepsStraight,num_thetas,3))
+            # give each of the z component normals a bit of positive slope.
+            vec_ring[:, 2] = 0.5
+            vec_ring = vec_ring / \
+                np.sqrt(np.einsum("ij,ij->i", vec_ring, vec_ring)
+                        )[:, np.newaxis]
+            vecs = np.ones((NumStepsStraight, num_thetas, 3))
             vecs[:] = vec_ring
 
             # Step 5: Generate the Dome Normals
             dome_base = end_straight_section
             dome_vecs = dome_pts - dome_base
-            dome_vecs_reshaped = np.reshape(dome_vecs, (num_phis*num_thetas,3))
-            dome_disps_reshaped_normalized = dome_vecs_reshaped / np.sqrt(np.einsum("ij,ij->i",dome_vecs_reshaped, dome_vecs_reshaped))[:,np.newaxis]
-            dome_vecs = np.reshape(dome_disps_reshaped_normalized,(num_phis,num_thetas,3) )
+            dome_vecs_reshaped = np.reshape(
+                dome_vecs, (num_phis*num_thetas, 3))
+            dome_disps_reshaped_normalized = dome_vecs_reshaped / \
+                np.sqrt(np.einsum("ij,ij->i", dome_vecs_reshaped,
+                        dome_vecs_reshaped))[:, np.newaxis]
+            dome_vecs = np.reshape(
+                dome_disps_reshaped_normalized, (num_phis, num_thetas, 3))
 
-            cylinder_points = np.append(CylinderStraight,dome_pts)
-            cylinder_points = np.reshape(cylinder_points,(NumStepsStraight*num_thetas+num_phis*num_thetas,3))
+            cylinder_points = np.append(CylinderStraight, dome_pts)
+            cylinder_points = np.reshape(
+                cylinder_points, (NumStepsStraight*num_thetas+num_phis*num_thetas, 3))
 
             # Fix 1: the way this is made ends up adding a bunch of points (an amount of num_thetas) and vecs right at the tip of the dome. in this fix here we remove them.
             cylinder_points = cylinder_points[0:-num_thetas + 1]
 
             return cylinder_points
 
-    def get_surface_intersection(surface_cloud, line_points, tol_mm = 0.25):
+    def get_surface_intersection(surface_cloud, line_points, tol_mm=0.25):
         # Convert the input lists to numpy arrays for efficient calculations
         surface_cloud = np.array(surface_cloud)
         line_points = np.array(line_points)
@@ -188,10 +104,12 @@ def export_pdf(window:MainWindow) -> None:
         projection_onto_line = np.dot(vector_to_points, line_direction)
 
         # Calculate the closest points on the line to each point in the cloud
-        closest_points_on_line = line_points[0] + projection_onto_line[:, np.newaxis] * line_direction
+        closest_points_on_line = line_points[0] + \
+            projection_onto_line[:, np.newaxis] * line_direction
 
         # Check if the closest points are within the bounds of the line segment
-        within_line_segment_bounds = np.logical_and(0 <= projection_onto_line, projection_onto_line <= np.linalg.norm(line_displacement))
+        within_line_segment_bounds = np.logical_and(
+            0 <= projection_onto_line, projection_onto_line <= np.linalg.norm(line_displacement))
 
         # Filter out points that are not within the line segment bounds
         closest_points_on_line = closest_points_on_line[within_line_segment_bounds]
@@ -201,14 +119,14 @@ def export_pdf(window:MainWindow) -> None:
             return None
 
         # Calculate the distance between each point in the cloud and its closest point on the line
-        distances = np.linalg.norm(surface_cloud[within_line_segment_bounds] - closest_points_on_line, axis=1)
+        distances = np.linalg.norm(
+            surface_cloud[within_line_segment_bounds] - closest_points_on_line, axis=1)
 
         if np.min(distances) > tol_mm:
             return None
 
         # Find the index of the point with the minimum distance
         min_distance_index = np.argmin(distances)
-        
 
         # Return the point on the line and the corresponding point on the surface cloud
         return closest_points_on_line[min_distance_index], surface_cloud[within_line_segment_bounds][min_distance_index]
@@ -231,18 +149,19 @@ def export_pdf(window:MainWindow) -> None:
 
     def get_all_interstitial_lengths(needles, base, tip, radius, spacing, CylLen=160):
 
-            # Example usage:
-            # needle_interstital_lengths = get_all_interstitial_lengths(needles, base, tip, radius, spacing, CylLen=160)
-            # Where needles is a list of lists of needle coordinates.
+         # Example usage:
+         # needle_interstital_lengths = get_all_interstitial_lengths(needles, base, tip, radius, spacing, CylLen=160)
+         # Where needles is a list of lists of needle coordinates.
 
-            cylinder_cloud = generate_cyl_pts(base, tip, radius, spacing, CylLen)
-            needle_interstitial_lengths = []
+         cylinder_cloud = generate_cyl_pts(base, tip, radius, spacing, CylLen)
+          needle_interstitial_lengths = []
 
-            for needle in needles:
+           for needle in needles:
                 needle = np.array(needle)
                 first_line_segment = np.vstack([needle[1], needle[0]])
-                length = get_interstitial_length(cylinder_cloud, first_line_segment)
-                
+                length = get_interstitial_length(
+                    cylinder_cloud, first_line_segment)
+
                 if length is not None:
                     needle_interstitial_lengths.append(length)
                 else:
@@ -272,7 +191,8 @@ def export_pdf(window:MainWindow) -> None:
             protrusion_length_cm = round(protrusion_length / 10, 1)
 
             # Create a tuple for needle_data with protrusion length in the third column
-            needle_info = (f"Needle {idx}", f"{length_cm} cm", f"{protrusion_length_cm} cm")
+            needle_info = (
+                f"Needle {idx}", f"{length_cm} cm", f"{protrusion_length_cm} cm")
             needle_data.append(needle_info)
 
         return needle_data
@@ -281,8 +201,10 @@ def export_pdf(window:MainWindow) -> None:
         last_xy_points = []
 
         for needle in needles:
-            if needle and len(needle[-1]) >= 2:  # Check if the needle list is not empty and has at least 2 coordinates
-                last_point = needle[-1][:2]  # Take only the first two coordinates (x and y)
+            # Check if the needle list is not empty and has at least 2 coordinates
+            if needle and len(needle[-1]) >= 2:
+                # Take only the first two coordinates (x and y)
+                last_point = needle[-1][:2]
                 last_xy_points.append(last_point)
 
         return last_xy_points
@@ -292,7 +214,8 @@ def export_pdf(window:MainWindow) -> None:
         fig, ax = plt.subplots()
 
         # Set axis limits to fit points inside a square with a border
-        square_size = 2 * (circle_radius + 1)  # Add a buffer of 1 to the radius
+        # Add a buffer of 1 to the radius
+        square_size = 2 * (circle_radius + 1)
         ax.set_xlim(-square_size / 2, square_size / 2)
         ax.set_ylim(-square_size / 2, square_size / 2)
 
@@ -314,7 +237,8 @@ def export_pdf(window:MainWindow) -> None:
         tick_color = 'black'
         tick_vert_offset = 0.5
         if not has_tandem:
-            rect = plt.Rectangle((-tick_width / 2, circle_radius - tick_vert_offset - tick_height), tick_width, tick_height, color=tick_color, fill=True)
+            rect = plt.Rectangle((-tick_width / 2, circle_radius - tick_vert_offset -
+                                 tick_height), tick_width, tick_height, color=tick_color, fill=True)
             ax.add_artist(rect)
 
         # Remove axis markers and numbering
@@ -339,26 +263,29 @@ def export_pdf(window:MainWindow) -> None:
             for i in range(1, len(needle)):
                 x1, y1, z1 = map(float, needle[i - 1])
                 x2, y2, z2 = map(float, needle[i])
-                segment_length = ((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)**0.5
+                segment_length = ((x2 - x1)**2 + (y2 - y1)
+                                  ** 2 + (z2 - z1)**2)**0.5
                 cumulative_length += segment_length
 
             cumulative_lengths.append(cumulative_length)
 
         return cumulative_lengths
-    
+
     def calculate_protrusion_lengths(needles, needle_length):
         cumulative_lengths = calculate_cumulative_lengths(needles)
-        protrusion_lengths = [needle_length - length for length in cumulative_lengths]
+        protrusion_lengths = [needle_length -
+                              length for length in cumulative_lengths]
         return protrusion_lengths
-    
+
     # Ask the user where to save the pdf and what to name it.
-    filename = QFileDialog.getSaveFileName(window, 'Save solid as PDF', '', "PDF files (*.pdf)")[0]
+    filename = QFileDialog.getSaveFileName(
+        window, 'Save solid as PDF', '', "PDF files (*.pdf)")[0]
     if len(filename) == 0:
         return
 
     # set the directory where to output the pdf
     pdf_output_dir = os.path.abspath(os.path.dirname(filename))
-    filename =  os.path.basename(filename)
+    filename = os.path.basename(filename)
     file_name_path = os.path.join(pdf_output_dir, filename)
 
     # make sure the path exists otherwise OCE gets confused
@@ -371,15 +298,16 @@ def export_pdf(window:MainWindow) -> None:
     needles = extract_points_from_channels(window.needles.channels)
 
     # generate the interstitial needle lengths
-    base = np.array([0,0,0])
-    tip = np.array([0,0,160])
+    base = np.array([0, 0, 0])
+    tip = np.array([0, 0, 160])
     radius = window.brachyCylinder.diameter/2
     length = window.brachyCylinder.length
 
-    is_lengths = get_all_interstitial_lengths(needles, base, tip, radius, 0.1, length)
-    
+    is_lengths = get_all_interstitial_lengths(
+        needles, base, tip, radius, 0.1, length)
+
     # generate the protrusion lengths
-    needle_length = 160 #TODO expose this in the exports tab as an option. 
+    needle_length = 160  # TODO expose this in the exports tab as an option.
     protrusion_lengths = calculate_protrusion_lengths(needles, needle_length)
 
     # get basepoints
@@ -389,11 +317,11 @@ def export_pdf(window:MainWindow) -> None:
     save_points_diagram(basepoints, radius, png_name_path)
 
     # get the patient name and ID
-        #TODO: should actually be shown in the window somewhere
+     #TODO: should actually be shown in the window somewhere
     # get the plan name and ID
-        #TODO: should actually be shown in the window somewhere
+     #TODO: should actually be shown in the window somewhere
     # Get today's date in the format "Month Day, Year"
-        #TODO: should actually be shown in the window somewhere
+     #TODO: should actually be shown in the window somewhere
 
     # Get today's date in the format "Month Day, Year"
     today_date = datetime.today().strftime('%B %d, %Y')
@@ -432,13 +360,14 @@ def export_pdf(window:MainWindow) -> None:
     content.append(Paragraph(f"Date: {today_date}", left_style))
     content.append(Paragraph(f"Patient Name: {patient_name}", left_style))
     content.append(Paragraph(f"Patient ID: {patient_id}", left_style))
-    content.append(Paragraph(f"Plan Label: {plan_label} <br/> <br/>", left_style))
+    content.append(
+        Paragraph(f"Plan Label: {plan_label} <br/> <br/>", left_style))
     content.append(Paragraph("<br/>", centered_style))
 
     # Add table with needle data
-    #TODO: Add needle lable and channel number instead of "Needle 1" etc. 
+    # TODO: Add needle lable and channel number instead of "Needle 1" etc.
     length_label = "Protruding Length for " + str(needle_length) + "mm needle"
-    data = [["Needle Number", "Interstitial Length", length_label]] 
+    data = [["Needle Number", "Interstitial Length", length_label]]
     for needle_number, interstitial_length, protruding_length in process_lengths_and_create_data(is_lengths, protrusion_lengths):
         data.append([needle_number, interstitial_length, protruding_length])
 
@@ -455,7 +384,8 @@ def export_pdf(window:MainWindow) -> None:
     content.append(table)
 
     # Add the image to the PDF
-    img = Image(png_name_path, width=300, height=300)  # Adjust width and height as needed
+    # Adjust width and height as needed
+    img = Image(png_name_path, width=300, height=300)
     content.append(img)
 
     # Build and save the PDF document
@@ -471,4 +401,3 @@ def export_pdf(window:MainWindow) -> None:
         print(f"Unable to open the PDF: {e}")
 
     print('wait')
-

@@ -84,6 +84,8 @@ class BrachyCylinder:
         self.diameter = diameter
         self.expand_base = expand_base
         self._shape = None
+        self.base = None
+        self.tip = None
 
 
 def get_brachy_cylinder(data: DicomData) -> BrachyCylinder:

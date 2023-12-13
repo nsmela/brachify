@@ -1,5 +1,5 @@
 # ref:  https://doc.qt.io/qtforpython-6/PySide6/QtGui/QPalette.html
-#       https://www.pythonguis.com/pyside6-book/ pgs 198-208 
+#       https://www.pythonguis.com/pyside6-book/ pgs 198-208
 #       https://github.com/gmarull/qtmodern/blob/master/qtmodern/styles.py
 
 
@@ -7,7 +7,7 @@ from PySide6.QtGui import QPalette, QColor
 
 
 class Palettes:
-    
+
     @staticmethod
     def dark(window):
         """ Apply Dark Theme to the Qt window instance.
@@ -39,14 +39,18 @@ class Palettes:
         darkPalette.setColor(QPalette.LinkVisited, QColor(80, 80, 80))
 
         # disabled
-        darkPalette.setColor(QPalette.Disabled, QPalette.WindowText, QColor(127, 127, 127))
-        darkPalette.setColor(QPalette.Disabled, QPalette.Text, QColor(127, 127, 127))
-        darkPalette.setColor(QPalette.Disabled, QPalette.ButtonText, QColor(127, 127, 127))
-        darkPalette.setColor(QPalette.Disabled, QPalette.Highlight, QColor(80, 80, 80))
-        darkPalette.setColor(QPalette.Disabled, QPalette.HighlightedText, QColor(127, 127, 127))
+        darkPalette.setColor(
+            QPalette.Disabled, QPalette.WindowText, QColor(127, 127, 127))
+        darkPalette.setColor(
+            QPalette.Disabled, QPalette.Text, QColor(127, 127, 127))
+        darkPalette.setColor(
+            QPalette.Disabled, QPalette.ButtonText, QColor(127, 127, 127))
+        darkPalette.setColor(
+            QPalette.Disabled, QPalette.Highlight, QColor(80, 80, 80))
+        darkPalette.setColor(
+            QPalette.Disabled, QPalette.HighlightedText, QColor(127, 127, 127))
 
         window.setPalette(darkPalette)
-
 
     def light(window):
         """ Apply Light Theme to the Qt window instance.
@@ -78,10 +82,15 @@ class Palettes:
         lightPalette.setColor(QPalette.LinkVisited, QColor(222, 222, 222))
 
         # disabled
-        lightPalette.setColor(QPalette.Disabled, QPalette.WindowText, QColor(115, 115, 115))
-        lightPalette.setColor(QPalette.Disabled, QPalette.Text, QColor(115, 115, 115))
-        lightPalette.setColor(QPalette.Disabled, QPalette.ButtonText, QColor(115, 115, 115))
-        lightPalette.setColor(QPalette.Disabled, QPalette.Highlight, QColor(190, 190, 190))
-        lightPalette.setColor(QPalette.Disabled, QPalette.HighlightedText, QColor(115, 115, 115))
+        lightPalette.setColor(
+            QPalette.Disabled, QPalette.WindowText, QColor(115, 115, 115))
+        lightPalette.setColor(
+            QPalette.Disabled, QPalette.Text, QColor(115, 115, 115))
+        lightPalette.setColor(
+            QPalette.Disabled, QPalette.ButtonText, QColor(115, 115, 115))
+        lightPalette.setColor(
+            QPalette.Disabled, QPalette.Highlight, QColor(190, 190, 190))
+        lightPalette.setColor(
+            QPalette.Disabled, QPalette.HighlightedText, QColor(115, 115, 115))
 
         window.setPalette(lightPalette)
