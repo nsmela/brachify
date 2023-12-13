@@ -19,12 +19,17 @@ class NavigationModel():
         self.views.append(TandemView())
         self.views.append(Export_View())
 
+        # adding views to the main window from the self.views list
         app = get_app()
         window = app.window
-        window.ui.page_import.layout().addWidget(self.views[0])
-        window.ui.page_cylinder.layout().addWidget(self.views[1])
-        window.ui.page_channels.layout().addWidget(self.views[2])
-        window.ui.page_tandem.layout().addWidget(self.views[3])
+        for i, view in enumerate(self.views):
+            window.ui.viewswidget.widget(i).layout().addWidget(view)
+
+        #window.ui.page_import.layout().addWidget(self.views[0])
+        #window.ui.page_cylinder.layout().addWidget(self.views[1])
+        #window.ui.page_channels.layout().addWidget(self.views[2])
+        #window.ui.page_tandem.layout().addWidget(self.views[3])
+        #window.ui.page_export.layout().addWidget(self.views[4])
 
         # signals
         app.signals.viewChanged.connect(self.set_page)

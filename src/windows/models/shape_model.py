@@ -12,6 +12,7 @@ class ShapeTypes(Enum):
     CHANNEL = auto()
     TANDEM = auto()
     SELECTED = auto()
+    EXPORT = auto()
     
 
 class ShapeModel:

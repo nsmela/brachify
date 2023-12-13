@@ -39,10 +39,42 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="btn_export_models">
-     <property name="text">
-      <string>export models</string>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Models</string>
      </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QPushButton" name="btn_export_mesh">
+        <property name="text">
+         <string>export mesh</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_export_shapes">
+        <property name="text">
+         <string>export shape(s)</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Documents</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QPushButton" name="btn_export_template_reference">
+        <property name="text">
+         <string>export template reference sheet</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>

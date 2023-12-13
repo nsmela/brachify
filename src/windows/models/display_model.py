@@ -5,10 +5,11 @@ from classes.app import get_app
 from classes.logger import log
 
 default_colours = {
-    ShapeTypes.CYLINDER: [1.0, 1.0, 1.0],
-    ShapeTypes.CHANNEL: [0.2, 0.55, 0.55],
-    ShapeTypes.TANDEM: [1.0, 1.0, 1.0],
-    ShapeTypes.SELECTED: [0.2, 0.55, 0.55]}
+    ShapeTypes.CYLINDER:    [1.0, 1.0, 1.0],
+    ShapeTypes.CHANNEL:     [0.2, 0.55, 0.55],
+    ShapeTypes.TANDEM:      [1.0, 1.0, 1.0],
+    ShapeTypes.SELECTED:    [0.2, 0.55, 0.55], 
+    ShapeTypes.EXPORT:      [0.8, 0.0, 0.0]}
 
 
 class DisplayModel(QObject):
@@ -28,6 +29,16 @@ class DisplayModel(QObject):
             else: self.shapes[shape.label] = shape
         self.update()
 
+    def remove_shape(self, label:str):
+        if label in self.shapes:
+            self.shapes.pop(label)
+        self.update()
+
+    def remove_shapes(self, labels:list):
+        for label in labels:
+            self.shapes.pop(label)
+        self.update()
+
     def set_selected_shapes(self, shapes):
         log.debug(f"selecting {shapes} \n\n{shapes[0].DumpJsonToString()}")
         label = ""
@@ -41,16 +52,6 @@ class DisplayModel(QObject):
                 continue
 
         log.debug(f"shape matches {label}")
-        self.update()
-
-    def remove_shape(self, label:str):
-        if label in self.shapes:
-            self.shapes.pop(label)
-        self.update()
-
-    def remove_shapes(self, labels:list):
-        for label in labels:
-            self.shapes.pop(label)
         self.update()
 
     def set_shape_colour(self, colours: dict, update=True):
@@ -73,6 +74,14 @@ class DisplayModel(QObject):
             self.shapes[label].transparent = is_transparent
         
         if update: self.update()
+
+    def show_shape(self, shape: ShapeModel):
+        """
+        Override settings to show only a single shape model
+        """
+        shape.rgb = self.colours[shape.type]
+        self.shapes_changed.emit([shape], True)
+
 
     def update(self):
         """
