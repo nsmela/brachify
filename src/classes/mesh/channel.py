@@ -50,6 +50,13 @@ class NeedleChannel:
 
     def getOffset(self) -> float:
         return self._offset
+    
+    def get_points(self) -> list:
+        return [ [
+            point[0], 
+            point[1], 
+            point[2] + self._offset
+            ] for point in self.points]
 
     # ref:
     # https://stackoverflow.com/questions/2827393/angles-between-two-n-dimensional-vectors-in-python/13849249#13849249

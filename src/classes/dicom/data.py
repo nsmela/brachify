@@ -72,6 +72,7 @@ class DicomData:
         return {
             "Patient Name": self.patient_name,
             "Patient ID": self.patient_id,
+            "Plan Label": self.plan_label,
             "Cylinder ROI": self.cylinder_roi,
             "Cylinder Colour": self.cylinder_color,
             "Cylinder Contour": self.cylinder_contour,
@@ -84,6 +85,7 @@ class DicomData:
     def fromJson(self, json: dict) -> None:
         self.patient_name = json["Patient Name"]
         self.patient_id = json["Patient ID"]
+        self.plan_label = json["Plan Label"]
         self.cylinder_roi = json["Cylinder ROI"]
         self.cylinder_color = json["Cylinder Colour"]
         self.cylinder_contour = json["Cylinder Contour"]

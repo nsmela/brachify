@@ -1,29 +1,74 @@
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Image
-
-import numpy as np
-import subprocess
 from datetime import datetime
 import matplotlib.pyplot as plt
+import numpy as np
+from pathlib import Path 
+import subprocess
 
-def export_pdf(window: MainWindow) -> None:
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.pdfgen import canvas
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Image
 
-    def generate_cyl_pts(base, tip, radius, spacing, CylLen=160):
-         # Example usage:
-         # base = np.array([0,0,0])
-         # tip = np.array([0,0,160])
-         # radius = 15
-          # spacing = 0.1
-         # linepoints = np.array([[0,1,125],[0,0,127]]) #example start and endpoint for the first (needle tip) needle segment
-         # cylinder_points, normals = generate_cyl_pts(base,tip,radius,spacing,CylLen=160)
+from classes.dicom.data import DicomData
+from classes.logger import log
+from classes.mesh.channel import NeedleChannel
+from classes.mesh.cylinder import BrachyCylinder
 
+BASEMAP = "basemap.png"
+
+
+def calculate_protrusion_lengths(needles: list, needle_length: float):
+    def calculate_cumulative_lengths(needles):
+        cumulative_lengths = []
+
+        for needle in needles:
+            cumulative_length = 0
+
+            for i in range(1, len(needle)):
+                x1, y1, z1 = map(float, needle[i - 1])
+                x2, y2, z2 = map(float, needle[i])
+                segment_length = ((x2 - x1)**2 + (y2 - y1)
+                                  ** 2 + (z2 - z1)**2)**0.5
+                cumulative_length += segment_length
+
+            cumulative_lengths.append(cumulative_length)
+
+        return cumulative_lengths
+    
+    cumulative_lengths = calculate_cumulative_lengths(needles)
+    protrusion_lengths = [needle_length - length for length in cumulative_lengths]
+    return protrusion_lengths
+
+
+def extract_points_from_channels(channels: list):
+    """
+    Retreives the points from NeedleChannels
+
+    Returns:
+        [ [x, y, z], [x, y, z], ...]
+    """
+    return [ channel.get_points() for channel in channels]
+
+
+def get_all_interstitial_lengths(cylinder: BrachyCylinder, needles: list, spacing: float = 0.1) -> list[float]:
+    """
+    Example usage:
+    needle_interstital_lengths = get_all_interstitial_lengths(needles, base, tip, radius, spacing, CylLen=160)
+    Where needles is a list of lists of needle coordinates.
+    """
+
+    def generate_cylinder_points(cylinder: BrachyCylinder, spacing: float) -> list[np.array]:
+        length = cylinder.length
+        base = np.array([0, 0, 0])
+        tip = np.array([0, 0, length])
+        radius = cylinder.diameter / 2 
+
+        # Step 1: Generate variables
         vec = np.array(tip-base)
         vec_normalized = vec / \
             np.sqrt(vec[0] ** 2 + vec[1] ** 2 + vec[2] ** 2)
-        len_straight = CylLen-radius
+        len_straight = length-radius
         NumStepsStraight = int(np.ceil(len_straight / spacing))
         end_straight_section = base + vec_normalized * len_straight
         CenterLineStraight = np.linspace(
@@ -37,8 +82,7 @@ def export_pdf(window: MainWindow) -> None:
         CylinderRing[:, 1] = CylinderRing[:, 1] * radius * np.cos(thetas)
         CylinderStraight = np.ones((NumStepsStraight, num_thetas, 3))
         CylinderStraight[:] = CylinderRing
-        CylinderStraight[:, :, 2] = CylinderStraight[:,
-            :, 2]*CenterLineStraight[:, 2, np.newaxis]
+        CylinderStraight[:, :, 2] = CylinderStraight[:, :, 2]*CenterLineStraight[:, 2, np.newaxis]
 
         # Step 3: Generate the Dome
         num_phis = int(np.ceil(np.pi/2*radius/spacing))
@@ -78,7 +122,9 @@ def export_pdf(window: MainWindow) -> None:
         cylinder_points = np.reshape(
             cylinder_points, (NumStepsStraight*num_thetas+num_phis*num_thetas, 3))
 
-        # Fix 1: the way this is made ends up adding a bunch of points (an amount of num_thetas) and vecs right at the tip of the dome. in this fix here we remove them.
+        # Fix 1: the way this is made ends up adding a bunch of points 
+        # (an amount of num_thetas) and vecs right at the tip of the dome
+        # in this fix here we remove them.
         cylinder_points = cylinder_points[0:-num_thetas + 1]
 
         return cylinder_points
@@ -147,193 +193,118 @@ def export_pdf(window: MainWindow) -> None:
             length = 0
         return length
 
-    def get_all_interstitial_lengths(needles, base, tip, radius, spacing, CylLen=160):
+    cylinder_cloud = generate_cylinder_points(cylinder=cylinder, spacing=spacing)
+    needle_interstitial_lengths = []
 
-         # Example usage:
-         # needle_interstital_lengths = get_all_interstitial_lengths(needles, base, tip, radius, spacing, CylLen=160)
-         # Where needles is a list of lists of needle coordinates.
+    for needle in needles:
+        needle = np.array(needle)
+        first_line_segment = np.vstack([needle[1], needle[0]])
+        length = get_interstitial_length(cylinder_cloud, first_line_segment)
 
-        cylinder_cloud = generate_cyl_pts(base, tip, radius, spacing, CylLen)
-        needle_interstitial_lengths = []
+        if length is not None:
+            needle_interstitial_lengths.append(length)
+        else:
+            needle_interstitial_lengths.append("Error")
 
-        for needle in needles:
-            needle = np.array(needle)
-            first_line_segment = np.vstack([needle[1], needle[0]])
-            length = get_interstitial_length(
-                cylinder_cloud, first_line_segment)
+    return needle_interstitial_lengths
 
-            if length is not None:
-                needle_interstitial_lengths.append(length)
-            else:
-                needle_interstitial_lengths.append("Error")
 
-        return needle_interstitial_lengths
+def get_last_xy_points(needles):
+    last_xy_points = []
 
-    def extract_points_from_channels(channels):
-        all_points = []
+    for needle in needles:
+        # Check if the needle list is not empty and has at least 2 coordinates
+        if needle and len(needle[-1]) >= 2:
+            # Take only the first two coordinates (x and y)
+            last_point = needle[-1][:2]
+            last_xy_points.append(last_point)
 
-        for channel in channels:
-            channel_points = []
+    return last_xy_points
 
-            for point in channel.points:
-                channel_points.append(point)
 
-            all_points.append(channel_points)
+def process_lengths_and_create_data(is_lengths, protrusion_lengths):
+    needle_data = []
 
-        return all_points
+    for idx, (length_mm, protrusion_length) in enumerate(zip(is_lengths, protrusion_lengths), start=1):
+        # Convert lengths from mm to cm and round to one decimal place
+        length_cm = round(length_mm / 10, 1)
+        protrusion_length_cm = round(protrusion_length / 10, 1)
 
-    def process_lengths_and_create_data(is_lengths, protrusion_lengths):
-        needle_data = []
+        # Create a tuple for needle_data with protrusion length in the third column
+        needle_info = (
+            f"Needle {idx}", f"{length_cm} cm", f"{protrusion_length_cm} cm")
+        needle_data.append(needle_info)
 
-        for idx, (length_mm, protrusion_length) in enumerate(zip(is_lengths, protrusion_lengths), start=1):
-            # Convert lengths from mm to cm and round to one decimal place
-            length_cm = round(length_mm / 10, 1)
-            protrusion_length_cm = round(protrusion_length / 10, 1)
+    return needle_data
 
-            # Create a tuple for needle_data with protrusion length in the third column
-            needle_info = (
-                f"Needle {idx}", f"{length_cm} cm", f"{protrusion_length_cm} cm")
-            needle_data.append(needle_info)
 
-        return needle_data
+def save_points_diagram(points, circle_radius, output_filepath, has_tandem=False):
+    # Create a figure and axis
+    fig, ax = plt.subplots()
 
-    def get_last_xy_points(needles):
-        last_xy_points = []
+    # Set axis limits to fit points inside a square with a border
+    # Add a buffer of 1 to the radius
+    square_size = 2 * (circle_radius + 1)
+    ax.set_xlim(-square_size / 2, square_size / 2)
+    ax.set_ylim(-square_size / 2, square_size / 2)
 
-        for needle in needles:
-            # Check if the needle list is not empty and has at least 2 coordinates
-            if needle and len(needle[-1]) >= 2:
-                # Take only the first two coordinates (x and y)
-                last_point = needle[-1][:2]
-                last_xy_points.append(last_point)
+    # Plot the circle
+    circle = plt.Circle((0, 0), circle_radius, color='black', fill=False)
+    ax.add_artist(circle)
 
-        return last_xy_points
+    # Plot each point as a circle with a number inside
+    for i, (x, y) in enumerate(points, start=1):
+        ax.add_artist(plt.Circle((x, y), 1.25, color='black', fill=False))
+        if (i == 1 and has_tandem):
+            ax.text(x, y, 'T', color='black', ha='center', va='center')
+        else:
+            ax.text(x, y, str(i), color='black', ha='center', va='center')
 
-    def save_points_diagram(points, circle_radius, output_filepath, has_tandem=False):
-        # Create a figure and axis
-        fig, ax = plt.subplots()
+    # Add a filled black rectangle at the top center of the big circle
+    tick_width = 0.2
+    tick_height = 1.0
+    tick_color = 'black'
+    tick_vert_offset = 0.5
+    if not has_tandem:
+        rect = plt.Rectangle((-tick_width / 2, circle_radius - tick_vert_offset -
+                                tick_height), tick_width, tick_height, color=tick_color, fill=True)
+        ax.add_artist(rect)
 
-        # Set axis limits to fit points inside a square with a border
-        # Add a buffer of 1 to the radius
-        square_size = 2 * (circle_radius + 1)
-        ax.set_xlim(-square_size / 2, square_size / 2)
-        ax.set_ylim(-square_size / 2, square_size / 2)
+    # Remove axis markers and numbering
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
 
-        # Plot the circle
-        circle = plt.Circle((0, 0), circle_radius, color='black', fill=False)
-        ax.add_artist(circle)
+    # Set axis aspect ratio to be equal
+    ax.set_aspect('equal', adjustable='box')
 
-        # Plot each point as a circle with a number inside
-        for i, (x, y) in enumerate(points, start=1):
-            ax.add_artist(plt.Circle((x, y), 1.25, color='black', fill=False))
-            if (i == 1 and has_tandem):
-                ax.text(x, y, 'T', color='black', ha='center', va='center')
-            else:
-                ax.text(x, y, str(i), color='black', ha='center', va='center')
+    # Save the plot as a PNG file
+    plt.savefig(output_filepath, format='png', bbox_inches='tight')
+    plt.close()
 
-        # Add a filled black rectangle at the top center of the big circle
-        tick_width = 0.2
-        tick_height = 1.0
-        tick_color = 'black'
-        tick_vert_offset = 0.5
-        if not has_tandem:
-            rect = plt.Rectangle((-tick_width / 2, circle_radius - tick_vert_offset -
-                                 tick_height), tick_width, tick_height, color=tick_color, fill=True)
-            ax.add_artist(rect)
 
-        # Remove axis markers and numbering
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_xticklabels([])
-        ax.set_yticklabels([])
-
-        # Set axis aspect ratio to be equal
-        ax.set_aspect('equal', adjustable='box')
-
-        # Save the plot as a PNG file
-        plt.savefig(output_filepath, format='png', bbox_inches='tight')
-        plt.close()
-
-    def calculate_cumulative_lengths(needles):
-        cumulative_lengths = []
-
-        for needle in needles:
-            cumulative_length = 0
-
-            for i in range(1, len(needle)):
-                x1, y1, z1 = map(float, needle[i - 1])
-                x2, y2, z2 = map(float, needle[i])
-                segment_length = ((x2 - x1)**2 + (y2 - y1)
-                                  ** 2 + (z2 - z1)**2)**0.5
-                cumulative_length += segment_length
-
-            cumulative_lengths.append(cumulative_length)
-
-        return cumulative_lengths
-
-    def calculate_protrusion_lengths(needles, needle_length):
-        cumulative_lengths = calculate_cumulative_lengths(needles)
-        protrusion_lengths = [needle_length -
-                              length for length in cumulative_lengths]
-        return protrusion_lengths
-
-    # Ask the user where to save the pdf and what to name it.
-    filename = QFileDialog.getSaveFileName(
-        window, 'Save solid as PDF', '', "PDF files (*.pdf)")[0]
-    if len(filename) == 0:
-        return
-
-    # set the directory where to output the pdf
-    pdf_output_dir = os.path.abspath(os.path.dirname(filename))
-    filename = os.path.basename(filename)
-    file_name_path = os.path.join(pdf_output_dir, filename)
-
-    # make sure the path exists otherwise OCE gets confused
-    if not os.path.isdir(pdf_output_dir):
-        raise AssertionError(f"wrong path provided: {pdf_output_dir}")
-
-    # get the relevent info for the pdf
-
-    # get the needle centerline points from the window object
-    needles = extract_points_from_channels(window.needles.channels)
-
-    # generate the interstitial needle lengths
-    base = np.array([0, 0, 0])
-    tip = np.array([0, 0, 160])
-    radius = window.brachyCylinder.diameter/2
-    length = window.brachyCylinder.length
-
-    is_lengths = get_all_interstitial_lengths(
-        needles, base, tip, radius, 0.1, length)
-
-    # generate the protrusion lengths
-    needle_length = 160  # TODO expose this in the exports tab as an option.
-    protrusion_lengths = calculate_protrusion_lengths(needles, needle_length)
-
-    # get basepoints
-    basepoints = get_last_xy_points(needles)
-    fn = 'basemap.png'
-    png_name_path = os.path.join(pdf_output_dir, fn)
-    save_points_diagram(basepoints, radius, png_name_path)
-
-    # get the patient name and ID
-     #TODO: should actually be shown in the window somewhere
-    # get the plan name and ID
-     #TODO: should actually be shown in the window somewhere
-    # Get today's date in the format "Month Day, Year"
-     #TODO: should actually be shown in the window somewhere
+#######################################################
+# pdf generation
+#######################################################
+def generate_pdf(
+        dicom: DicomData, 
+        cylinder: BrachyCylinder,
+        channels: list[NeedleChannel],
+        filepath: Path,
+        needle_length: float):
 
     # Get today's date in the format "Month Day, Year"
     today_date = datetime.today().strftime('%B %d, %Y')
 
     # Header information
     header_info = "Patient Specific Cylindrical Template Reference Sheet"
-    patient_name = window.PatientName
-    patient_id = window.PatientID
-    plan_label = window.plan_label
+    patient_name = dicom.patient_name
+    patient_id = dicom.patient_id
+    plan_label = dicom.plan_label or "N/A"
 
     # Create a PDF document
-    pdf = SimpleDocTemplate(file_name_path, pagesize=letter)
+    pdf = SimpleDocTemplate(str(filepath), pagesize=letter)
 
     # Content elements for the PDF
     content = []
@@ -365,10 +336,19 @@ def export_pdf(window: MainWindow) -> None:
     content.append(Paragraph("<br/>", centered_style))
 
     # Add table with needle data
-    # TODO: Add needle lable and channel number instead of "Needle 1" etc.
+    needles = extract_points_from_channels(channels)
+    interstitial_lengths = get_all_interstitial_lengths(
+        cylinder=cylinder,
+        needles=needles)
+    
+    needle_length = cylinder.default_length()
+    protrusion_lengths = calculate_protrusion_lengths(needles, needle_length)
+
+    # TODO: Add needle label and channel number instead of "Needle 1" etc.
     length_label = "Protruding Length for " + str(needle_length) + "mm needle"
     data = [["Needle Number", "Interstitial Length", length_label]]
-    for needle_number, interstitial_length, protruding_length in process_lengths_and_create_data(is_lengths, protrusion_lengths):
+    for needle_number, interstitial_length, protruding_length \
+    in process_lengths_and_create_data(interstitial_lengths, protrusion_lengths):
         data.append([needle_number, interstitial_length, protruding_length])
 
     table = Table(data)
@@ -385,7 +365,9 @@ def export_pdf(window: MainWindow) -> None:
 
     # Add the image to the PDF
     # Adjust width and height as needed
-    img = Image(png_name_path, width=300, height=300)
+    pdf_output_dir = filepath.parent
+    png_path = pdf_output_dir.joinpath(BASEMAP)
+    img = Image(str(png_path), width=300, height=300)
     content.append(img)
 
     # Build and save the PDF document
@@ -393,11 +375,12 @@ def export_pdf(window: MainWindow) -> None:
 
     # Open the generated PDF using the default PDF viewer
     try:
+        import os
         if os.name == 'nt':  # Check if on Windows
-            subprocess.Popen(['start', file_name_path], shell=True)
+            subprocess.Popen(['start', str(filepath)], shell=True)
         elif os.name == 'posix':  # Check if on macOS/Linux
-            subprocess.Popen(['open', file_name_path])
+            subprocess.Popen(['open', str(filepath)])
     except Exception as e:
         print(f"Unable to open the PDF: {e}")
 
-    print('wait')
+    log.info('wait')

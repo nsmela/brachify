@@ -1,3 +1,7 @@
+import datetime
+import numpy as np
+from pathlib import Path
+
 from OCC.Core.BRep import BRep_Builder
 from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Cut
 from OCC.Core.TopoDS import TopoDS_Compound, TopoDS_Shape
@@ -7,10 +11,13 @@ from PySide6.QtWidgets import QWidget, QFileDialog
 from classes.app import get_app
 from classes.logger import log
 from classes.mesh.fileio import write_3d_file
+import classes.pdf.template_reference as template_reference
 from windows.models.shape_model import ShapeTypes, ShapeModel
 from windows.ui.export_view_ui import Ui_Export_View
 
 EXPORT_LABEL = "export"
+BASEMAP = "basemap.png"
+DEFAULT_NEEDLE_LENGTH = 160.0
 
 colours = {
     ShapeTypes.CYLINDER: [1.0, 1.0, 1.0],
@@ -18,6 +25,7 @@ colours = {
     ShapeTypes.TANDEM: [0.2, 0.55, 0.55],
     ShapeTypes.SELECTED: [0.5, 0.5, 0.2],
     ShapeTypes.EXPORT: [0.8, 0, 0]}
+
 
 class Export_View(QWidget):
 
@@ -50,6 +58,26 @@ class Export_View(QWidget):
         compound = self._final_shape()
         write_3d_file(filename[0], compound)
 
+    def action_export_template_reference(self):
+        filename = QFileDialog.getSaveFileName(
+            self, 'Save solid as PDF', '', "PDF files (*.pdf)")
+        
+        # error checking
+        if not filename:  # no file selected?
+            log.info("no valid filename selected for importing")
+            return
+        
+        window = get_app().window
+        needle_length = self.ui.sb_needle_length.value()
+
+        # generate pdf
+        template_reference.generate_pdf(
+            dicom=window.dicommodel.data,
+            cylinder=window.cylindermodel.cylinder,
+            channels=window.channelsmodel.channels.values(),
+            filepath=Path(filename[0]),
+            needle_length=needle_length)
+
     def on_view_close(self):
         log.debug(f"on view close")
 
@@ -77,10 +105,15 @@ class Export_View(QWidget):
         # signals and slots
         self.ui.btn_export_mesh.pressed.connect(self.action_export_mesh)
         self.ui.btn_export_shapes.pressed.connect(self.action_export_shapes)
+
+        self.ui.sb_needle_length.setValue(DEFAULT_NEEDLE_LENGTH)
+        self.ui.btn_export_template_reference.pressed.connect(self.action_export_template_reference)
         
     def _final_mesh(self) -> TopoDS_Shape:
         shape = self.window.cylindermodel.cylinder.shape()
-        shape = BRepAlgoAPI_Cut(shape, self.window.tandemmodel.shape()).Shape()
+
+        tandem_shape = self.window.tandemmodel.shape()
+        if tandem_shape: shape = BRepAlgoAPI_Cut(shape, tandem_shape).Shape()
 
         for channel in self.window.channelsmodel.channels.values():
             shape = BRepAlgoAPI_Cut(shape, channel.shape()).Shape()

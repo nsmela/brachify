@@ -84,8 +84,6 @@ class BrachyCylinder:
         self.diameter = diameter
         self.expand_base = expand_base
         self._shape = None
-        self.base = None
-        self.tip = None
 
 
 def get_brachy_cylinder(data: DicomData) -> BrachyCylinder:
@@ -96,8 +94,8 @@ def get_brachy_cylinder(data: DicomData) -> BrachyCylinder:
                        (difference[1]) ** 2 + (difference[2]) ** 2)
     diameter = round(diameter, 1)
 
-    log.debug(
-        f"Cylinder results: \n Diameter: {diameter}")
+    log.debug(f"Cylinder results: \n Diameter: {diameter}")
+    
     return BrachyCylinder(diameter=diameter)
 
 

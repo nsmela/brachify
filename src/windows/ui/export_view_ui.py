@@ -15,8 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGroupBox, QLabel, QPushButton,
-    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QDoubleSpinBox, QFormLayout, QGroupBox,
+    QLabel, QPushButton, QSizePolicy, QSpacerItem,
+    QVBoxLayout, QWidget)
 
 class Ui_Export_View(object):
     def setupUi(self, Export_View):
@@ -53,12 +54,24 @@ class Ui_Export_View(object):
 
         self.groupBox_2 = QGroupBox(Export_View)
         self.groupBox_2.setObjectName(u"groupBox_2")
-        self.verticalLayout_3 = QVBoxLayout(self.groupBox_2)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.formLayout = QFormLayout(self.groupBox_2)
+        self.formLayout.setObjectName(u"formLayout")
+        self.label = QLabel(self.groupBox_2)
+        self.label.setObjectName(u"label")
+
+        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label)
+
+        self.sb_needle_length = QDoubleSpinBox(self.groupBox_2)
+        self.sb_needle_length.setObjectName(u"sb_needle_length")
+        self.sb_needle_length.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.sb_needle_length.setMaximum(350.000000000000000)
+
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.sb_needle_length)
+
         self.btn_export_template_reference = QPushButton(self.groupBox_2)
         self.btn_export_template_reference.setObjectName(u"btn_export_template_reference")
 
-        self.verticalLayout_3.addWidget(self.btn_export_template_reference)
+        self.formLayout.setWidget(1, QFormLayout.SpanningRole, self.btn_export_template_reference)
 
 
         self.verticalLayout.addWidget(self.groupBox_2)
@@ -80,6 +93,8 @@ class Ui_Export_View(object):
         self.btn_export_mesh.setText(QCoreApplication.translate("Export_View", u"export mesh", None))
         self.btn_export_shapes.setText(QCoreApplication.translate("Export_View", u"export shape(s)", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("Export_View", u"Documents", None))
+        self.label.setText(QCoreApplication.translate("Export_View", u"needle length", None))
+        self.sb_needle_length.setSuffix(QCoreApplication.translate("Export_View", u" mm", None))
         self.btn_export_template_reference.setText(QCoreApplication.translate("Export_View", u"export template reference sheet", None))
     # retranslateUi
 
