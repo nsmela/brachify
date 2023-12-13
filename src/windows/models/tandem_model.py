@@ -28,6 +28,7 @@ class TandemModel(QObject):
     def clear_tandem(self):
         # remove tandem from the display
         self._base_shape = None
+        self.filepath = None
         self.update()
 
     def generate_tandem(self, 
@@ -52,10 +53,6 @@ class TandemModel(QObject):
 
         self.update()
 
-    def import_tandem(self, filepath: str):
-        self._base_shape = read_3d_file(filepath)
-        self.update()
-
     def get_tandem_channel(self):
         log.debug(f"getting rotation from tandem channel")
         channelsmodel = get_app().window.channelsmodel
@@ -65,6 +62,38 @@ class TandemModel(QObject):
         if tandem_channel: rotation = tandem_channel.get_rotation()
         self.rotation = rotation
 
+    def import_tandem(self, filepath: str):
+        self.filepath = filepath
+        self._base_shape = read_3d_file(filepath)
+        self.update()
+
+    def set_import_height_offset(self, height_offset: float):
+        if self.mesh_offset == height_offset: return
+        if not self.filepath: return
+
+        self.mesh_offset = height_offset
+        self.update()
+
+    def shape(self):
+        if not self._base_shape: return None
+        log.debug(f"shape offsets being applied")
+
+        # if using an imported file, also apply the mesh's offset
+        height_offset = self.height_offset
+        if self.filepath: height_offset += self.mesh_offset
+
+        # apply offsets
+        offset = gp_Vec(0.0, 0.0, height_offset)
+        rotation = self.rotation
+
+        shape = rotate_shape(
+            shape=self._base_shape, axis=gp.OZ(), angle=rotation)
+        shape = translate_shp(shape, offset)
+
+        if self.filepath: shape = extend_bottom_face(shape)
+
+        return shape
+    
     def update(self):
         log.debug(f"updating")
         self.values_changed.emit()
@@ -76,7 +105,6 @@ class TandemModel(QObject):
             self.displaymodel.remove_shape(TANDEM_LABEL)
             return
         
-        # TODO process shape
         shape = self.shape()
         if not shape: return
 
@@ -90,26 +118,13 @@ class TandemModel(QObject):
         self.height_offset = height_offset
         self.update()
 
-    def shape(self):
-        if not self._base_shape: return None
-        log.debug(f"shape offsets being applied")
-        # apply offsets
-        offset = gp_Vec(0.0, 0.0, self.height_offset)
-        rotation = self.rotation
-
-        shape = rotate_shape(
-            shape=self._base_shape, axis=gp.OZ(), angle=rotation)
-        shape = translate_shp(shape, offset)
-        #shape = extend_bottom_face(shape)
-
-        return shape
-
     def __init__(self) -> None:
         super().__init__()
         self._base_shape = None  # base shape before extending due to height offset
         self.height_offset = 0.0
         self.rotation = 0.0
-        self.filepath = ""
+        self.filepath = None
+        self.mesh_offset = 0.0
 
         # generated tandem settings
         self.channel_diameter = TANDEM_CHANNEL_DIAMETER_DEFAULT

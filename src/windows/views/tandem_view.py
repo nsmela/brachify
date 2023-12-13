@@ -39,6 +39,7 @@ class TandemView(QWidget):
         log.info(f"file {filename} has been selected")
         
         self.tandemmodel.import_tandem(filename)
+        self.update_settings()
 
     def on_view_close(self):
         log.debug(f"on view close")
@@ -84,5 +85,6 @@ class TandemView(QWidget):
         self.ui.btn_clear_generate.pressed.connect(self.action_clear_tandem)
         self.ui.btn_import.pressed.connect(self.action_import_tandem)
         self.ui.btn_clear_import.pressed.connect(self.action_clear_tandem)
+        self.ui.sb_height_offset.valueChanged.connect(self.tandemmodel.set_import_height_offset)
 
         self.update_settings()
