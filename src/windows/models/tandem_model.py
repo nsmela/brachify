@@ -1,4 +1,3 @@
-from OCC.Core.TopoDS import TopoDS_Shape
 from OCC.Core.gp import gp, gp_Vec
 from OCC.Extend.ShapeFactory import translate_shp, rotate_shape
 

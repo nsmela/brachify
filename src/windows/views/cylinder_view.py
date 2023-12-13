@@ -2,9 +2,7 @@ from PySide6.QtWidgets import QWidget
 
 from classes.app import get_app
 from classes.logger import log
-from classes.dicom.data import DicomData
 from windows.ui.cylinder_view_ui import Ui_Cylinder_View
-from windows.models.cylinder_model import CylinderModel
 from classes.mesh.cylinder import BrachyCylinder
 from windows.models.shape_model import ShapeTypes
 
@@ -73,7 +71,6 @@ class CylinderView(QWidget):
         self.ui.btn_apply_settings.pressed.connect(self.action_apply_settings)
 
         app = get_app()
-        #app.signals.viewChanged.connect(self.action_set_view)
         window = app.window
         window.cylindermodel.values_changed.connect(self.action_update_settings)
 

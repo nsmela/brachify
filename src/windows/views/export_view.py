@@ -1,5 +1,3 @@
-import datetime
-import numpy as np
 from pathlib import Path
 
 from OCC.Core.BRep import BRep_Builder

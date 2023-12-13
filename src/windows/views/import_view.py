@@ -5,7 +5,6 @@ from classes.logger import log
 from classes.dicom.fileio import read_dicom_folder
 from classes.dicom.data import DicomData
 from windows.ui.import_view_ui import Ui_Import_View
-from windows.models.cylinder_model import CylinderModel
 from windows.models.shape_model import ShapeTypes
 
 colours = {

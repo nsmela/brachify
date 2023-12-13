@@ -2,10 +2,7 @@ from PySide6.QtWidgets import QWidget, QListWidgetItem
 
 from classes.app import get_app
 from classes.logger import log
-from classes.dicom.data import DicomData
 from windows.ui.channels_view_ui import Ui_Channels_View
-from windows.models.channels_model import ChannelsModel
-from windows.models.cylinder_model import CylinderModel
 from windows.models.shape_model import ShapeTypes
 
 colours = {
