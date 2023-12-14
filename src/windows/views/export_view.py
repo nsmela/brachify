@@ -73,7 +73,7 @@ class Export_View(CustomView):
         template_reference.generate_pdf(
             dicom=window.dicommodel.data,
             cylinder=window.cylindermodel.cylinder,
-            channels=window.channelsmodel.channels.values(),
+            channels=window.channelsmodel.get_visible_channels(),
             filepath=Path(filename[0]),
             needle_length=needle_length)
 
