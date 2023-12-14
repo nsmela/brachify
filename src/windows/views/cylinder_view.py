@@ -2,9 +2,10 @@ from PySide6.QtWidgets import QWidget
 
 from classes.app import get_app
 from classes.logger import log
-from windows.ui.cylinder_view_ui import Ui_Cylinder_View
 from classes.mesh.cylinder import BrachyCylinder
 from windows.models.shape_model import ShapeTypes
+from windows.ui.cylinder_view_ui import Ui_Cylinder_View
+from windows.views.custom_view import display_action, CustomView
 
 colours = {
     ShapeTypes.CYLINDER: [0.2, 0.55, 0.55],
@@ -13,8 +14,9 @@ colours = {
     ShapeTypes.SELECTED: [0.5, 0.5, 0.2]}
 
 
-class CylinderView(QWidget):
+class CylinderView(CustomView):
 
+    @display_action
     def action_apply_settings(self):
         log.debug(f"applying cylinder settings")
 
@@ -51,16 +53,12 @@ class CylinderView(QWidget):
         self.ui.spinbox_length.setValue(length)
         self.ui.cb_add_base.setChecked(add_base)
 
-    def on_view_close(self):
-        log.debug(f"on view close")
-
-    def on_view_open(self):
-        log.debug(f"on view open")
+    @display_action
+    def on_open(self):
+        log.debug(f"view open")
         displaymodel = get_app().window.displaymodel
         displaymodel.set_shape_colour(colours)
-        displaymodel.set_transparent(True, False)
-
-        get_app().window.cylindermodel.update_display()
+        displaymodel.set_transparent(True)
 
     def __init__(self):
         super().__init__()
@@ -70,8 +68,7 @@ class CylinderView(QWidget):
         # signals and slots
         self.ui.btn_apply_settings.pressed.connect(self.action_apply_settings)
 
-        app = get_app()
-        window = app.window
+        window = get_app().window
         window.cylindermodel.values_changed.connect(self.action_update_settings)
 
         self.action_update_settings(window.cylindermodel.cylinder)

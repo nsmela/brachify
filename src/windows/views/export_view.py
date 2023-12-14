@@ -12,6 +12,7 @@ from classes.mesh.fileio import write_3d_file
 import classes.pdf.template_reference as template_reference
 from windows.models.shape_model import ShapeTypes, ShapeModel
 from windows.ui.export_view_ui import Ui_Export_View
+from windows.views.custom_view import display_action, CustomView
 
 EXPORT_LABEL = "export"
 BASEMAP = "basemap.png"
@@ -25,7 +26,7 @@ colours = {
     ShapeTypes.EXPORT: [0.8, 0, 0]}
 
 
-class Export_View(QWidget):
+class Export_View(CustomView):
 
     def action_export_mesh(self):
         """
@@ -76,11 +77,12 @@ class Export_View(QWidget):
             filepath=Path(filename[0]),
             needle_length=needle_length)
 
-    def on_view_close(self):
-        log.debug(f"on view close")
+    def on_close(self):
+        log.debug(f"on close")
 
-    def on_view_open(self):
-        log.debug(f"on view open")
+    @display_action
+    def on_open(self):
+        log.debug(f"on open")
 
         displaymodel = self.window.displaymodel
         displaymodel.set_shape_colour(colours)
@@ -123,9 +125,10 @@ class Export_View(QWidget):
         shape_tool = BRep_Builder()  # add shapes to the compound
         shape_tool.MakeCompound(compound)
 
-        # cylinder and tandem
         shape_tool.Add(compound, self.window.cylindermodel.cylinder.shape())
-        shape_tool.Add(compound, self.window.tandemmodel.shape())
+
+        tandem_shape = self.window.tandemmodel.shape()
+        if tandem_shape: shape_tool.Add(compound, self.window.tandemmodel.shape())
 
         # place all channels in a sub compound
         channels_compound = TopoDS_Compound()

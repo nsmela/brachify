@@ -2,8 +2,9 @@ from PySide6.QtWidgets import QWidget, QListWidgetItem
 
 from classes.app import get_app
 from classes.logger import log
-from windows.ui.channels_view_ui import Ui_Channels_View
 from windows.models.shape_model import ShapeTypes
+from windows.ui.channels_view_ui import Ui_Channels_View
+from windows.views.custom_view import display_action, CustomView
 
 colours = {
     ShapeTypes.CYLINDER: [1.0, 1.0, 1.0],
@@ -12,10 +13,12 @@ colours = {
     ShapeTypes.SELECTED: [0.5, 0.5, 0.2]}
 
 
-class ChannelsView(QWidget):
+class ChannelsView(CustomView):
 
-    def action_select_channel(self, item: QListWidgetItem):
+    @display_action
+    def action_select_channel(self, item: QListWidgetItem, *args):
         log.debug(f"action: select channel")
+        log.debug(f"{args}")
         if type(item) is type(None): return None
         else: label = item.text()
 
@@ -26,12 +29,14 @@ class ChannelsView(QWidget):
         except Exception as error_message:
             log.critical(f"failed selecting channel from list view: \n{error_message}")
 
+    @display_action
     def action_set_diameter(self):
         log.debug(f"action: set channel diameter")
         diameter = self.ui.spinbox_diameter.value()
         log.debug(f"setting channel diameters to: {diameter}")
         get_app().window.channelsmodel.set_diameter(diameter)
 
+    @display_action
     def action_set_tandem(self):
         log.debug(f"setting channel's tandem status")
 
@@ -43,6 +48,7 @@ class ChannelsView(QWidget):
         if channel_label != model.tandem_channel: label = channel_label
         model.set_tandem(label)
 
+    @display_action
     def action_toggle_channel_disable(self):
         log.debug(f"toggling channel's disabled status")
         model = get_app().window.channelsmodel
@@ -85,7 +91,7 @@ class ChannelsView(QWidget):
         if is_tandem: self.ui.btn_set_tandem.setText("Clear Tandem")
         else: self.ui.btn_set_tandem.setText("Set as Tandem")
 
-    def on_view_close(self):
+    def on_close(self):
         log.debug(f"on view close")
         try:         
             canvas = get_app().window.canvas
@@ -93,9 +99,10 @@ class ChannelsView(QWidget):
             canvas.sig_topods_selected.disconnect(channelsmodel.set_selected_shapes)
         except RuntimeError as error_message:  # incase the signal isn't connected
             log.warning(f"{error_message}")
-        
-    def on_view_open(self):
-        log.debug(f"on view open")
+
+    @display_action
+    def on_open(self):
+        log.debug(f"on open")
 
         canvas = get_app().window.canvas
         channelsmodel = get_app().window.channelsmodel

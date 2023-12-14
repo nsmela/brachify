@@ -7,6 +7,7 @@ from classes.logger import log
 
 
 def display_action(func):
+
     @functools.wraps(func)
     def wrapper_display_action(*args, **kwargs):
         try:
@@ -15,6 +16,7 @@ def display_action(func):
             displaymodel = get_app().window.displaymodel
             displaymodel.update()
         return None
+    
     return wrapper_display_action
 
 

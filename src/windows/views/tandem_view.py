@@ -2,8 +2,9 @@ from PySide6.QtWidgets import QWidget, QFileDialog
 
 from classes.app import get_app
 from classes.logger import log
-from windows.ui.tandem_view_ui import Ui_Tandem_View
 from windows.models.shape_model import ShapeTypes
+from windows.ui.tandem_view_ui import Ui_Tandem_View
+from windows.views.custom_view import display_action, CustomView
 
 colours = {
     ShapeTypes.CYLINDER: [1.0, 1.0, 1.0],
@@ -12,12 +13,14 @@ colours = {
     ShapeTypes.SELECTED: [0.5, 0.5, 0.2]}
 
 
-class TandemView(QWidget):
+class TandemView(CustomView):
 
+    @display_action
     def action_clear_tandem(self):
         log.debug(f"action: clearing tandem")
         self.tandemmodel.clear_tandem()
 
+    @display_action
     def action_generate_tandem(self):
         log.debug(f"action: generate a tandem")
         self.tandemmodel.generate_tandem(
@@ -27,6 +30,7 @@ class TandemView(QWidget):
             tip_angle=self.ui.sp_tip_angle.value()
         )
 
+    @display_action
     def action_import_tandem(self):
         log.debug(f"action: import a tandem")
         # file dialog to choose file
@@ -41,13 +45,15 @@ class TandemView(QWidget):
         self.tandemmodel.import_tandem(filename)
         self.update_settings()
 
-    def on_view_close(self):
+    @display_action
+    def action_set_import_offset(self, offset):
+        self.tandemmodel.set_import_height_offset(offset)
+
+    def on_close(self):
         log.debug(f"on view close")
 
-        displaymodel = get_app().window.displaymodel
-        displaymodel.set_transparent(False)
-
-    def on_view_open(self):
+    @display_action
+    def on_open(self):
         log.debug(f"on view open")
 
         displaymodel = get_app().window.displaymodel
@@ -85,6 +91,6 @@ class TandemView(QWidget):
         self.ui.btn_clear_generate.pressed.connect(self.action_clear_tandem)
         self.ui.btn_import.pressed.connect(self.action_import_tandem)
         self.ui.btn_clear_import.pressed.connect(self.action_clear_tandem)
-        self.ui.sb_height_offset.valueChanged.connect(self.tandemmodel.set_import_height_offset)
+        self.ui.sb_height_offset.valueChanged.connect(self.action_set_import_offset)
 
         self.update_settings()
