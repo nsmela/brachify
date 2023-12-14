@@ -24,8 +24,7 @@ class ChannelsView(CustomView):
 
         log.debug(f"selecting {label} channel")
         try:
-            model = get_app().window.channelsmodel
-            model.set_selected_channels(label)
+            self.channelsmodel.set_selected_channels(label)
         except Exception as error_message:
             log.critical(f"failed selecting channel from list view: \n{error_message}")
 
@@ -111,7 +110,7 @@ class ChannelsView(CustomView):
         log.debug(f"on open")
 
         canvas = get_app().window.canvas
-        canvas.sig_topods_selected.connect(self.channelsmodel.set_selected_shapes)
+        canvas.sig_topods_selected.connect(self.action_set_selected_shapes)
 
         displaymodel = get_app().window.displaymodel
         displaymodel.set_shape_colour(colours)
