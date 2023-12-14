@@ -25,17 +25,11 @@ class NavigationModel():
         for i, view in enumerate(self.views):
             window.ui.viewswidget.widget(i).layout().addWidget(view)
 
-        #window.ui.page_import.layout().addWidget(self.views[0])
-        #window.ui.page_cylinder.layout().addWidget(self.views[1])
-        #window.ui.page_channels.layout().addWidget(self.views[2])
-        #window.ui.page_tandem.layout().addWidget(self.views[3])
-        #window.ui.page_export.layout().addWidget(self.views[4])
-
         # signals
         app.signals.viewChanged.connect(self.set_page)
 
         # initializing the first page
-        self.views[0].on_view_open()
+        self.views[0].on_open()
         get_app().window.ui.viewswidget.setCurrentIndex(0)
 
         log.debug(f"Navigation model initialized")
@@ -43,7 +37,7 @@ class NavigationModel():
     def set_page(self, page:int):
         if page == self.current_page: return
         log.debug(f"setting page to {page}")
-        self.views[self.current_page].on_view_close()
+        self.views[self.current_page].on_close()
         self.current_page = page
-        self.views[self.current_page].on_view_open()
+        self.views[self.current_page].on_open()
         get_app().window.ui.viewswidget.setCurrentIndex(page)

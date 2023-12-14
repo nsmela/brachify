@@ -19,7 +19,6 @@ class DisplayModel(QObject):
     def add_shape(self, shape: ShapeModel):
         if not shape.enabled: del self.shapes[shape.label]
         else: self.shapes[shape.label] = shape
-        self.update()
 
     def add_shapes(self, shapes:list):
         for shape in shapes:
@@ -27,17 +26,14 @@ class DisplayModel(QObject):
                 if shape.label in self.shapes:
                     del self.shapes[shape.label]
             else: self.shapes[shape.label] = shape
-        self.update()
 
     def remove_shape(self, label:str):
         if label in self.shapes:
             self.shapes.pop(label)
-        self.update()
 
     def remove_shapes(self, labels:list):
         for label in labels:
             self.shapes.pop(label)
-        self.update()
 
     def set_selected_shapes(self, shapes):
         log.debug(f"selecting {shapes} \n\n{shapes[0].DumpJsonToString()}")
@@ -52,28 +48,22 @@ class DisplayModel(QObject):
                 continue
 
         log.debug(f"shape matches {label}")
-        self.update()
 
-    def set_shape_colour(self, colours: dict, update=True):
+    def set_shape_colour(self, colours: dict):
         """
         colours is {ShapeTypes: [0.5, 0.5, 0.5]}
         """
         self.colours = colours
-        
-        if update: self.update()
 
-    def set_shape_visibility(self, visibility: dict, update: bool = True):
+    def set_shape_visibility(self, visibility: dict):
         """
         visibility is {label: bool} where True means the shape is passed to the display
         """
         self.visibility.update(visibility)
-        if update: self.update()
 
-    def set_transparent(self, is_transparent:bool, update: bool = False):
+    def set_transparent(self, is_transparent:bool):
         for label in self.shapes:
             self.shapes[label].transparent = is_transparent
-        
-        if update: self.update()
 
     def show_shape(self, shape: ShapeModel):
         """
@@ -81,7 +71,6 @@ class DisplayModel(QObject):
         """
         shape.rgb = self.colours[shape.type]
         self.shapes_changed.emit([shape], True)
-
 
     def update(self):
         """
