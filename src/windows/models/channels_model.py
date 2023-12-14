@@ -21,6 +21,12 @@ class ChannelsModel(QObject):
         if not self.tandem_channel: return None
         return self.channels[self.tandem_channel]
 
+    def get_visible_channels(self) -> list[NeedleChannel]:
+        """Returns a list of NeedleChannel where the objects are not disabled"""
+        return [channel 
+                for channel in self.channels.values() 
+                if not self.is_channel_disabled(channel.label)]
+
     def is_channel_disabled(self, label: str) -> bool:
         return label in self.disabled_channels
     

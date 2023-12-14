@@ -80,7 +80,7 @@ class Export_View(CustomView):
     def on_close(self):
         log.debug(f"on close")
 
-    @display_action
+    # don't use @display_action because we want a unique view
     def on_open(self):
         log.debug(f"on open")
 
@@ -115,7 +115,7 @@ class Export_View(CustomView):
         tandem_shape = self.window.tandemmodel.shape()
         if tandem_shape: shape = BRepAlgoAPI_Cut(shape, tandem_shape).Shape()
 
-        for channel in self.window.channelsmodel.channels.values():
+        for channel in self.window.channelsmodel.get_visible_channels():
             shape = BRepAlgoAPI_Cut(shape, channel.shape()).Shape()
         
         return shape
@@ -134,7 +134,7 @@ class Export_View(CustomView):
         channels_compound = TopoDS_Compound()
         channel_tool = BRep_Builder()
         channel_tool.MakeCompound(channels_compound)
-        for channel in self.window.channelsmodel.channels.values():
+        for channel in self.window.channelsmodel.get_visible_channels():
             channel_tool.Add(channels_compound, channel.shape())
 
         shape_tool.Add(compound, channels_compound)
