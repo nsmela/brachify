@@ -46,29 +46,22 @@ class ChannelsModel(QObject):
         channel_index = 1
         for i in range(len(data.channels_rois)):
             channel_number = f"{data.channels_rois[i]}"
-            channel_id = f"Channel {data.channels_labels[i]}"
+            channel_id = f"{data.channels_labels[i]}"
             points = data.channel_paths[i]
 
             # to print the list of points without quotes
             points_list = f"Raw points: {points}"
             log.debug(points_list.replace("'", ""))
 
-            label = channel_id.lower()
-            if "tandem" in label: 
-                label = "tandem"
-            else: 
-                label = f"channel {channel_index}"
-                channel_index += 1
-
             needle = NeedleChannel(
                 number=channel_number, 
-                label=label, 
+                label=channel_id,
                 points=points)
             self.channels[needle.label]= needle
 
             #set tandem channel
-            if "tandem" in label: 
-                self.set_tandem(label)
+            if "tandem" in channel_id.lower():
+                self.set_tandem(channel_id)
 
         self.update()
 
