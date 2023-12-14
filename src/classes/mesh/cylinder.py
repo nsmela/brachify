@@ -17,6 +17,7 @@ from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeTorus
 from classes.dicom.data import DicomData
 from classes.logger import log
 from classes.mesh.helper import face_is_plane, geom_plane_from_face
+from classes.mesh.notch import CylinderNotch
 
 DEFAULT_LENGTH = 160.0
 
@@ -62,6 +63,10 @@ class BrachyCylinder:
         if self.expand_base:
             cylinder = add_base(
                 shape=cylinder, radius1=self.diameter / 2, radius2=12.0)
+            
+        if self.notch:
+            cylinder = add_notch(cylinder, self.notch)
+
         return cylinder
 
     def setDiameter(self, diameter: float) -> None:
@@ -84,6 +89,7 @@ class BrachyCylinder:
         self.diameter = diameter
         self.expand_base = expand_base
         self._shape = None
+        self.notch = CylinderNotch()
 
 
 def get_brachy_cylinder(data: DicomData) -> BrachyCylinder:
@@ -109,3 +115,8 @@ def add_base(shape: TopoDS_Solid, radius1: float, radius2: float):
     torus = translate_shp(torus, gp_Vec(0.0, 0.0, radius2))
     result = BRepAlgoAPI_Cut(cylinder, torus).Shape()
     return BRepAlgoAPI_Fuse(shape, result).Shape()
+
+def add_notch(shape: TopoDS_Shape, notch: CylinderNotch):
+    if not notch: return shape
+
+    return BRepAlgoAPI_Cut(shape, notch.shape()).Shape()
