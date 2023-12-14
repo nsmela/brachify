@@ -7,7 +7,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 
 from classes.app import get_app
 from classes.logger import log
-from windows.models.shape_model import ShapeModel
+
 
 class qtBaseViewer(QtWidgets.QWidget):
     """The base Qt Widget for an OCC viewer"""
@@ -44,7 +44,7 @@ class OrbitCameraViewer3d(qtBaseViewer):
     sig_topods_selected = QtCore.Signal(list)
 
     def update_display(self, shapes: list, resize: bool = True):
-        log.debug(f"updating viewport with {len(shapes)} shapes")
+        log.debug(f"updating viewport: {[shape.label for shape in shapes]}")
         # clear all the shapes
         self._display.Context.RemoveAll(True)
 

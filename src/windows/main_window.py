@@ -9,10 +9,6 @@ from windows.models.dicom_model import DicomModel
 from windows.models.channels_model import ChannelsModel
 from windows.models.cylinder_model import CylinderModel
 from windows.models.tandem_model import TandemModel
-from windows.views.import_view import ImportView
-from windows.views.cylinder_view import CylinderView
-from windows.views.channels_view import ChannelsView
-from windows.views.tandem_view import TandemView
 from windows.models.navigation_model import NavigationModel
 
 class MainWindow(QMainWindow):

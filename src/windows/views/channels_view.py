@@ -37,6 +37,10 @@ class ChannelsView(CustomView):
         get_app().window.channelsmodel.set_diameter(diameter)
 
     @display_action
+    def action_set_selected_shapes(self, *args, **kwargs):
+        self.channelsmodel.set_selected_shapes(*args)
+
+    @display_action
     def action_set_tandem(self):
         log.debug(f"setting channel's tandem status")
 
@@ -59,14 +63,13 @@ class ChannelsView(CustomView):
         log.debug(f"updating channels view")
         
         # diameter spin box
-        model = get_app().window.channelsmodel
-        self.ui.spinbox_diameter.setValue(model.diameter)
+        self.ui.spinbox_diameter.setValue(self.channelsmodel.diameter)
 
         # channels list
-        selected_channel = model.get_selected_channel()
+        selected_channel = self.channelsmodel.get_selected_channel()
         self.ui.listwidget_channels.blockSignals(True)  # prevents accidently emitting signals
         self.ui.listwidget_channels.clear()          
-        for row, channel in enumerate(model.channels.values()):
+        for row, channel in enumerate(self.channelsmodel.channels.values()):
             new_item = QListWidgetItem()
             new_item.setText(channel.label)
             self.ui.listwidget_channels.addItem(new_item)
@@ -81,9 +84,9 @@ class ChannelsView(CustomView):
         self.ui.btn_enable.setEnabled(any_selected)
         self.ui.btn_set_tandem.setEnabled(any_selected)
         
-        label = model.get_selected_channel()
-        is_disabled = model.is_channel_disabled(label)
-        is_tandem = model.is_channel_tandem(label)
+        label = self.channelsmodel.get_selected_channel()
+        is_disabled = self.channelsmodel.is_channel_disabled(label)
+        is_tandem = self.channelsmodel.is_channel_tandem(label)
 
         if is_disabled: self.ui.btn_enable.setText("Enable")
         else: self.ui.btn_enable.setText("Disable")
@@ -92,11 +95,14 @@ class ChannelsView(CustomView):
         else: self.ui.btn_set_tandem.setText("Set as Tandem")
 
     def on_close(self):
-        log.debug(f"on view close")
+        log.debug(f"on close")
+
+        channelsmodel = get_app().window.channelsmodel
+        channelsmodel.clear_selected_channels()
+
         try:         
             canvas = get_app().window.canvas
-            channelsmodel = get_app().window.channelsmodel
-            canvas.sig_topods_selected.disconnect(channelsmodel.set_selected_shapes)
+            canvas.sig_topods_selected.disconnect(self.action_set_selected_shapes)
         except RuntimeError as error_message:  # incase the signal isn't connected
             log.warning(f"{error_message}")
 
@@ -105,13 +111,12 @@ class ChannelsView(CustomView):
         log.debug(f"on open")
 
         canvas = get_app().window.canvas
-        channelsmodel = get_app().window.channelsmodel
-        canvas.sig_topods_selected.connect(channelsmodel.set_selected_shapes)
+        canvas.sig_topods_selected.connect(self.channelsmodel.set_selected_shapes)
 
         displaymodel = get_app().window.displaymodel
         displaymodel.set_shape_colour(colours)
         displaymodel.set_transparent(True)
-        channelsmodel.update()
+        self.channelsmodel.update()
 
         self.action_update_settings()
 
@@ -127,9 +132,7 @@ class ChannelsView(CustomView):
         self.ui.btn_enable.pressed.connect(self.action_toggle_channel_disable)
         self.ui.btn_set_tandem.pressed.connect(self.action_set_tandem)
 
-        app = get_app()
-
-        window = app.window
-        window.channelsmodel.values_changed.connect(self.action_update_settings)
+        self.channelsmodel = get_app().window.channelsmodel
+        self.channelsmodel.values_changed.connect(self.action_update_settings)
 
         self.action_update_settings()

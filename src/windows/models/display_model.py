@@ -17,21 +17,27 @@ class DisplayModel(QObject):
     shapes_changed = Signal(list, bool)
 
     def add_shape(self, shape: ShapeModel):
+        log.debug(f"adding {shape.label}")
         if not shape.enabled: del self.shapes[shape.label]
         else: self.shapes[shape.label] = shape
+        log.debug(f"Shapes: {self.shapes.keys()}")
 
     def add_shapes(self, shapes:list):
+        log.debug(f"adding {[shape.label for shape in shapes]}")
         for shape in shapes:
             if not shape.enabled:  # if disabled, remove the shape all together 
                 if shape.label in self.shapes:
                     del self.shapes[shape.label]
             else: self.shapes[shape.label] = shape
+        log.debug(f"Shapes: {self.shapes.keys()}")
 
     def remove_shape(self, label:str):
+        log.debug(f"removing {label}")
         if label in self.shapes:
             self.shapes.pop(label)
 
     def remove_shapes(self, labels:list):
+        log.debug(f"removing {labels}")
         for label in labels:
             self.shapes.pop(label)
 
@@ -76,7 +82,6 @@ class DisplayModel(QObject):
         """
         To update the viewport's shapes
         """
-
         shapes = self.shapes.values()
         # colour remaining shapes
         for shape in shapes:

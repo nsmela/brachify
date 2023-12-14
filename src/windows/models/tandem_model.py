@@ -5,12 +5,13 @@ from PySide6.QtCore import QObject, Signal
 
 from classes.app import get_app
 from classes.logger import log
+from classes.mesh.channel import NeedleChannel
 from classes.mesh.fileio import read_3d_file
 from classes.mesh.helper import extend_bottom_face
 from classes.mesh.tandem import generate_tandem
 from windows.models.shape_model import ShapeModel, ShapeTypes
 
-TANDEM_LABEL = "tandem"
+TANDEM_LABEL = "tandem_shape"
 
 # Defaults
 TANDEM_CHANNEL_DIAMETER_DEFAULT = 4.0
@@ -52,15 +53,6 @@ class TandemModel(QObject):
 
         self.update()
 
-    def get_tandem_channel(self):
-        log.debug(f"getting rotation from tandem channel")
-        channelsmodel = get_app().window.channelsmodel
-        tandem_channel = channelsmodel.get_tandem_channel()
-
-        rotation = 0.0
-        if tandem_channel: rotation = tandem_channel.get_rotation()
-        self.rotation = rotation
-
     def import_tandem(self, filepath: str):
         self.filepath = filepath
         self._base_shape = read_3d_file(filepath)
@@ -72,6 +64,13 @@ class TandemModel(QObject):
 
         self.mesh_offset = height_offset
         self.update()
+    
+    def set_tandem_channel(self, channel: NeedleChannel):
+        rotation = 0.0
+        if channel:
+            rotation = channel.get_rotation()
+        self.rotation = rotation
+        self.update_display()
 
     def shape(self):
         if not self._base_shape: return None
@@ -92,7 +91,7 @@ class TandemModel(QObject):
         if self.filepath: shape = extend_bottom_face(shape)
 
         return shape
-    
+
     def update(self):
         log.debug(f"updating")
         self.values_changed.emit()
@@ -110,7 +109,7 @@ class TandemModel(QObject):
         shape_model = ShapeModel(
             label=TANDEM_LABEL, shape=shape, shape_type=ShapeTypes.TANDEM)
         
-        get_app().window.displaymodel.add_shape(shape_model)
+        self.displaymodel.add_shape(shape_model)
 
     def update_height_offset(self, height_offset:float):
         log.debug(f"updating tandem height offset to {height_offset}")
@@ -132,11 +131,11 @@ class TandemModel(QObject):
         self.tip_angle = TANDEM_TIP_ANGLE_DEFAULT
 
         # signals and slots
-        app = get_app()
-        app.window.channelsmodel.values_changed.connect(self.get_tandem_channel)
+        window = get_app().window
+        window.channelsmodel.tandem_changed.connect(self.set_tandem_channel)
 
         # references
-        self.displaymodel = app.window.displaymodel
+        self.displaymodel = window.displaymodel
 
     @staticmethod
     def get_label(): return TANDEM_LABEL

@@ -12,6 +12,11 @@ CHANNELS_LABEL = "applicator_"
 class ChannelsModel(QObject):
 
     values_changed = Signal()
+    tandem_changed = Signal(NeedleChannel)
+
+    def clear_selected_channels(self):
+        self.selected_channels = []
+        self.update()
 
     def get_selected_channel(self) -> str:
         if not self.selected_channels: return None
@@ -38,6 +43,7 @@ class ChannelsModel(QObject):
         self.selected_channels = []
         self.channels = {}
         log.debug("### Importing RP Data ###")
+        channel_index = 1
         for i in range(len(data.channels_rois)):
             channel_number = f"{data.channels_rois[i]}"
             channel_id = f"Channel {data.channels_labels[i]}"
@@ -47,20 +53,23 @@ class ChannelsModel(QObject):
             points_list = f"Raw points: {points}"
             log.debug(points_list.replace("'", ""))
 
+            label = channel_id.lower()
+            if "tandem" in label: 
+                label = "tandem"
+            else: 
+                label = f"channel {channel_index}"
+                channel_index += 1
+
             needle = NeedleChannel(
                 number=channel_number, 
-                label=channel_id, 
+                label=label, 
                 points=points)
             self.channels[needle.label]= needle
 
             #set tandem channel
-            label = channel_id.lower()
-            if "tandem" in label: self.set_tandem(channel_id)
+            if "tandem" in label: 
+                self.set_tandem(label)
 
-        self.update()
-
-    def on_view_changed(self):
-        self.selected_channels = []
         self.update()
 
     def set_diameter(self, diameter: float):
@@ -113,6 +122,7 @@ class ChannelsModel(QObject):
             self.disabled_channels.append(label)
 
         self.update()
+        self.tandem_changed.emit(self.get_tandem_channel())
 
     def toggle_channel_enabled(self, label: str):
         log.debug(f"Toggling channel enable")
@@ -160,8 +170,6 @@ class ChannelsModel(QObject):
         self.selected_channels = []
         self.tandem_channel = None  # a label for the specified channel to represent the tandem
         self.disabled_channels = []
-        
-        get_app().signals.viewChanged.connect(self.on_view_changed)
 
     @staticmethod
     def get_label(): return CHANNELS_LABEL
