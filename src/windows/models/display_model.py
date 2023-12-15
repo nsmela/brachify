@@ -11,6 +11,13 @@ default_colours = {
     ShapeTypes.SELECTED:    [0.2, 0.55, 0.55], 
     ShapeTypes.EXPORT:      [0.8, 0.0, 0.0]}
 
+default_materials = {
+    ShapeTypes.CYLINDER: {"rgb": [0.2, 0.55, 0.55], "transparent": True},
+    ShapeTypes.CHANNEL: {"rgb": [0.2, 0.55, 0.55], "transparent": True},
+    ShapeTypes.TANDEM: {"rgb": [0.2, 0.55, 0.55], "transparent": True},
+    ShapeTypes.SELECTED: {"rgb": [0.2, 0.55, 0.55], "transparent": True}
+}
+
 
 class DisplayModel(QObject):
 
@@ -40,6 +47,10 @@ class DisplayModel(QObject):
         log.debug(f"removing {labels}")
         for label in labels:
             self.shapes.pop(label)
+
+    def set_materials(self, materials: dict) -> None:
+        log.debug(f"updating materials list to: {materials}")
+        self.materials = materials
 
     def set_selected_shapes(self, shapes):
         log.debug(f"selecting {shapes} \n\n{shapes[0].DumpJsonToString()}")
@@ -75,7 +86,6 @@ class DisplayModel(QObject):
         """
         Override settings to show only a single shape model
         """
-        shape.rgb = self.colours[shape.type]
         self.shapes_changed.emit([shape], True)
 
     def update(self):
@@ -85,15 +95,16 @@ class DisplayModel(QObject):
         shapes = self.shapes.values()
         # colour remaining shapes
         for shape in shapes:
-            if shape.selected: 
-                shape.rgb = self.colours[ShapeTypes.SELECTED]
-            else: 
-                shape.rgb = self.colours[shape.type]
+            shape_type = shape.type
+            if shape.selected: shape_type = ShapeTypes.SELECTED
+
+            shape.material = self.materials[shape_type]
         self.shapes_changed.emit(list(shapes), True)
 
     def __init__(self):
         super().__init__()
         self.colours = default_colours
+        self.materials = default_materials
         self.visibility = {}  # label: bool where True is visible
         self.shapes = {}  # each entry stored as (ShapeModel)
 

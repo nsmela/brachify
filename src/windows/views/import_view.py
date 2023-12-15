@@ -8,11 +8,12 @@ from windows.models.shape_model import ShapeTypes
 from windows.ui.import_view_ui import Ui_Import_View
 from windows.views.custom_view import display_action, CustomView
 
-colours = {
-    ShapeTypes.CYLINDER: [0.2, 0.55, 0.55],
-    ShapeTypes.CHANNEL: [0.2, 0.55, 0.55],
-    ShapeTypes.TANDEM: [0.2, 0.55, 0.55],
-    ShapeTypes.SELECTED: [0.5, 0.5, 0.2]}
+materials = {
+    ShapeTypes.CYLINDER: {"rgb": [0.2, 0.55, 0.55], "transparent": True},
+    ShapeTypes.CHANNEL: {"rgb": [0.2, 0.55, 0.55], "transparent": True},
+    ShapeTypes.TANDEM: {"rgb": [0.2, 0.55, 0.55], "transparent": True},
+    ShapeTypes.SELECTED: {"rgb": [0.2, 0.55, 0.55], "transparent": True}
+}
 
 
 class ImportView(CustomView):
@@ -44,8 +45,7 @@ class ImportView(CustomView):
     def on_open(self):
         log.debug(f"on view open")
         displaymodel = get_app().window.displaymodel
-        displaymodel.set_shape_colour(colours)
-        displaymodel.set_transparent(True)
+        displaymodel.set_materials(materials)
 
     def __init__(self):
         super().__init__()

@@ -6,11 +6,12 @@ from windows.models.shape_model import ShapeTypes
 from windows.ui.channels_view_ui import Ui_Channels_View
 from windows.views.custom_view import display_action, CustomView
 
-colours = {
-    ShapeTypes.CYLINDER: [1.0, 1.0, 1.0],
-    ShapeTypes.CHANNEL: [0.2, 0.55, 0.55],
-    ShapeTypes.TANDEM: [1.0, 1.0, 1.0],
-    ShapeTypes.SELECTED: [0.5, 0.5, 0.2]}
+materials = {
+    ShapeTypes.CYLINDER: {"rgb": [0.8, 0.8, 0.8], "transparent": True},
+    ShapeTypes.CHANNEL: {"rgb": [0.2, 0.55, 0.55], "transparent": False},
+    ShapeTypes.TANDEM: {"rgb": [0.8, 0.8, 0.8], "transparent": True},
+    ShapeTypes.SELECTED: {"rgb": [0.3, 0.7, 0.7], "transparent": False}
+}
 
 
 class ChannelsView(CustomView):
@@ -113,8 +114,7 @@ class ChannelsView(CustomView):
         canvas.sig_topods_selected.connect(self.action_set_selected_shapes)
 
         displaymodel = get_app().window.displaymodel
-        displaymodel.set_shape_colour(colours)
-        displaymodel.set_transparent(True)
+        displaymodel.set_materials(materials)
         self.channelsmodel.update()
 
         self.action_update_settings()

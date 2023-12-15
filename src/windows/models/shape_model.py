@@ -34,6 +34,7 @@ class ShapeModel:
         self.shape = shape
         self.type = shape_type or ShapeTypes.NONE  # flags the shape
         self.rgb = None  # used by display model and viewport
+        self.material = None  # {"rgb": [1.0, 1.0, 1.0], "transparent": True}
 
         # flags
         self.selected = False

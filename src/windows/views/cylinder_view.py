@@ -7,11 +7,12 @@ from windows.models.shape_model import ShapeTypes
 from windows.ui.cylinder_view_ui import Ui_Cylinder_View
 from windows.views.custom_view import display_action, CustomView
 
-colours = {
-    ShapeTypes.CYLINDER: [0.2, 0.55, 0.55],
-    ShapeTypes.CHANNEL: [1.0, 1.0, 1.0],
-    ShapeTypes.TANDEM: [1.0, 1.0, 1.0],
-    ShapeTypes.SELECTED: [0.5, 0.5, 0.2]}
+materials = {
+    ShapeTypes.CYLINDER: {"rgb": [0.2, 0.55, 0.55], "transparent": False},
+    ShapeTypes.CHANNEL: {"rgb": [0.8, 0.8, 0.8], "transparent": True},
+    ShapeTypes.TANDEM: {"rgb": [0.8, 0.8, 0.8], "transparent": True},
+    ShapeTypes.SELECTED: {"rgb": [0.2, 0.55, 0.55], "transparent": True}
+}
 
 
 class CylinderView(CustomView):
@@ -57,8 +58,7 @@ class CylinderView(CustomView):
     def on_open(self):
         log.debug(f"view open")
         displaymodel = get_app().window.displaymodel
-        displaymodel.set_shape_colour(colours)
-        displaymodel.set_transparent(True)
+        displaymodel.set_materials(materials)
 
     def __init__(self):
         super().__init__()

@@ -18,12 +18,13 @@ EXPORT_LABEL = "export"
 BASEMAP = "basemap.png"
 DEFAULT_NEEDLE_LENGTH = 160.0
 
-colours = {
-    ShapeTypes.CYLINDER: [1.0, 1.0, 1.0],
-    ShapeTypes.CHANNEL: [1.0, 1.0, 1.0],
-    ShapeTypes.TANDEM: [0.2, 0.55, 0.55],
-    ShapeTypes.SELECTED: [0.5, 0.5, 0.2],
-    ShapeTypes.EXPORT: [0.8, 0, 0]}
+materials = {
+    ShapeTypes.CYLINDER: {"rgb": [0.2, 0.55, 0.55], "transparent": True},
+    ShapeTypes.CHANNEL: {"rgb": [0.8, 0.8, 0.8], "transparent": True},
+    ShapeTypes.TANDEM: {"rgb": [0.8, 0.8, 0.8], "transparent": True},
+    ShapeTypes.SELECTED: {"rgb": [0.2, 0.55, 0.55], "transparent": True},
+    ShapeTypes.EXPORT: {"rgb": [0.8, 0, 0], "transparent": True}
+}
 
 
 class Export_View(CustomView):
@@ -85,13 +86,13 @@ class Export_View(CustomView):
         log.debug(f"on open")
 
         displaymodel = self.window.displaymodel
-        displaymodel.set_shape_colour(colours)
+        displaymodel.set_materials(materials)
         self.shape = self._final_mesh()
         shape_model = ShapeModel(
             label=EXPORT_LABEL,
             shape=self.shape,
             shape_type=ShapeTypes.EXPORT)
-        shape_model.transparent = True
+        shape_model.material=materials[ShapeTypes.EXPORT]
 
         displaymodel.show_shape(shape_model)
 

@@ -52,10 +52,12 @@ class OrbitCameraViewer3d(qtBaseViewer):
         for shape in shapes:
             if shape.selected:
                 loggedinfo += f"\n    {shape.label}: Type:{shape.type.name} Selected: {shape.selected} rgb: {shape.rgb} Transparent: {shape.transparent}"
+            rgb = shape.material["rgb"]
+            transparent = shape.material["transparent"]
             colour = Quantity_Color(
-                    shape.rgb[0], shape.rgb[1], shape.rgb[2], Quantity_TOC_RGB)
+                    rgb[0], rgb[1], rgb[2], Quantity_TOC_RGB)
             
-            if shape.transparent: self._display.DisplayShape(shape.shape, color=colour, material=Graphic3d_NOM_TRANSPARENT, update=False)
+            if transparent: self._display.DisplayShape(shape.shape, color=colour, material=Graphic3d_NOM_TRANSPARENT, update=False)
             else: self._display.DisplayShape(shape.shape, color=colour, update=False)
 
         self._display.Repaint()
