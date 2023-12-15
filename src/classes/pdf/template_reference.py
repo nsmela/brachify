@@ -341,7 +341,6 @@ def generate_pdf(
         cylinder=cylinder,
         needles=needles)
     
-    needle_length = cylinder.default_length()
     protrusion_lengths = calculate_protrusion_lengths(needles, needle_length)
 
     # TODO: Add needle label and channel number instead of "Needle 1" etc.
