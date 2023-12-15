@@ -21,7 +21,7 @@
     <number>0</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>6</number>
    </property>
    <property name="bottomMargin">
     <number>0</number>
@@ -51,6 +51,52 @@
    <item row="1" column="1">
     <widget class="QDoubleSpinBox" name="spinbox_diameter"/>
    </item>
+   <item row="7" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QPushButton" name="btn_apply_settings">
+     <property name="text">
+      <string>apply settings</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>add base</string>
+     </property>
+     <property name="buddy">
+      <cstring>cb_add_base</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QCheckBox" name="cb_add_base">
+     <property name="layoutDirection">
+      <enum>Qt::RightToLeft</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
+    </widget>
+   </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
@@ -65,7 +111,7 @@
     <widget class="QSpinBox" name="spinbox_length">
      <property name="minimumSize">
       <size>
-       <width>86</width>
+       <width>0</width>
        <height>0</height>
       </size>
      </property>
@@ -77,43 +123,6 @@
      </property>
      <property name="maximum">
       <number>300</number>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="QPushButton" name="btn_apply_settings">
-     <property name="text">
-      <string>apply settings</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>add base</string>
-     </property>
-     <property name="buddy">
-      <cstring>cb_add_base</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QCheckBox" name="cb_add_base">
-     <property name="text">
-      <string>CheckBox</string>
      </property>
     </widget>
    </item>
