@@ -49,11 +49,6 @@ class Ui_Channels_View(object):
         self.groupBox.setObjectName(u"groupBox")
         self.verticalLayout = QVBoxLayout(self.groupBox)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.label_4 = QLabel(self.groupBox)
-        self.label_4.setObjectName(u"label_4")
-
-        self.verticalLayout.addWidget(self.label_4)
-
         self.btn_enable = QPushButton(self.groupBox)
         self.btn_enable.setObjectName(u"btn_enable")
 
@@ -111,7 +106,6 @@ class Ui_Channels_View(object):
         self.label_title.setText(QCoreApplication.translate("Channels_View", u"channels", None))
         self.label_2.setText(QCoreApplication.translate("Channels_View", u"Channels", None))
         self.groupBox.setTitle(QCoreApplication.translate("Channels_View", u"Channel Details", None))
-        self.label_4.setText(QCoreApplication.translate("Channels_View", u"Points:", None))
         self.btn_enable.setText(QCoreApplication.translate("Channels_View", u"Disable", None))
         self.btn_set_tandem.setText(QCoreApplication.translate("Channels_View", u"Set as Tandem", None))
         self.label.setText(QCoreApplication.translate("Channels_View", u"channels diameter", None))
