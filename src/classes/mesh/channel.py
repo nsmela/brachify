@@ -22,21 +22,16 @@ class NeedleChannel:
     @staticmethod
     def default_diameter() -> float: return DEFAULT_DIAMETER
 
-    def shape(self) -> TopoDS_Shape:
-        if self._shape:
-            return self._shape
-
-        self._shape = rounded_channel(self.points, self._offset, self._diameter)
-        
-        return self._shape
-
     def setChannel(self, height: float = 0.0, diameter: float = 3.0) -> None:
         self._offset = height
         self._diameter = diameter
         self._shape = None
         self.shape()
 
-    def setDiameter(self, diameter: float) -> None:
+    def get_diameter(self):
+        return self._diameter
+    
+    def set_diameter(self, diameter: float) -> None:
         self._diameter = diameter
         self._shape = None
         self.shape()
@@ -45,9 +40,6 @@ class NeedleChannel:
         self._offset = height
         self._shape = None
         self.shape()
-
-    def getDiameter(self):
-        return self._diameter
 
     def getOffset(self) -> float:
         return self._offset
@@ -80,6 +72,14 @@ class NeedleChannel:
             log.debug(f"Large angle! corrected to {angle}")
 
         return angle
+
+    def shape(self) -> TopoDS_Shape:
+        if self._shape:
+            return self._shape
+
+        self._shape = rounded_channel(self.points, self._offset, self._diameter)
+        
+        return self._shape
     
     def __init__(self, number: str, label: str, points):
         self.number = number

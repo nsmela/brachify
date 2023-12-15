@@ -66,8 +66,11 @@ class ChannelsModel(QObject):
         self.update()
 
     def set_diameter(self, diameter: float):
-        for i in range(len(self.channels)):
-            self.channels[i].setDiameter(diameter)  # set diameter and calculate shape
+        self.diameter = diameter
+
+        for channel in self.channels.keys():
+            # set diameter and calculate shape
+            self.channels[channel].set_diameter(self.diameter)
         self.update()
 
     def set_selected_channels(self, *args):

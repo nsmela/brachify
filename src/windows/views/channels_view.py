@@ -34,7 +34,7 @@ class ChannelsView(CustomView):
         log.debug(f"action: set channel diameter")
         diameter = self.ui.spinbox_diameter.value()
         log.debug(f"setting channel diameters to: {diameter}")
-        get_app().window.channelsmodel.set_diameter(diameter)
+        self.channelsmodel.set_diameter(diameter)
 
     @display_action
     def action_set_selected_shapes(self, *args, **kwargs):
