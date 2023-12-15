@@ -23,7 +23,7 @@ materials = {
     ShapeTypes.CHANNEL: {"rgb": [0.8, 0.8, 0.8], "transparent": True},
     ShapeTypes.TANDEM: {"rgb": [0.8, 0.8, 0.8], "transparent": True},
     ShapeTypes.SELECTED: {"rgb": [0.2, 0.55, 0.55], "transparent": True},
-    ShapeTypes.EXPORT: {"rgb": [0.8, 0, 0], "transparent": True}
+    ShapeTypes.EXPORT: {"rgb": [0.2, 0.55, 0.55], "transparent": True}
 }
 
 
