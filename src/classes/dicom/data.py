@@ -14,6 +14,9 @@ class DicomData:
         self.cylinder_tip = None
         self.cylinder_base = None
         self.cylinder_direction = None
+        self.cylinder_diameter = None
+
+        self.central_channel_roi = None
 
         self.channels_rois = None
         self.channels_labels = None
