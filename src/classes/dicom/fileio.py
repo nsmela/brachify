@@ -44,9 +44,12 @@ def read_dicom_folder(folder_path: str):
 
 
 def is_rs_file(filepath: str) -> bool:
-    """Checks if a file is a DICOM file and if it contains the data to make a cylinder"""
+    """Checks if a file is a RTSTRUCT DICOM file and if it contains the data to make a cylinder"""
     try:
         dataset = pydicom.read_file(filepath)
+
+        if dataset.Modality != 'RTSTRUCT': return False
+
         # finding the contour data
         referenced_roi = list(filter(lambda s:
                                      ("surface" in s.ROIObservationLabel.lower()),
@@ -55,22 +58,25 @@ def is_rs_file(filepath: str) -> bool:
                                    (s.ReferencedROINumber == referenced_roi),
                                    dataset.ROIContourSequence))[0].ContourSequence[0].ContourData
     except Exception as error_message:
-        log.info(f"Invalid RS DICOM file: {filepath}\n{error_message}")
+        log.info(f"Error reading dicom file: {filepath}\n{error_message}")
         return False
 
     return True
 
 
 def is_rp_file(filepath: str) -> bool:
-    """Checks if a file is a DICOM file and if it contains the data for needle channels"""
+    """Checks if a file is a RTPLAN DICOM file and if it contains the data for needle channels"""
     try:
         dataset = pydicom.read_file(filepath)
+
+        if dataset.Modality != 'RTPLAN': return False
+
         # finding the contour data
         channels = dataset.ApplicationSetupSequence[0].ChannelSequence
         if len(channels) < 1:
             return False
     except Exception as error_message:
-        log.info(f"Invalid RP DICOM file: {filepath} \n{error_message}")
+        log.info(f"Error reading RP DICOM file: {filepath} \n{error_message}")
         return False
     else:
         return True
@@ -79,6 +85,7 @@ def is_rp_file(filepath: str) -> bool:
 def load_dicom_data(rp_file: str, rs_file: str) -> DicomData:
     data = DicomData()
 
+    # Channel ROI Numbers
     try:
         # we use the Planning file to get the channel ROI numbers
         rp_dataset = pydicom.read_file(rp_file)
@@ -90,8 +97,16 @@ def load_dicom_data(rp_file: str, rs_file: str) -> DicomData:
         data.patient_id = rp_dataset.PatientID
         data.plan_label = rp_dataset.RTPlanLabel
     except Exception as error_message:
-        log.error(f"Loading RP Dicom file failed! {rp_file}\n{error_message}")
+        log.error(f"Reading RP Dicom file failed! {rp_file}\n{error_message}")
 
+    # Central Axis data
+    try:
+        #TODO
+        pass
+    except Exception as error_message:
+        log.error(f"Error locating central axis: {error_message}")    
+
+    # Contour Data
     try:
         # We use the RS file to get the Applicator's ROI and contour data
         # We also use it to get the channel ROI data if we have their ROIS
@@ -171,6 +186,10 @@ def load_dicom_data(rp_file: str, rs_file: str) -> DicomData:
 
     log.debug(f"{data.toString()}")
     return data
+
+
+def get_central_axis():
+    pass
 
 
 def dicomCylinder(data: DicomData) -> BrachyCylinder:
