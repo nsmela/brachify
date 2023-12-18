@@ -9,7 +9,6 @@ class DicomData:
         self.plan_label = None
 
         self.cylinder_roi = None
-        self.cylinder_color = None
         self.cylinder_contour = None
         self.cylinder_tip = None
         self.cylinder_base = None
@@ -20,7 +19,6 @@ class DicomData:
 
         self.channels_rois = None
         self.channels_labels = None
-        self.channels_colors = None
         self.channel_contours = None
         self.channel_paths = None
 
@@ -37,17 +35,11 @@ class DicomData:
         if new_data.cylinder_roi:
             self.cylinder_roi = new_data.cylinder_roi
 
-        if new_data.cylinder_color:
-            self.cylinder_color = new_data.cylinder_color
-
         if new_data.cylinder_contour:
             self.cylinder_contour = new_data.cylinder_contour
 
         if new_data.channels_rois:
             self.channels_rois = new_data.channels_rois
-
-        if new_data.channels_colors:
-            self.channels_colors = new_data.channels_colors
 
         if new_data.channel_contours:
             self.channel_contours = new_data.channel_contours
@@ -57,7 +49,7 @@ class DicomData:
         text += f"Patient {self.patient_name} -- ID: {self.patient_id}\n"
 
         if self.cylinder_roi:
-            text += f"Cylinder ROI Number {self.cylinder_roi}\n Cylinder Color {self.cylinder_color}\n"
+            text += f"Cylinder ROI Number {self.cylinder_roi}\n"
         else:
             text += "No Cylinder Data!\n"
 
@@ -65,7 +57,6 @@ class DicomData:
             text += f"\nChannels ({len(self.channels_rois)} loaded)\n"
             for i in range(len(self.channels_rois)):
                 text += f" Channel {self.channels_rois[i]}\n"
-                text += f" Channel Color {self.channels_colors[i]}\n"
         else:
             text += "\nNo Channel Data!\n"
 
@@ -77,11 +68,9 @@ class DicomData:
             "Patient ID": self.patient_id,
             "Plan Label": self.plan_label,
             "Cylinder ROI": self.cylinder_roi,
-            "Cylinder Colour": self.cylinder_color,
             "Cylinder Contour": self.cylinder_contour,
             "Channel ROIs": self.channels_rois,
             "Channel Labels": self.channels_labels,
-            "Channel Colours": self.channels_colors,
             "Channel Contours": self.channel_contours
         }
 
@@ -90,9 +79,7 @@ class DicomData:
         self.patient_id = json["Patient ID"]
         self.plan_label = json["Plan Label"]
         self.cylinder_roi = json["Cylinder ROI"]
-        self.cylinder_color = json["Cylinder Colour"]
         self.cylinder_contour = json["Cylinder Contour"]
         self.channels_rois = json["Channel ROIs"]
         self.channels_labels = json["Channel Labels"]
-        self.channels_colors = json["Channel Colours"]
         self.channel_contours = json["Channel Contours"]

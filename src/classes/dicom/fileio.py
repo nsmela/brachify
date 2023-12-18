@@ -88,14 +88,12 @@ def load_central_axis(data: DicomData, rs_dataset):
 
     data.cylinder_tip = data.central_channel[0]
     data.cylinder_base = data.central_channel[-1]
-    data.cylinder_diameter = DEFAULT_CYLINDER_DIAMETER #hardcoded default. user needs to be flagged...
+    data.cylinder_diameter = DEFAULT_CYLINDER_DIAMETER  # hardcoded default. user needs to be flagged...
 
 
 def load_channels(data: DicomData, rs_dataset):
     channel_contours = list(filter(lambda sequence: (sequence.ReferencedROINumber in data.channels_rois),
                                     rs_dataset.ROIContourSequence))
-    data.channels_colors = [
-        contour.ROIDisplayColor for contour in channel_contours]
 
     # channel points are a single array dividable by 3
     # so for each channel, take those three points and put them into a small 3 list
@@ -137,7 +135,6 @@ def load_cylinder_contour(data: DicomData, rs_dataset):
                                     rs_dataset.RTROIObservationsSequence))[0].ReferencedROINumber
     cylinder_contour = list(filter(lambda s: (s.ReferencedROINumber == data.cylinder_roi),
                                     rs_dataset.ROIContourSequence))[0]
-    data.cylinder_color = cylinder_contour.ROIDisplayColor
 
     data.cylinder_contour = [[
         cylinder_contour.ContourSequence[0].ContourData[i],
