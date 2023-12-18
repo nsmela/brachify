@@ -88,6 +88,9 @@ class DisplayModel(QObject):
         """
         self.shapes_changed.emit([shape], True)
 
+    def show_shapes(self, shapes: list[ShapeModel]):
+        self.shapes_changed.emit(shapes, True)
+
     def update(self):
         """
         To update the viewport's shapes

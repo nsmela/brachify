@@ -20,8 +20,8 @@ DEFAULT_NEEDLE_LENGTH = 160.0
 
 materials = {
     ShapeTypes.CYLINDER: {"rgb": [0.2, 0.55, 0.55], "transparent": True},
-    ShapeTypes.CHANNEL: {"rgb": [0.8, 0.8, 0.8], "transparent": True},
-    ShapeTypes.TANDEM: {"rgb": [0.8, 0.8, 0.8], "transparent": True},
+    ShapeTypes.CHANNEL: {"rgb": [0.2, 0.55, 0.55], "transparent": True},
+    ShapeTypes.TANDEM: {"rgb": [0.2, 0.55, 0.55], "transparent": False},
     ShapeTypes.SELECTED: {"rgb": [0.2, 0.55, 0.55], "transparent": True},
     ShapeTypes.EXPORT: {"rgb": [0.2, 0.55, 0.55], "transparent": True}
 }
@@ -78,6 +78,9 @@ class Export_View(CustomView):
             filepath=Path(filename[0]),
             needle_length=needle_length)
 
+    def action_show_tandem(self, tandem_visible: bool):
+        self.update_display()
+
     def on_close(self):
         log.debug(f"on close")
 
@@ -85,16 +88,40 @@ class Export_View(CustomView):
     def on_open(self):
         log.debug(f"on open")
 
-        displaymodel = self.window.displaymodel
-        displaymodel.set_materials(materials)
+        # if tandem exists
+        if self.window.tandemmodel.shape():
+            self.ui.cb_tandem_shown.setEnabled(True)
+        else:
+            self.ui.cb_tandem_shown.setDisabled(True)
+
         self.shape = self._final_mesh()
-        shape_model = ShapeModel(
+
+        self.update_display()
+
+    def update_display(self, *args):
+        # export shape
+        export_shape = ShapeModel(
             label=EXPORT_LABEL,
             shape=self.shape,
-            shape_type=ShapeTypes.EXPORT)
-        shape_model.material=materials[ShapeTypes.EXPORT]
+            shape_type=ShapeTypes.EXPORT
+        )
+        export_shape.material=materials[ShapeTypes.EXPORT]
+        shapes = [export_shape]
 
-        displaymodel.show_shape(shape_model)
+        # tandem shape
+        if self.ui.cb_tandem_shown.isChecked():
+            tandemmodel = self.window.tandemmodel
+            tandem = tandemmodel.shape()
+            if tandem:
+                tandem_shape = ShapeModel(
+                    label=tandemmodel.get_label(),
+                    shape=tandem,
+                    shape_type=ShapeTypes.TANDEM
+                ) 
+                tandem_shape.material = materials[ShapeTypes.TANDEM]
+                shapes.append(tandem_shape)
+        
+        self.window.displaymodel.show_shapes(shapes)
 
     def __init__(self):
         super().__init__()
@@ -110,6 +137,8 @@ class Export_View(CustomView):
         self.ui.sb_needle_length.setValue(DEFAULT_NEEDLE_LENGTH)
         self.ui.btn_export_template_reference.pressed.connect(self.action_export_template_reference)
         
+        self.ui.cb_tandem_shown.stateChanged.connect(self.action_show_tandem)
+
     def _final_mesh(self) -> TopoDS_Shape:
         shape = self.window.cylindermodel.cylinder.shape()
 

@@ -50,6 +50,7 @@ class OrbitCameraViewer3d(qtBaseViewer):
 
         loggedinfo = ""
         for shape in shapes:
+            if not shape.shape: continue
             if shape.selected:
                 loggedinfo += f"\n    {shape.label}: Type:{shape.type.name} Selected: {shape.selected} rgb: {shape.rgb} Transparent: {shape.transparent}"
             rgb = shape.material["rgb"]

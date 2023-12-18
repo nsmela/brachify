@@ -15,9 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QDoubleSpinBox, QFormLayout, QGroupBox,
-    QLabel, QPushButton, QSizePolicy, QSpacerItem,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QDoubleSpinBox, QFormLayout,
+    QGroupBox, QLabel, QPushButton, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 
 class Ui_Export_View(object):
     def setupUi(self, Export_View):
@@ -34,6 +34,25 @@ class Ui_Export_View(object):
         self.label_title.setFont(font)
 
         self.verticalLayout.addWidget(self.label_title)
+
+        self.groupBox_3 = QGroupBox(Export_View)
+        self.groupBox_3.setObjectName(u"groupBox_3")
+        self.formLayout_2 = QFormLayout(self.groupBox_3)
+        self.formLayout_2.setObjectName(u"formLayout_2")
+        self.label_2 = QLabel(self.groupBox_3)
+        self.label_2.setObjectName(u"label_2")
+
+        self.formLayout_2.setWidget(0, QFormLayout.LabelRole, self.label_2)
+
+        self.cb_tandem_shown = QCheckBox(self.groupBox_3)
+        self.cb_tandem_shown.setObjectName(u"cb_tandem_shown")
+        self.cb_tandem_shown.setLayoutDirection(Qt.RightToLeft)
+        self.cb_tandem_shown.setChecked(False)
+
+        self.formLayout_2.setWidget(0, QFormLayout.FieldRole, self.cb_tandem_shown)
+
+
+        self.verticalLayout.addWidget(self.groupBox_3)
 
         self.groupBox = QGroupBox(Export_View)
         self.groupBox.setObjectName(u"groupBox")
@@ -89,6 +108,9 @@ class Ui_Export_View(object):
     def retranslateUi(self, Export_View):
         Export_View.setWindowTitle(QCoreApplication.translate("Export_View", u"Form", None))
         self.label_title.setText(QCoreApplication.translate("Export_View", u"export", None))
+        self.groupBox_3.setTitle(QCoreApplication.translate("Export_View", u"Options", None))
+        self.label_2.setText(QCoreApplication.translate("Export_View", u"Show Tandem", None))
+        self.cb_tandem_shown.setText("")
         self.groupBox.setTitle(QCoreApplication.translate("Export_View", u"Models", None))
         self.btn_export_mesh.setText(QCoreApplication.translate("Export_View", u"export mesh", None))
         self.btn_export_shapes.setText(QCoreApplication.translate("Export_View", u"export shape(s)", None))
