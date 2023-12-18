@@ -93,15 +93,19 @@ class BrachyCylinder:
 
 
 def get_brachy_cylinder(data: DicomData) -> BrachyCylinder:
-    point1 = np.asarray(data.cylinder_contour[0])
-    point2 = np.asarray(data.cylinder_contour[-1])
-    difference = point2 - point1
-    diameter = np.sqrt((difference[0]) ** 2 +
-                       (difference[1]) ** 2 + (difference[2]) ** 2)
-    diameter = round(diameter, 1)
+    try:
+        point1 = np.asarray(data.cylinder_contour[0])
+        point2 = np.asarray(data.cylinder_contour[-1])
+        difference = point2 - point1
+        diameter = np.sqrt((difference[0]) ** 2 +
+                        (difference[1]) ** 2 + (difference[2]) ** 2)
+        diameter = round(diameter, 1)
 
-    log.debug(f"Cylinder results: \n Diameter: {diameter}")
-    
+        log.debug(f"Cylinder results: \n Diameter: {diameter}")
+    except Exception as error_message:
+        log.debug(f"No Cylinder surface contour, or error reading:\nDiameter set to 30mm.")
+        diameter = 30 #mm
+
     return BrachyCylinder(diameter=diameter)
 
 
