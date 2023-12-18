@@ -61,13 +61,7 @@ def is_rs_file(filepath: str) -> bool:
 
         if dataset.Modality != 'RTSTRUCT': return False
 
-        # finding the contour data
-        referenced_roi = list(filter(lambda s:
-                                     ("surface" in s.ROIObservationLabel.lower()),
-                                     dataset.RTROIObservationsSequence))[0].ReferencedROINumber
-        contour_data = list(filter(lambda s:
-                                   (s.ReferencedROINumber == referenced_roi),
-                                   dataset.ROIContourSequence))[0].ContourSequence[0].ContourData
+
     except Exception as error_message:
         log.info(f"Error reading dicom file: {filepath}\n{error_message}")
         return False
