@@ -80,10 +80,10 @@ def load_central_axis(data: DicomData, rs_dataset):
     points = [channel_contour_raw[i:i + 3] for i in range(0, len(channel_contour_raw), 3)]
     data.central_channel = points
 
-    data.cylinder_tip = data.central_channel[0]
-    data.cylinder_base = data.central_channel[-1]
+    data.cylinder_tip = np.asarray(data.central_channel[0])
+    data.cylinder_base = np.asarray(data.central_channel[-1])
     data.cylinder_diameter = DEFAULT_CYLINDER_DIAMETER  # hardcoded default. user needs to be flagged...
-
+    data.cylinder_direction = data.cylinder_tip - data.cylinder_base   
 
 def load_channels(data: DicomData, rs_dataset):
     channel_contours = list(filter(lambda sequence: (sequence.ReferencedROINumber in data.channels_rois),
