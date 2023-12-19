@@ -22,6 +22,10 @@ class DicomData:
         self.channel_contours = None
         self.channel_paths = None
 
+        self.central_channel_roi = False
+        self.central_axis_flag = None
+        self.central_channel = None
+
     def update(self, new_data):
         if new_data.patient_name:
             self.patient_name = new_data.patient_name
