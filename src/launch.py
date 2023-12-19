@@ -32,6 +32,14 @@ def main():
 
     # launch GUI
     if app.gui():
+
+        # close the splash screen if any
+        try:
+            import pyi_splash
+            pyi_splash.close()
+        except:
+            pass
+
         sys.exit(app.exec())
 
 
