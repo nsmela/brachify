@@ -10,14 +10,33 @@ https://www.youtube.com/watch?v=RYdAf2NH0TY
 >designer
 
 # PySide6 converter
->uic.exe src/Presentation/MainWindow/ui_main.ui
->pyrcc5 ./Presentation/MainWindow/resources.qrc -o ./Presentation/MainWindow/resources_rc.py
+>uic.exe src/windows/ui/main_window.ui  # to convert ui to py
+# it's posible to set up Qt Designer to automatically convert the ui to py for you once the ui is saved
 
 # PySide6 converter
 
 # workflow
 -> edit in Qt Designer
--> save as interface.ui
--> convert interface.ui to ui.interface_py
--> core.py class references that and modifies (add functions, etc)
--> start app with a main.py in the main folder
+-> save as src/windows/ui/######_view.ui
+-> convert ######.ui to ######_view_ui.py
+-> create a ######_view.py file and import Ui_######_View to use the gui
+-> add ######_view.py to src/windows/main_window.py to have to show
+
+# using buttons or controls
+-> create the control in Qt Designer, save and convert the file
+-> in the related ######_view.py file, create a function: def action_#######:
+
+
+ (if action and signal have different function variables, use *arg to capture the unused ones)
+-> connect the control's Signal to the action function (self.ui.btn.pressed.connect(self.action_######))
+-> if the action needs to update the 3D display, use the @display_action decorator (it will update the 3D display once the action is complete)
+-> use get_app().window.###### to access the models
+-> example:
+
+    # example action function
+    @display_action
+    def action_test_push(self, *args):
+        pass
+
+    # example of linking the control to the action
+    self.ui.btn_test.pressed.connect(self.action_test_push)
