@@ -26,64 +26,9 @@ class Ui_MainWindow(object):
         MainWindow.resize(887, 696)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout_5 = QVBoxLayout(self.centralwidget)
-        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
-        self.top_menu_bar = QWidget(self.centralwidget)
-        self.top_menu_bar.setObjectName(u"top_menu_bar")
-        self.top_menu_bar.setMinimumSize(QSize(0, 64))
-        self.top_menu_bar.setMaximumSize(QSize(16777215, 64))
-        self.horizontalLayout = QHBoxLayout(self.top_menu_bar)
-        self.horizontalLayout.setSpacing(1)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer)
-
-        self.btn_import_view = QPushButton(self.top_menu_bar)
-        self.btn_import_view.setObjectName(u"btn_import_view")
-        self.btn_import_view.setMinimumSize(QSize(80, 0))
-        self.btn_import_view.setMaximumSize(QSize(80, 16777215))
-
-        self.horizontalLayout.addWidget(self.btn_import_view)
-
-        self.btn_cylinder_view = QPushButton(self.top_menu_bar)
-        self.btn_cylinder_view.setObjectName(u"btn_cylinder_view")
-
-        self.horizontalLayout.addWidget(self.btn_cylinder_view)
-
-        self.btn_channels_view = QPushButton(self.top_menu_bar)
-        self.btn_channels_view.setObjectName(u"btn_channels_view")
-        self.btn_channels_view.setMinimumSize(QSize(80, 0))
-        self.btn_channels_view.setMaximumSize(QSize(80, 16777215))
-
-        self.horizontalLayout.addWidget(self.btn_channels_view)
-
-        self.btn_tandem_view = QPushButton(self.top_menu_bar)
-        self.btn_tandem_view.setObjectName(u"btn_tandem_view")
-
-        self.horizontalLayout.addWidget(self.btn_tandem_view)
-
-        self.btn_export_view = QPushButton(self.top_menu_bar)
-        self.btn_export_view.setObjectName(u"btn_export_view")
-
-        self.horizontalLayout.addWidget(self.btn_export_view)
-
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_2)
-
-
-        self.verticalLayout_5.addWidget(self.top_menu_bar)
-
-        self.bodywidget = QWidget(self.centralwidget)
-        self.bodywidget.setObjectName(u"bodywidget")
-        self.horizontalLayout_2 = QHBoxLayout(self.bodywidget)
-        self.horizontalLayout_2.setSpacing(0)
+        self.horizontalLayout_2 = QHBoxLayout(self.centralwidget)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.horizontalLayout_2.setContentsMargins(0, 0, 4, 4)
-        self.left_menu_bar = QWidget(self.bodywidget)
+        self.left_menu_bar = QWidget(self.centralwidget)
         self.left_menu_bar.setObjectName(u"left_menu_bar")
         self.left_menu_bar.setMinimumSize(QSize(250, 0))
         self.left_menu_bar.setMaximumSize(QSize(260, 16777215))
@@ -129,6 +74,54 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addWidget(self.left_menu_bar)
 
+        self.bodywidget = QWidget(self.centralwidget)
+        self.bodywidget.setObjectName(u"bodywidget")
+        self.verticalLayout_5 = QVBoxLayout(self.bodywidget)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.top_menu_bar = QWidget(self.bodywidget)
+        self.top_menu_bar.setObjectName(u"top_menu_bar")
+        self.top_menu_bar.setMinimumSize(QSize(0, 64))
+        self.top_menu_bar.setMaximumSize(QSize(16777215, 64))
+        self.horizontalLayout = QHBoxLayout(self.top_menu_bar)
+        self.horizontalLayout.setSpacing(1)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.btn_import_view = QPushButton(self.top_menu_bar)
+        self.btn_import_view.setObjectName(u"btn_import_view")
+        self.btn_import_view.setMinimumSize(QSize(80, 0))
+        self.btn_import_view.setMaximumSize(QSize(80, 16777215))
+
+        self.horizontalLayout.addWidget(self.btn_import_view)
+
+        self.btn_cylinder_view = QPushButton(self.top_menu_bar)
+        self.btn_cylinder_view.setObjectName(u"btn_cylinder_view")
+
+        self.horizontalLayout.addWidget(self.btn_cylinder_view)
+
+        self.btn_channels_view = QPushButton(self.top_menu_bar)
+        self.btn_channels_view.setObjectName(u"btn_channels_view")
+        self.btn_channels_view.setMinimumSize(QSize(80, 0))
+        self.btn_channels_view.setMaximumSize(QSize(80, 16777215))
+
+        self.horizontalLayout.addWidget(self.btn_channels_view)
+
+        self.btn_tandem_view = QPushButton(self.top_menu_bar)
+        self.btn_tandem_view.setObjectName(u"btn_tandem_view")
+
+        self.horizontalLayout.addWidget(self.btn_tandem_view)
+
+        self.btn_export_view = QPushButton(self.top_menu_bar)
+        self.btn_export_view.setObjectName(u"btn_export_view")
+
+        self.horizontalLayout.addWidget(self.btn_export_view)
+
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_2)
+
+
+        self.verticalLayout_5.addWidget(self.top_menu_bar)
+
         self.display_view_widget = QWidget(self.bodywidget)
         self.display_view_widget.setObjectName(u"display_view_widget")
         self.display_view_widget.setMinimumSize(QSize(600, 540))
@@ -136,10 +129,10 @@ class Ui_MainWindow(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
 
-        self.horizontalLayout_2.addWidget(self.display_view_widget)
+        self.verticalLayout_5.addWidget(self.display_view_widget)
 
 
-        self.verticalLayout_5.addWidget(self.bodywidget)
+        self.horizontalLayout_2.addWidget(self.bodywidget)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
