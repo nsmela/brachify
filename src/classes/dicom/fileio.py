@@ -85,6 +85,7 @@ def load_central_axis(data: DicomData, rs_dataset):
     data.cylinder_diameter = DEFAULT_CYLINDER_DIAMETER  # hardcoded default. user needs to be flagged...
     data.cylinder_direction = data.cylinder_tip - data.cylinder_base   
 
+
 def load_channels(data: DicomData, rs_dataset):
     channel_contours = list(filter(lambda sequence: (sequence.ReferencedROINumber in data.channels_rois),
                                     rs_dataset.ROIContourSequence))

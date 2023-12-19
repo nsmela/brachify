@@ -95,8 +95,8 @@ def rounded_channel(channel_points, offset: float = 0.0, diameter: float = 3.0) 
     """
     If a needle channel has a long distance between the first and second point, this helps stub it
     """
-    if len(channel_points) < 3:
-        print(F"Needle Channel Generation error! needs 3 or more points!")
+    if len(channel_points) < 2:
+        log.error(F"Needle Channel Generation error! needs 2 or more points!")
         return None
 
     # offset points using z axis and cylinder's offset

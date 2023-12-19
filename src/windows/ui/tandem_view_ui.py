@@ -141,7 +141,7 @@ class Ui_Tandem_View(object):
 
         self.retranslateUi(Tandem_View)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(Tandem_View)
@@ -164,7 +164,7 @@ class Ui_Tandem_View(object):
         self.label_3.setText(QCoreApplication.translate("Tandem_View", u"tip thickness", None))
         self.sp_tip_thickness.setSuffix(QCoreApplication.translate("Tandem_View", u" mm", None))
         self.label_4.setText(QCoreApplication.translate("Tandem_View", u"tip angle", None))
-        self.sp_tip_angle.setSuffix(QCoreApplication.translate("Tandem_View", u" mm", None))
+        self.sp_tip_angle.setSuffix(QCoreApplication.translate("Tandem_View", u" deg", None))
         self.btn_clear_generate.setText(QCoreApplication.translate("Tandem_View", u"clear", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_generate), QCoreApplication.translate("Tandem_View", u"generate", None))
     # retranslateUi
