@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QApplication
 import sys
 
 from classes import info
-
+from classes.logger import log
 
 app = None
 
@@ -11,10 +11,10 @@ app = None
 def main():
     global app
 
-    # parse command-line arguements
-    # process arguements
+    # TODO parse command-line arguements
+    # TODO process arguements
 
-    print(f"Loaded modules from: {info.DIR_PATH}")
+    log.info(f"Loaded modules from: {info.DIR_PATH}")
 
     from classes.app import RadiotherapyApp
 
@@ -24,7 +24,7 @@ def main():
         app = RadiotherapyApp(argv)
     except Exception:
         # TODO show errors from within app
-        print("Radiotherapy App failed to load!")
+        log.critical("Radiotherapy App failed to load!")
         input("Press enter key to continue...")
 
     app.setApplicationName(info.APP_NAME)
