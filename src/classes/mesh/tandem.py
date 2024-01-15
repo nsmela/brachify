@@ -251,6 +251,11 @@ def generate_new_tandem(
     vector = gp_Vec(x, 0 , z) * tandem_length
     end_point = [arc_point[0] + vector.X(), 0, arc_point[2] + vector.Z()]
 
+    # top arc
+    #does tandem length line start within circle for cylinder top?
+    # if so, find intersect
+    # if not, find intersect with bend radius circle
+
     # make the lines
     edges = []
     edges.append(make_edge(p0, p1))
@@ -302,5 +307,5 @@ if __name__ == "__main__":
 
     display, start_display, add_menu, add_function_to_menu = init_display()
 
-    display.DisplayShape(generate_new_tandem(tandem_angle=75))
+    display.DisplayShape(generate_new_tandem(tandem_angle=60))
     start_display()
