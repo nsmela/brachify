@@ -218,10 +218,89 @@ class Line:
         return self.get_point_from_x(x)
 
 
+def generate_new_tandem(
+        cylinder_height: float = 160.0,
+        tandem_height: float = 129.0,  # default
+        tandem_diameter: float = 8.0,
+        tandem_angle: float = 60.0,
+        bend_radius: float = 15.0,
+        tandem_length: float = 8.0) -> TopoDS_Shape:
+
+    # variables
+    height_offset = 10.0  # how much futher above cylinder this tandem shows
+
+    tandem_rads = math.radians( tandem_angle)
+    tandem_radius = tandem_diameter / 2
+
+    p0 = [0, 0, 0]  # origin
+    p1 = [0, 0, tandem_height]  # start of bend
+    p2 = [0, 0, tandem_height + bend_radius]  # end of bend radius straight up
+    pTop = [0, 0, cylinder_height + height_offset]  # where tandem ends
+
+    # calculate bend
+    x = (1 - math.cos(tandem_rads)) * bend_radius
+    z = math.sin(tandem_rads) * bend_radius
+
+    # determine direction to find the arc's end point
+    arc_point = [x, 0, z + tandem_height]
+
+    # continuing the direction
+    angle_rads = math.radians(90 - tandem_angle)
+    x = math.cos(angle_rads)
+    z = math.sin(angle_rads)
+    vector = gp_Vec(x, 0 , z) * tandem_length
+    end_point = [arc_point[0] + vector.X(), 0, arc_point[2] + vector.Z()]
+
+    # make the lines
+    edges = []
+    edges.append(make_edge(p0, p1))
+    edges.append(make_edge(p1, p2))
+    
+    # arc
+    def arc(origin, radius, start_point, end_point):
+        p0 = gp_Pnt(origin[0], origin[1], origin[2])
+        p1 = gp_Pnt(start_point[0], start_point[1], start_point[2])
+        p2 = gp_Pnt(end_point[0], end_point[1], end_point[2])
+        circle = gp_Circ(gp_Ax2(p0, gp_Dir(0, 1, 0)), radius)
+        arc = GC_MakeArcOfCircle(circle, p1, p2, False).Value()
+        return BRepBuilderAPI_MakeEdge(arc).Edge()
+
+    bend_point = [bend_radius, 0, tandem_height]
+
+    edges.append(arc(bend_point, bend_radius, p1, arc_point))
+    #edges.append(make_edge(arc_point, p1))
+    #edges.append(make_edge(p1, bend_point))
+    #edges.append(make_edge(bend_point, arc_point))
+    edges.append(make_edge(arc_point, end_point))
+    print(edges)
+
+    wire = make_wire(edges)
+
+    return wire
+    # generating the shape by collecting all small shapes
+    # and boolean_addition
+
+    def cylinder(origin, end, radius):
+        p0 = gp_Pnt(origin[0], origin[1], origin[2])
+        p1 = gp_Pnt(end[0], end[1], end[2])
+        direction = p1- p0
+        axis = gp_Ax2(p0, direction)
+        return BRepPrimAPI_MakeCylinder()
+
+    shapes = []
+    shapes.append(make_cylinder(p0, p1, tandem_radius))
+    # axis = gp_Ax2(gp_Pnt(p1[0], p1[1], p1[2]), gp_Dir(0,0,1))
+    # tip_cyl = BRepPrimAPI_MakeCylinder(axis, tip_radius, tip_thickness)
+    # shapes.append(tip_cyl.Shape())
+    shapes.append(make_symmetrical_shape(wire, tandem_radius))
+
+    return fuse_shapes(shapes)
+
+
 if __name__ == "__main__":
     from OCC.Display.SimpleGui import init_display
 
     display, start_display, add_menu, add_function_to_menu = init_display()
 
-    display.DisplayShape(generate_tandem())
+    display.DisplayShape(generate_new_tandem(tandem_angle=75))
     start_display()
