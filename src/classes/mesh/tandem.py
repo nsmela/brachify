@@ -323,7 +323,7 @@ def tandem_from_2d(
     height_offset = 10.0
     max_height = cylinder_height + height_offset
     tandem_radius = tandem_diameter / 2
-    cylinder_radius = (cylinder_diamter + height_offset) / 2
+    cylinder_radius = (cylinder_diamter)/2  + height_offset
 
     origin = gp_Pnt2d(0,0)
     bend_start = gp_Pnt2d(0, tandem_height)
@@ -359,8 +359,18 @@ def tandem_from_2d(
     top_circle_origin = gp_Pnt2d(0, max_height - cylinder_radius)
     top_circle = gp_Circ2d(gp_Ax2d(top_circle_origin, gp_Dir2d(0, 1)), cylinder_radius)
     top_curve = Geom2d_Circle(top_circle)
-    tandem_final_line = Geom2d_Line(bend_end, direction)
-    intersection = Geom2dAPI_InterCurveCurve(top_curve, tandem_final_line)
+
+    # determine the end of the tandem line
+    use_bend_for_end = cylinder_radius < top_circle_origin.Distance(bend_end)
+    print(f" is bend end in range? ")
+    if use_bend_for_end:
+        print("Yes! Using final tandem line")
+        tandem_final_line = Geom2d_Line(bend_end, direction)
+        intersection = Geom2dAPI_InterCurveCurve(top_curve, tandem_final_line)
+    else:
+        print("No! using curve line for intersection")
+        circle = Geom2d_Circle(bend_circle)
+        intersection = Geom2dAPI_InterCurveCurve(top_curve, circle)
 
     if intersection.NbPoints() > 1:
         top_tandem_point = gp_Pnt2d(0, -100)
@@ -369,9 +379,6 @@ def tandem_from_2d(
             print(f"Point: {point.X()}, {point.Y()}")
             if top_tandem_point.Y() < point.Y():
                 top_tandem_point = point
-
-    distance = top_circle_origin.Distance(bend_end)
-    print(f" is bend end in range? Distance of {distance} vs {cylinder_diamter} : {distance < cylinder_diamter}")
 
     # calculate intersection of tandem output and cylinder top curve
 
@@ -401,8 +408,12 @@ def tandem_from_2d(
         circle = gp_Circ(axis, radius)
         return GC_MakeArcOfCircle(circle, p0, p1, True).Value()
     
-    edges.append(BRepBuilderAPI_MakeEdge(arc_generate(bend_start, bend_end, bend_radius)).Edge())
-    edges.append(BRepBuilderAPI_MakeEdge(p2, p5).Edge())
+    end_bend_point = bend_end
+    if use_bend_for_end:
+        end_bend_point = top_tandem_point
+
+    edges.append(BRepBuilderAPI_MakeEdge(arc_generate(bend_start, end_bend_point, bend_radius)).Edge())
+    if not use_bend_for_end: edges.append(BRepBuilderAPI_MakeEdge(p2, p5).Edge())
     edges.append(BRepBuilderAPI_MakeEdge(p1, p4).Edge())
 
     # top arc
@@ -471,7 +482,7 @@ if __name__ == "__main__":
 
     display, start_display, add_menu, add_function_to_menu = init_display()
 
-    tandem_angle = 30.0
+    tandem_angle = 65.0
 
     display.DisplayColoredShape(tandem_from_2d(
         tandem_angle=tandem_angle), "BLUE")
