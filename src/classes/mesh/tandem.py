@@ -258,7 +258,7 @@ def generate_new_tandem(
     # https://dev.opencascade.org/doc/overview/html/occt_user_guides__modeling_algos.html
     # https://liuxinwin_admin.gitee.io/pythonocc-docs/OCC.Geom2dAPI.html#OCC.Geom2dAPI.Geom2dAPI_InterCurveCurve
     # https://github.com/tpaviot/pythonocc-demos/blob/4c5af9e6b6a0fcd1885b3c44325e2a890d80136a/examples/core_modeling_sprocket.py#L131C78-L131C78
-    
+
 
     # make the lines
     edges = []
@@ -311,5 +311,8 @@ if __name__ == "__main__":
 
     display, start_display, add_menu, add_function_to_menu = init_display()
 
+    # generate a stopper
+
+    # generate and show the tandem
     display.DisplayShape(generate_new_tandem(tandem_angle=60))
     start_display()
