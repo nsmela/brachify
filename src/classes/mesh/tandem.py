@@ -252,7 +252,9 @@ def generate_new_tandem(
     end_point = [arc_point[0] + vector.X(), 0, arc_point[2] + vector.Z()]
 
     # top arc
-    #does tandem length line start within circle for cylinder top?
+    # does tandem length line start within circle for cylinder top?
+    # distance from pTop - cylinder radius will be less than cylinder radius
+    
     # if so, find intersect
     # if not, find intersect with bend radius circle
 
@@ -302,10 +304,172 @@ def generate_new_tandem(
     return fuse_shapes(shapes)
 
 
+def tandem_from_2d(        
+        cylinder_height: float = 160.0,
+        cylinder_diamter: float = 15,
+        tandem_height: float = 129.0,  # default
+        tandem_diameter: float = 8.0,
+        tandem_angle: float = 60.0,
+        bend_radius: float = 35.0,
+        tandem_length: float = 8.0) -> TopoDS_Shape:
+
+    from OCC.Core.Geom2d import Geom2d_Circle, Geom2d_Line, Geom2d_TrimmedCurve
+    from OCC.Core.Geom2dAPI import Geom2dAPI_InterCurveCurve
+
+    height_offset = 10.0
+    max_height = cylinder_height + height_offset
+    tandem_radius = tandem_diameter / 2
+    cylinder_radius = (cylinder_diamter + height_offset) / 2
+
+    origin = gp_Pnt2d(0,0)
+    bend_start = gp_Pnt2d(0, tandem_height)
+
+    # bend
+    bend_origin = gp_Pnt2d(bend_radius, tandem_height)
+    bend_rads = math.radians(180-tandem_angle)
+    x = math.cos(bend_rads)
+    y = math.sin(bend_rads)
+    bend_direction = gp_Dir2d(x, y)
+    bend_line = gp_Lin2d(bend_origin, bend_direction)
+    bend_circle = gp_Circ2d(gp_Ax22d(bend_origin, bend_direction), bend_radius)
+
+    line_curve = Geom2d_Line(bend_line)
+    bend_curve = Geom2d_Circle(bend_circle)
+    intersection = Geom2dAPI_InterCurveCurve(bend_curve, line_curve)
+
+    if intersection.NbPoints() > 1:
+        bend_end = gp_Pnt2d(0, -100)
+        for i in range(1, intersection.NbPoints() + 1):
+            point = intersection.Point(i)
+            print(f"Point: {point.X()}, {point.Y()}")
+            if point.Y() > bend_end.Y():
+                bend_end = point
+
+    new_line = bend_line.Rotated(bend_end, math.radians(90))
+    direction = new_line.Direction()
+    bend_vector = gp_Vec2d(direction) * tandem_length * -1
+    tandem_end = gp_Pnt2d(bend_end.X() + bend_vector.X(), bend_end.Y() + bend_vector.Y())
+    tandem_top = gp_Pnt2d(0, max_height)
+
+    # top arc
+    top_circle_origin = gp_Pnt2d(0, max_height - cylinder_radius)
+    top_circle = gp_Circ2d(gp_Ax2d(top_circle_origin, gp_Dir2d(0, 1)), cylinder_radius)
+    top_curve = Geom2d_Circle(top_circle)
+    tandem_final_line = Geom2d_Line(bend_end, direction)
+    intersection = Geom2dAPI_InterCurveCurve(top_curve, tandem_final_line)
+
+    if intersection.NbPoints() > 1:
+        top_tandem_point = gp_Pnt2d(0, -100)
+        for i in range(1, intersection.NbPoints() + 1):
+            point = intersection.Point(i)
+            print(f"Point: {point.X()}, {point.Y()}")
+            if top_tandem_point.Y() < point.Y():
+                top_tandem_point = point
+
+    distance = top_circle_origin.Distance(bend_end)
+    print(f" is bend end in range? Distance of {distance} vs {cylinder_diamter} : {distance < cylinder_diamter}")
+
+    # calculate intersection of tandem output and cylinder top curve
+
+
+    print(f"Results:\n\n" \
+          f"Origin: {origin.X()},{origin.Y()}\n" \
+          f"Bend Start: {bend_start.X()},{bend_start.Y()}\n" \
+          f"Bend End: {bend_end.X()},{bend_end.Y()}\n" \
+          f"Tandem End: {tandem_end.X()},{tandem_end.Y()}"  \
+          f"Top of model: {tandem_top.X()},{tandem_top.Y()}")
+
+    # wire
+    p0 = gp_Pnt(origin.X(),     0,     origin.Y())
+    p1 = gp_Pnt(bend_start.X(), 0,     bend_start.Y())
+    p2 = gp_Pnt(bend_end.X(),   0,     bend_end.Y())
+    p3 = gp_Pnt(tandem_end.X(), 0,     tandem_end.Y())
+    p4 = gp_Pnt(tandem_top.X(), 0,     tandem_top.Y())
+    p5 = gp_Pnt(top_tandem_point.X(), 0, top_tandem_point.Y())
+
+    edges = []
+    def arc_generate(arc_start, arc_end, radius):
+        p0 = gp_Pnt(arc_start.X(), 0, arc_start.Y())
+        p1 = gp_Pnt(arc_end.X(), 0, arc_end.Y())
+        o = gp_Pnt(arc_start.X() + radius, 0, arc_start.Y())
+
+        axis = gp_Ax2(o, gp_Dir(0,1,0))
+        circle = gp_Circ(axis, radius)
+        return GC_MakeArcOfCircle(circle, p0, p1, True).Value()
+    
+    edges.append(BRepBuilderAPI_MakeEdge(arc_generate(bend_start, bend_end, bend_radius)).Edge())
+    edges.append(BRepBuilderAPI_MakeEdge(p2, p5).Edge())
+    edges.append(BRepBuilderAPI_MakeEdge(p1, p4).Edge())
+
+    # top arc
+    o = gp_Pnt(p4.X(), p4.Y(), p4.Z() - cylinder_radius)
+    axis = gp_Ax2(o, gp_Dir(0,1,0))
+    circle = gp_Circ(axis, cylinder_radius)
+    arc = GC_MakeArcOfCircle(circle, p4, p5, True).Value()
+    edges.append(BRepBuilderAPI_MakeEdge(arc).Edge())
+
+    #extra edges for display
+    edges.append(BRepBuilderAPI_MakeEdge(p0, p1).Edge())
+
+    wire = make_wire(edges)
+
+    return wire
+    shapes = []
+    shapes.append(BRepPrimAPI_MakeCylinder(tandem_radius, max_height).Shape())
+
+    curve_axis = gp_Ax2(p1, gp_Dir(0,0,1))
+    curve_circle = gp_Circ(curve_axis, tandem_radius)
+    arc_edge = GC_MakeArcOfCircle(curve_circle, p1, p2, True).Value()
+    bend_wire = BRepBuilderAPI_MakeWire(
+        BRepBuilderAPI_MakeEdge(arc_edge).Edge(),
+        BRepBuilderAPI_MakeEdge(p2, p3).Edge()).Wire()
+    direction = gp_Dir(0,0,1)
+    axis = gp_Ax2(p1, direction)
+    circle = gp_Circ(axis, tandem_radius)
+    circle_edge = BRepBuilderAPI_MakeEdge(circle).Edge()
+    profile = BRepBuilderAPI_MakeWire(circle_edge).Wire()
+
+    pipe = BRepFill_PipeShell(bend_wire)
+    pipe.Add(profile)
+    pipe.Build()
+    pipe.MakeSolid()
+
+    shapes.append(pipe.Shape())
+    shapes.append(make_symmetrical_shape(wire, tandem_radius))
+
+    return fuse_shapes(shapes)
+
+def show_cylinder(
+        cylinder_length: float = 160,
+        cylinder_diameter: float =30) -> TopoDS_Shape:
+    
+    from OCC.Core.GC import GC_MakeSegment
+
+    radius = cylinder_diameter / 2
+    height = cylinder_length - radius
+
+    top_point = gp_Pnt(0,0,cylinder_length)
+    curve_point = gp_Pnt(radius/2, 0, height + (radius/2))
+    end_arc_point = gp_Pnt(radius, 0, height)
+    bottom_point = gp_Pnt(radius, 0, 0)
+
+    circle = gp_Circ(gp_Ax2(gp_Pnt(0,0, height), gp_Dir(0,1,0)), radius)
+    curve = GC_MakeArcOfCircle(circle, top_point, end_arc_point, True)
+    line = GC_MakeSegment(end_arc_point, bottom_point)
+
+    edges = []
+    edges.append(BRepBuilderAPI_MakeEdge(curve.Value()).Edge())
+    edges.append(BRepBuilderAPI_MakeEdge(line.Value()).Edge())
+    return make_wire(edges)
+
 if __name__ == "__main__":
     from OCC.Display.SimpleGui import init_display
 
     display, start_display, add_menu, add_function_to_menu = init_display()
 
-    display.DisplayShape(generate_new_tandem(tandem_angle=60))
+    tandem_angle = 30.0
+
+    display.DisplayColoredShape(tandem_from_2d(
+        tandem_angle=tandem_angle), "BLUE")
+    display.DisplayShape(show_cylinder())
     start_display()
