@@ -41,10 +41,23 @@ class Tandem():
 
         # first cylinder matches stopper profile
         axis = gp_Ax2(self.bend_end, self.bend_direction)
-        cylinder_1 = BRepPrimAPI_MakeCylinder(axis, stopper_radius, stopper_depth).Shape()
+        shape_stopper = BRepPrimAPI_MakeCylinder(axis, stopper_radius, stopper_depth).Shape()
+
         # second profile helps stopper vertical
+        bottom_wire = BRepBuilderAPI_MakeWire(BRepBuilderAPI_MakeEdge(gp_Circ(axis, stopper_radius)).Edge()).Wire()
+        bottom_face = BRepBuilderAPI_MakeFace(bottom_wire).Face()
+        distance = self.cylinder_height + self.height_offset - self.bend_end.Z()
+        vector_1 = gp_Vec(0, 0, distance)
+        prism_1 = BRepPrimAPI_MakePrism(bottom_face, vector_1).Shape()
+
+        vector_2 = gp_Vec(
+            self.tandem_end.X() - self.bend_end.X(),
+            self.tandem_end.Y() - self.bend_end.Y(),
+            self.tandem_end.Z() - self.bend_end.Z())
+
+        prism_2 = BRepPrimAPI_MakePrism(bottom_face, vector_2).Shape()
         # cut off bottom for smooth surface
-        return cylinder_1
+        return fuse_shapes([prism_1, prism_2])
 
     def tandem_shape(self) -> TopoDS_Shape:
         """
@@ -192,6 +205,7 @@ class Tandem():
         # save values to self to use for stopper, if used
         self.bend_end = bend_end_3d
         self.bend_direction = gp_Dir(direction.X(), 0, direction.Y())
+        self.tandem_end = tandem_end_3d
 
         return fuse_shapes([shape_channel, shape_interior, shape_bend])
 
@@ -311,7 +325,7 @@ if __name__ == "__main__":
     display, start_display, add_menu, add_function_to_menu = init_display()
 
     tandem = Tandem() # object to hold the tandem settings
-    tandem.tandem_angle = 25.0  # manually change a setting
+    tandem.tandem_angle = 15.0  # manually change a setting
 
     display.DisplayColoredShape(tandem.generate_shape(), "BLUE")
     # generate a stopper
