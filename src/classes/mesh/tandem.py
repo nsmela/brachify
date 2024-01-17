@@ -6,6 +6,8 @@ from OCC.Core.BRepFill import BRepFill_PipeShell
 from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_ThruSections
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeSphere, BRepPrimAPI_MakePrism
 from OCC.Core.GC import GC_MakeArcOfCircle
+from OCC.Core.Geom2d import Geom2d_Circle, Geom2d_Line
+from OCC.Core.Geom2dAPI import Geom2dAPI_InterCurveCurve
 from OCC.Core.gp import *
 from OCC.Core.TopoDS import TopoDS_Shape
 
@@ -307,34 +309,33 @@ def generate_new_tandem(
 
     return fuse_shapes(shapes)
 
-
-def tandem_from_2d(        
+def tandem_frame(
         cylinder_height: float = 160.0,
         cylinder_diamter: float = 15,
         tandem_height: float = 129.0,  # default
         tandem_diameter: float = 8.0,
         tandem_angle: float = 60.0,
-        bend_radius: float = 15.0,
-        tandem_length: float = 8.0) -> TopoDS_Shape:
-
-    from OCC.Core.Geom2d import Geom2d_Circle, Geom2d_Line, Geom2d_TrimmedCurve
-    from OCC.Core.Geom2dAPI import Geom2dAPI_InterCurveCurve
-
+        bend_radius: float = 35.0,
+        tandem_length: float = 8.0):
+    """
+    Calculates the 2d frame for the tandem
+    """
     # variables used
-    height_offset = 10.0
+    height_offset = 10.0  # tandem extends past cylinder by this amount
     max_height = cylinder_height + height_offset
-    tandem_radius = tandem_diameter / 2
     cylinder_radius = (cylinder_diamter)/2  + height_offset
+    tandem_radius = tandem_diameter / 2
 
+    #########################################################################################
+    # 2D points    
+    #########################################################################################
     origin = gp_Pnt2d(0,0)
-    top_circle_origin = gp_Pnt(0, 0, max_height - cylinder_radius)
-    print(f"top circle origin: {top_circle_origin.Z()}")
-
-    # bend
+    top_circle_origin = gp_Pnt(0, 0, max_height - cylinder_radius)  # circle origin for the top arc
     bend_start = gp_Pnt2d(0, tandem_height)
     bend_origin = gp_Pnt2d(bend_radius, tandem_height)  # point on the circle centre
 
-    # create line to intersect bend for end point 
+    # bend end 
+    # a line is angled with the tandem angle and the highest intersection is the bend's end
     bend_rads = math.radians(180-tandem_angle)
     x = math.cos(bend_rads)
     y = math.sin(bend_rads)
@@ -347,17 +348,21 @@ def tandem_from_2d(
     intersection = Geom2dAPI_InterCurveCurve(bend_curve, line_curve)
 
     # highest intersecting point is the end of the bending section
-    if intersection.NbPoints() > 1:
-        bend_end = gp_Pnt2d(0, -100)
+    bend_end = gp_Pnt2d(0, -100)
+    if intersection.NbPoints() < 1:
+        raise Exception("Invalid bend!")
+    else:
         for i in range(1, intersection.NbPoints() + 1):
             point = intersection.Point(i)
             print(f"Point: {point.X()}, {point.Y()}")
             if point.Y() > bend_end.Y():
                 bend_end = point
 
-    print(f"bend_end: {bend_end.X()},{bend_end.Y()}")
-
-    # top arc
+    # top tandem end
+    # where the top arc intersects with the tandem leaving the cylinder
+    # two possible situations:
+    #   1) bend exits the cylinder: calculate the intersection of the two arcs
+    #   2) bend ends within the cylinder: create a line that continues tangently and caluclate the intersection
     top_circle_origin = gp_Pnt2d(0, max_height - cylinder_radius)
     top_circle = gp_Circ2d(gp_Ax2d(top_circle_origin, gp_Dir2d(0, 1)), cylinder_radius)
     top_curve = Geom2d_Circle(top_circle)
@@ -365,67 +370,128 @@ def tandem_from_2d(
     # if bend_end is outside the cylinder
     is_intersecting_bend = False
     if bend_end.Distance(top_circle_origin) < cylinder_radius \
-        or (bend_end.X() < cylinder_radius and bend_end.Y() < top_circle_origin.Y()):
-        print("bend ends within cylinder")
+                or (bend_end.X() < cylinder_radius and bend_end.Y() < top_circle_origin.Y()):
         new_line = bend_line.Rotated(bend_end, math.radians(90))
         direction = new_line.Direction()
         bend_vector = gp_Vec2d(direction) * tandem_length * -1
-        tandem_end = gp_Pnt2d(bend_end.X() + bend_vector.X(), bend_end.Y() + bend_vector.Y())
+        #TODO remove: tandem_end = gp_Pnt2d(bend_end.X() + bend_vector.X(), bend_end.Y() + bend_vector.Y())
         tandem_final_line = Geom2d_Line(bend_end, direction)
         intersection = Geom2dAPI_InterCurveCurve(top_curve, tandem_final_line)
     else:
-        print("bend ends outside of cylinder")
         is_intersecting_bend = True
         circle = Geom2d_Circle(bend_circle)
         intersection = Geom2dAPI_InterCurveCurve(top_curve, circle)       
 
-    if intersection.NbPoints() > 1:
+    top_tandem_point = gp_Pnt2d(0, -100)
+    if intersection.NbPoints() < 1:
+        raise Exception("Tandem doesn't exit cylinder!")
+    else:
         top_tandem_point = gp_Pnt2d(0, -100)
         for i in range(1, intersection.NbPoints() + 1):
             point = intersection.Point(i)
-            print(f"Point: {point.X()}, {point.Y()}")
             if top_tandem_point.Y() < point.Y():
                 top_tandem_point = point
+
+    #########################################################################################
+    # 3D points    
+    #########################################################################################
+    def to_3d(point: gp_Pnt2d):
+        return gp_Pnt(point.X(), 0, point.Y())
+
+    origin_3d = to_3d(origin)
+    bend_origin_3d = to_3d(bend_origin)
+    bend_start_3d = to_3d(bend_start)
+    bend_end_3d = to_3d(bend_end)
+    top_3d = gp_Pnt(0, 0, max_height)
+    top_arc_origin_3d = to_3d(top_circle_origin)
+    tandem_end_3d = to_3d(top_tandem_point)
+
+    #########################################################################################
+    # Edges   
+    #########################################################################################
+
+    edge_base = BRepBuilderAPI_MakeEdge(origin_3d, bend_start_3d).Edge()
+    edge_channel = BRepBuilderAPI_MakeEdge(bend_start_3d, top_3d).Edge()
     
-    print(f"top tandem point: {top_tandem_point.X()},{top_tandem_point.Y()}")
-
-    # calculate intersection of tandem output and cylinder top curve
-
-    # wire
-    p0 = gp_Pnt(origin.X(),     0,     origin.Y())
-    p1 = gp_Pnt(bend_start.X(), 0,     bend_start.Y())
-    p2 = gp_Pnt(bend_end.X(),   0,     bend_end.Y())
-    p4 = gp_Pnt(0,              0,     max_height)
-    p5 = gp_Pnt(top_tandem_point.X(), 0, top_tandem_point.Y())
-
-    edges = []
-
     # bend edge
-    origin = gp_Pnt(bend_origin.X(), 0, bend_origin.Y())
-    axis = gp_Ax2(origin, gp_Dir(0, 1, 0))
+    axis = gp_Ax2(bend_origin_3d, gp_Dir(0, 1, 0))
     circle = gp_Circ(axis, bend_radius)
-    end_point = p2
-    if is_intersecting_bend: end_point = p5
-    arc = GC_MakeArcOfCircle(circle, p1, end_point, True).Value()
-    edges.append(BRepBuilderAPI_MakeEdge(arc).Edge())
+    end_point = bend_end_3d
+    if is_intersecting_bend: end_point = tandem_end_3d
+    arc = GC_MakeArcOfCircle(circle, bend_start_3d, end_point, True).Value()
+    edge_bend = BRepBuilderAPI_MakeEdge(arc).Edge()
 
-    if not is_intersecting_bend: edges.append(BRepBuilderAPI_MakeEdge(p2, p5).Edge())
-
-    edges.append(BRepBuilderAPI_MakeEdge(p1, p4).Edge())
+    # extend bend if it doesn't exit the cylinder
+    if not is_intersecting_bend: edge_extend_bend = BRepBuilderAPI_MakeEdge(bend_end_3d, tandem_end_3d).Edge()
 
     # top arc
-    origin = gp_Pnt(p4.X(), p4.Y(), p4.Z() - cylinder_radius)
-    axis = gp_Ax2(origin, gp_Dir(0,1,0))
+    axis = gp_Ax2(top_arc_origin_3d, gp_Dir(0,1,0))
     circle = gp_Circ(axis, cylinder_radius)
-    top_arc = GC_MakeArcOfCircle(circle, p4, p5, True).Value()
-    edges.append(BRepBuilderAPI_MakeEdge(top_arc).Edge())
+    top_arc = GC_MakeArcOfCircle(circle, top_3d, tandem_end_3d, True).Value()
+    edge_top_arc = BRepBuilderAPI_MakeEdge(top_arc).Edge()
 
-    #extra edges for display
-    edges.append(BRepBuilderAPI_MakeEdge(p0, p1).Edge())
+    #########################################################################################
+    # Wires   
+    #########################################################################################
 
-    wire = make_wire(edges)
+    wire_channel = BRepBuilderAPI_MakeWire(edge_base, edge_channel).Wire()
 
-    return wire
+    if is_intersecting_bend: 
+        wire_bend = BRepBuilderAPI_MakeWire(edge_bend).Wire()
+        wire_profile = BRepBuilderAPI_MakeWire(edge_bend, edge_top_arc, edge_channel).Wire()
+    else:
+        wire_bend = BRepBuilderAPI_MakeWire(edge_bend, edge_extend_bend).Wire()
+        wire_profile = BRepBuilderAPI_MakeWire(edge_bend, edge_extend_bend, edge_top_arc, edge_channel).Wire()
+
+    #########################################################################################
+    # Shapes
+    #########################################################################################
+    shape_channel = BRepPrimAPI_MakeCylinder(tandem_radius, max_height).Shape()
+
+    bend_profile = BRepBuilderAPI_MakeWire(
+        BRepBuilderAPI_MakeEdge(
+            gp_Circ(
+                gp_Ax2(bend_start_3d, gp_Dir(0,0,1)),
+                tandem_radius)
+        ).Edge()
+    ).Wire()
+    pipe = BRepFill_PipeShell(wire_bend)
+    pipe.Add(bend_profile)
+    pipe.Build()
+    pipe.MakeSolid()
+    shape_bend = pipe.Shape()
+
+    shape_interior = make_symmetrical_shape(wire_profile, tandem_radius)
+
+    return fuse_shapes([shape_channel, shape_interior, shape_bend])
+    return shape_channel, shape_bend, shape_interior
+
+
+def tandem_shape( wire_channel, wire_bend, wire_profile,
+                 tandem_diameter: float = 4.0,
+                 cylinder_height: float = 160.0,
+                 height_offset: float = 10.0):
+    
+    # variables
+    tandem_radius = tandem_diameter / 2
+    total_height = cylinder_height + height_offset
+
+    #shapes
+    shape_channel = BRepPrimAPI_MakeCylinder(tandem_radius, total_height).Shape()
+
+    bend_circle = gp_Circ(gp_Ax2())
+
+
+def tandem_from_2d(        
+        cylinder_height: float = 160.0,
+        cylinder_diamter: float = 15,
+        tandem_height: float = 129.0,  # default
+        tandem_diameter: float = 8.0,
+        tandem_angle: float = 60.0,
+        bend_radius: float = 35.0,
+        tandem_length: float = 8.0) -> TopoDS_Shape:
+
+    pass
     shapes = []
     shapes.append(BRepPrimAPI_MakeCylinder(tandem_radius, max_height).Shape())
 
@@ -478,10 +544,9 @@ if __name__ == "__main__":
 
     display, start_display, add_menu, add_function_to_menu = init_display()
 
-    tandem_angle = 75.0
+    tandem_angle = 55.0
 
-    display.DisplayColoredShape(tandem_from_2d(
-        tandem_angle=tandem_angle), "BLUE")
+    display.DisplayColoredShape( tandem_frame(tandem_angle=tandem_angle), "BLUE")
     # generate a stopper
 
     # generate and show the tandem
