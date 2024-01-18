@@ -1,17 +1,17 @@
 import math
 
-from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse
+from OCC.Core.BRepAlgoAPI import BRepAlgoAPI_Fuse, BRepAlgoAPI_Common
 from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge, BRepBuilderAPI_MakeWire, BRepBuilderAPI_MakeFace
 from OCC.Core.BRepFill import BRepFill_PipeShell
 from OCC.Core.BRepOffsetAPI import BRepOffsetAPI_ThruSections
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeSphere, BRepPrimAPI_MakePrism
-from OCC.Core.GC import GC_MakeArcOfCircle
+from OCC.Core.GC import GC_MakeArcOfCircle, GC_MakeSegment
 from OCC.Core.Geom2d import Geom2d_Circle, Geom2d_Line
 from OCC.Core.Geom2dAPI import Geom2dAPI_InterCurveCurve
 from OCC.Core.gp import *
 from OCC.Core.TopoDS import TopoDS_Shape
 
-
+# TODO create a step file that shows the points and measurements here to visualize what is being done
 class Tandem():
     cylinder_height: float = 160.0
     cylinder_diameter: float = 15
@@ -29,85 +29,77 @@ class Tandem():
     bend_end = gp_Pnt(0,0,0)
     bend_direction = gp_Dir(0,0,1)
     
+    def cylinder_offset_shape(self) -> TopoDS_Shape:
+        radius = self.cylinder_diameter / 2 + self.height_offset
+        height = self.cylinder_height + self.height_offset - radius - 1
+
+        top_point = gp_Pnt(0,0,self.cylinder_height)
+        start_arc_point = gp_Pnt(-radius, 0, height)
+        end_arc_point = gp_Pnt(radius, 0, height)
+        bottom_point = gp_Pnt(radius, 0, 0)
+
+        circle = gp_Circ(gp_Ax2(gp_Pnt(0,0, height), gp_Dir(0,1,0)), radius)
+        curve = GC_MakeArcOfCircle(circle, start_arc_point, end_arc_point, True)
+        line = GC_MakeSegment(end_arc_point, bottom_point)
+
+        edges = []
+        edges.append(BRepBuilderAPI_MakeEdge(curve.Value()).Edge())
+        edges.append(BRepBuilderAPI_MakeEdge(line.Value()).Edge())
+        edges.append(make_edge(bottom_point, gp_Pnt(-radius, 0, 0)))
+        edges.append(make_edge(gp_Pnt(-radius, 0, 0), start_arc_point))
+        wire = make_wire(edges)
+
+        return make_symmetrical_shape(wire, radius)
+
     def generate_shape(self) -> TopoDS_Shape:
-        return self.tandem_shape()
+        # create tandem
+        tandem = self.tandem_shape()
+        # create stopper, if needed
+        stopper = self.stopper_shape()
+        # combine stopper to tandem
+        shape = fuse_shapes([tandem, stopper])
+        # create cylinder
+        cylinder = self.cylinder_offset_shape()
+        # union cylinder and tandem+stopper model
+        return BRepAlgoAPI_Common(shape, cylinder).Shape()
 
     def stopper_shape(self) -> TopoDS_Shape:
+        # create a slanted circle and extrude it upwards
         max_height = self.cylinder_height + self.height_offset
-        cylinder_radius = self.cylinder_diameter / 2 + self.height_offset
         stopper_depth = self.stopper_length
         stopper_radius = self.stopper_diameter / 2
         stopper_rads = math.radians(90 - self.tandem_angle)
-        stopper_direction = gp_Dir2d(
+        stopper_direction = gp_Dir(
             math.cos(stopper_rads),
+            0,
             math.sin(stopper_rads))
+        stopper_start = self.bend_end
+        axis = gp_Ax2(stopper_start, stopper_direction)
+        circle = gp_Circ(axis, stopper_radius)
+        distance = max_height - stopper_start.Z()
+        stopper_profile = BRepBuilderAPI_MakeFace(BRepBuilderAPI_MakeWire(BRepBuilderAPI_MakeEdge(circle).Edge()).Wire()).Face()
+        channel_shape = BRepPrimAPI_MakePrism(stopper_profile, gp_Vec(0, 0, distance)).Shape()
+        vector = gp_Vec(stopper_direction) * distance
+        tandem_shape = BRepPrimAPI_MakePrism(stopper_profile, vector).Shape()
 
-        # first cylinder matches stopper profile
-        axis = gp_Ax2(self.bend_end, self.bend_direction)
-        shape_stopper = BRepPrimAPI_MakeCylinder(axis, stopper_radius, stopper_depth).Shape()
+        stopper_line = Geom2d_Line(gp_Lin2d(gp_Pnt2d(stopper_start.X(), stopper_start.Z()), gp_Dir2d(stopper_direction.X(), stopper_direction.Z())))
+        cylinder_radius = self.cylinder_diameter / 2 + self.height_offset
+        arc_circle_origin = gp_Pnt2d(0, max_height - cylinder_radius)
+        arc_circle = Geom2d_Circle(gp_Circ2d(gp_Ax2d(arc_circle_origin, gp_Dir2d(0,1)), cylinder_radius))
+        arc_end = intersection2d(stopper_line, arc_circle)
 
-        # second profile helps stopper vertical
-        bottom_wire = BRepBuilderAPI_MakeWire(BRepBuilderAPI_MakeEdge(gp_Circ(axis, stopper_radius)).Edge()).Wire()
-        bottom_face = BRepBuilderAPI_MakeFace(bottom_wire).Face()
-        distance = self.cylinder_height + self.height_offset - self.bend_end.Z()
-        vector_1 = gp_Vec(0, 0, distance)
-        prism_1 = BRepPrimAPI_MakePrism(bottom_face, vector_1).Shape()
-
-        vector_2 = gp_Vec(
-            self.tandem_end.X() - self.bend_end.X(),
-            self.tandem_end.Y() - self.bend_end.Y(),
-            self.tandem_end.Z() - self.bend_end.Z())
-
-        prism_2 = BRepPrimAPI_MakePrism(bottom_face, vector_2).Shape()
-        # cut off bottom for smooth surface
-
-
-        # use lines to make sedges and profiles like the tandem
-        start_point = gp_Pnt2d(self.bend_end.X(), self.bend_end.Z())
-        top_point = gp_Pnt2d(0, max_height)
-        line = gp_Lin2d(start_point, stopper_direction)
-        tandem_line = Geom2d_Line(line)
-        perp = line.Rotated(start_point, math.radians(90))
-        perp_line = Geom2d_Line(perp)
-        channel_line = Geom2d_Line( gp_Ax2d(gp_Pnt2d(stopper_radius - (self.tandem_diameter / 2), 0),gp_Dir2d(0,1)))
-        
-        def intersection(curve_1, curve_2):
-            intersect = Geom2dAPI_InterCurveCurve(curve_1, curve_2)
-
-            if intersect.NbPoints() < 1:
-                raise Exception("Does not intersect!")
-                return None
-            
-            result = gp_Pnt2d(0,0)
-            for i in range(1, intersect.NbPoints() + 1):
-                point = intersect.Point(i)
-                if point.Y() > result.Y():
-                    result = point
-
-            return result
-        
-        channel_point = intersection(perp_line, channel_line)
-
-        top_circle = Geom2d_Circle(gp_Ax2d(gp_Pnt2d(0, max_height - cylinder_radius), gp_Dir2d(0,1)), cylinder_radius )
-        arc_point = intersection(top_circle, tandem_line)
-
-        def to_3d(point: gp_Pnt2d) -> gp_Pnt:
-            y = 15.0
-            return gp_Pnt(point.X(), y, point.Y())
-
-        p0 = to_3d(start_point)
-        p1 = to_3d(channel_point)
-        p2 = to_3d(top_point)
-        p3 = to_3d(arc_point)
+        p0 = stopper_start
+        p1 = gp_Pnt(stopper_start.X(), 0, max_height)
+        p2 = to3d(arc_end)
 
         edges = []
         edges.append(make_edge(p0, p1))
         edges.append(make_edge(p1, p2))
-        edges.append(make_edge(p2, p3))
-        edges.append(make_edge(p3, p0))
+        edges.append(make_edge(p2, p0))
+        wire = make_wire(edges)
+        shape = make_symmetrical_shape(wire, stopper_radius)
 
-        return make_wire(edges)
-        return fuse_shapes([prism_1, prism_2])
+        return fuse_shapes([channel_shape, tandem_shape, shape])
 
     def tandem_shape(self) -> TopoDS_Shape:
         """
@@ -150,7 +142,6 @@ class Tandem():
         else:
             for i in range(1, intersection.NbPoints() + 1):
                 point = intersection.Point(i)
-                print(f"Point: {point.X()}, {point.Y()}")
                 if point.Y() > bend_end.Y():
                     bend_end = point
 
@@ -263,6 +254,33 @@ class Tandem():
         pass
 
 
+def fuse_shapes(shapes: []):
+    result = None
+    for shape in shapes:
+        if result is None:
+            result = shape
+            continue
+
+        result = BRepAlgoAPI_Fuse(result, shape).Shape()
+
+    return result
+
+
+def intersection2d(curve1, curve2):
+        intersection = Geom2dAPI_InterCurveCurve(curve1, curve2)
+
+        result = gp_Pnt2d(0, -1000)
+        if intersection.NbPoints() < 1:
+            return None
+        else:
+            for i in range(1, intersection.NbPoints() + 1):
+                point = intersection.Point(i)
+                if point.Y() > result.Y():
+                    result = point
+
+        return result
+
+
 def make_edge(p1: gp_Pnt, p2: gp_Pnt):
     return BRepBuilderAPI_MakeEdge(p1, p2).Edge()
 
@@ -330,19 +348,7 @@ def make_curved_pipe(start_point, arc, start_direction, radius):
     pipe.Build()
     pipe.MakeSolid()
     return pipe.Shape()
-
-
-def fuse_shapes(shapes: []):
-    result = None
-    for shape in shapes:
-        if result is None:
-            result = shape
-            continue
-
-        result = BRepAlgoAPI_Fuse(result, shape).Shape()
-
-    return result
-
+    
 
 def show_cylinder(
         cylinder_length: float = 160,
@@ -367,18 +373,22 @@ def show_cylinder(
     return make_wire(edges)
 
 
+def to3d(point: gp_Pnt2d, y = 0.0) -> gp_Pnt:
+    return gp_Pnt(point.X(), y, point.Y())
+
+
 if __name__ == "__main__":
     from OCC.Display.SimpleGui import init_display
 
     display, start_display, add_menu, add_function_to_menu = init_display()
 
     tandem = Tandem() # object to hold the tandem settings
-    tandem.tandem_angle = 15.0  # manually change a setting
+    tandem.tandem_angle = 45.0  # manually change a setting
 
     display.DisplayColoredShape(tandem.generate_shape(), "BLUE")
     # generate a stopper
-    display.DisplayColoredShape(tandem.stopper_shape(), "ORANGE")
-    
+    #display.DisplayColoredShape(tandem.stopper_shape(), "ORANGE")
+
     # generate and show the tandem
-    display.DisplayShape(show_cylinder())
+    #display.DisplayShape(tandem.cylinder_offset_shape())
     start_display()
