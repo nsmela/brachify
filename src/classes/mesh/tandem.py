@@ -68,6 +68,11 @@ class Tandem():
         max_height = self.cylinder_height + self.height_offset
         stopper_depth = self.stopper_length
         stopper_radius = self.stopper_diameter / 2
+
+        if self.tandem_angle == 0:
+            top_point = gp_Pnt(0,0,self.max_height + self.height_offset)
+            return make_cylinder(self.bend_end, top_point, stopper_radius)
+
         stopper_rads = math.radians(90 - self.tandem_angle)
         stopper_direction = gp_Dir(
             math.cos(stopper_rads),
@@ -88,6 +93,9 @@ class Tandem():
         arc_circle = Geom2d_Circle(gp_Circ2d(gp_Ax2d(arc_circle_origin, gp_Dir2d(0,1)), cylinder_radius))
         arc_end = intersection2d(stopper_line, arc_circle)
 
+        if arc_end is None:
+            raise Exception("invalid stopper generated!")
+        
         p0 = stopper_start
         p1 = gp_Pnt(stopper_start.X(), 0, max_height)
         p2 = to3d(arc_end)
