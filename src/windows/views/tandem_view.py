@@ -24,6 +24,7 @@ class TandemView(CustomView):
     @display_action
     def action_generate_tandem(self):
         log.debug(f"action: generate a tandem")
+
         self.tandemmodel.generate_tandem(
             channel_diameter=self.ui.sp_channel_diameter.value(),
             tip_diameter=self.ui.sp_tip_diameter.value(),

@@ -245,8 +245,6 @@ class Tandem():
 
         # save values to self to use for stopper, if used
         self.bend_end = bend_end_3d
-        self.bend_direction = gp_Dir(direction.X(), 0, direction.Y())
-        self.tandem_end = tandem_end_3d
 
         return fuse_shapes([shape_channel, shape_interior, shape_bend])
 
