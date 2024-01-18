@@ -8,27 +8,29 @@ from classes.logger import log
 from classes.mesh.channel import NeedleChannel
 from classes.mesh.fileio import read_3d_file
 from classes.mesh.helper import extend_bottom_face
-from classes.mesh.tandem import generate_tandem
+from classes.mesh.tandem import Tandem
 from windows.models.shape_model import ShapeModel, ShapeTypes
 
 TANDEM_LABEL = "tandem_shape"
 
 # Defaults
 TANDEM_CHANNEL_DIAMETER_DEFAULT = 4.0
-TANDEM_TIP_DIAMETER_DEFAULT = 4.0
+TANDEM_TIP_DIAMETER_DEFAULT = 8.0
 TANDEM_TIP_THICKNESS_DEFAULT = 12.0
-TANDEM_TIP_ANGLE_DEFAULT = 45.0
-TANDEM_TIP_HEIGHT_DEFAULT = 140.0
+TANDEM_TIP_ANGLE_DEFAULT = 30.0
+TANDEM_TIP_HEIGHT_DEFAULT = 129.0
 
 
 class TandemModel(QObject):
 
     values_changed = Signal()
+    tandem = Tandem()
 
     def clear_tandem(self):
         # remove tandem from the display
         self._base_shape = None
         self.filepath = None
+        self.tandem = Tandem()
         self.update()
 
     def generate_tandem(self, 
@@ -36,18 +38,13 @@ class TandemModel(QObject):
         tip_thickness: float, tip_angle:float):
         log.debug(f"generating tandem")
 
-        self.channel_diameter = channel_diameter
-        self.tip_diameter = tip_diameter
-        self.tip_thickness = tip_thickness
-        self.tip_angle = tip_angle
+        self.tandem.tandem_diameter = channel_diameter
+        self.tandem.stopper_diameter = tip_diameter
+        self.tandem.stopper_length = tip_thickness
+        self.tandem.tandem_angle = tip_angle
 
-        self._base_shape = generate_tandem(
-            channel_diameter=self.channel_diameter,
-            tip_diameter=self.tip_diameter,
-            tip_thickness=self.tip_thickness,
-            tip_angle=self.tip_angle,
-            tip_height= TANDEM_TIP_HEIGHT_DEFAULT
-        )
+        self.is_shape_imported = False #  used to flag height offsets
+        self._base_shape = self.tandem.generate_shape()
 
         self.filepath = ""
 
@@ -56,6 +53,7 @@ class TandemModel(QObject):
     def import_tandem(self, filepath: str):
         self.filepath = filepath
         self._base_shape = read_3d_file(filepath)
+        self.is_shape_imported = True
         self.update()
 
     def set_import_height_offset(self, height_offset: float):
@@ -63,6 +61,7 @@ class TandemModel(QObject):
         if not self.filepath: return
 
         self.mesh_offset = height_offset
+        self.tandem.tandem_height = TANDEM_TIP_HEIGHT_DEFAULT + height_offset
         self.update()
     
     def set_tandem_channel(self, channel: NeedleChannel):
@@ -86,7 +85,7 @@ class TandemModel(QObject):
 
         shape = rotate_shape(
             shape=self._base_shape, axis=gp.OZ(), angle=rotation)
-        shape = translate_shp(shape, offset)
+        if self.is_shape_imported: shape = translate_shp(shape, offset)
 
         if self.filepath: shape = extend_bottom_face(shape)
 
@@ -96,6 +95,18 @@ class TandemModel(QObject):
         log.debug(f"updating")
         self.values_changed.emit()
         self.update_display()
+
+    def update_cylinder(self):
+        log.debug("updating cylinder on tandem model")
+
+        cylindermodel = get_app().window.cylindermodel
+        self.tandem.cylinder_height = cylindermodel.cylinder.length
+        self.tandem.cylinder_diameter = cylindermodel.cylinder.diameter
+
+        if self._base_shape is None: return
+
+        self._base_shape = self.tandem.generate_shape()
+        self.update()
 
     def update_display(self):
         log.debug(f"update display")
@@ -123,6 +134,7 @@ class TandemModel(QObject):
         self.rotation = 0.0
         self.filepath = None
         self.mesh_offset = 0.0
+        self.is_shape_imported = False
 
         # generated tandem settings
         self.channel_diameter = TANDEM_CHANNEL_DIAMETER_DEFAULT
@@ -133,6 +145,7 @@ class TandemModel(QObject):
         # signals and slots
         window = get_app().window
         window.channelsmodel.tandem_changed.connect(self.set_tandem_channel)
+        window.cylindermodel.values_changed.connect(self.update_cylinder)
 
         # references
         self.displaymodel = window.displaymodel
