@@ -33,7 +33,6 @@ class Tandem():
         radius = self.cylinder_diameter / 2 + self.height_offset
         height = self.cylinder_height + self.height_offset - radius - 1
 
-        top_point = gp_Pnt(0,0,self.cylinder_height)
         start_arc_point = gp_Pnt(-radius, 0, height)
         end_arc_point = gp_Pnt(radius, 0, height)
         bottom_point = gp_Pnt(radius, 0, 0)
@@ -72,7 +71,7 @@ class Tandem():
         stopper_start = self.bend_end
 
         if self.tandem_angle == 0:
-            axis = gp_Ax2(stopper_start, gp_Dir(0,0,1))
+            axis = gp_Ax2(gp_Pnt(0, 0, self.tandem_height), gp_Dir(0,0,1))
             length = max_height - stopper_start.Z() - 1
             return BRepPrimAPI_MakeCylinder(axis, stopper_radius, length).Shape()
    
@@ -83,12 +82,19 @@ class Tandem():
             math.sin(stopper_rads))
         axis = gp_Ax2(stopper_start, stopper_direction)
         circle = gp_Circ(axis, stopper_radius)
-        distance = max_height - stopper_start.Z()
         stopper_profile = BRepBuilderAPI_MakeFace(BRepBuilderAPI_MakeWire(BRepBuilderAPI_MakeEdge(circle).Edge()).Wire()).Face()
-        channel_shape = BRepPrimAPI_MakePrism(stopper_profile, gp_Vec(0, 0, distance)).Shape()
+
+        # channel shape
+        distance = max_height - stopper_start.Z()
+        channel_direction = gp_Dir(0,0,1)
+        channel_vector = gp_Vec(channel_direction) * distance
+        channel_shape = BRepPrimAPI_MakePrism(stopper_profile, channel_vector).Shape()
+
+        # tandem shape
         vector = gp_Vec(stopper_direction) * distance
         tandem_shape = BRepPrimAPI_MakePrism(stopper_profile, vector).Shape()
 
+        # infil shape
         stopper_line = Geom2d_Line(gp_Lin2d(gp_Pnt2d(stopper_start.X(), stopper_start.Z()), gp_Dir2d(stopper_direction.X(), stopper_direction.Z())))
         cylinder_radius = self.cylinder_diameter / 2 + self.height_offset
         arc_circle_origin = gp_Pnt2d(0, max_height - cylinder_radius)
@@ -107,9 +113,9 @@ class Tandem():
         edges.append(make_edge(p1, p2))
         edges.append(make_edge(p2, p0))
         wire = make_wire(edges)
-        shape = make_symmetrical_shape(wire, stopper_radius)
+        infil_shape = make_symmetrical_shape(wire, stopper_radius)
 
-        return fuse_shapes([channel_shape, tandem_shape, shape])
+        return fuse_shapes([channel_shape, tandem_shape, infil_shape])
 
     def tandem_shape(self) -> TopoDS_Shape:
         """
@@ -398,7 +404,7 @@ if __name__ == "__main__":
     display, start_display, add_menu, add_function_to_menu = init_display()
 
     tandem = Tandem() # object to hold the tandem settings
-    tandem.tandem_angle = 45.0  # manually change a setting
+    tandem.tandem_angle = 0.0  # manually change a setting
 
     display.DisplayColoredShape(tandem.generate_shape(), "BLUE")
     # generate a stopper
