@@ -68,17 +68,18 @@ class Tandem():
         max_height = self.cylinder_height + self.height_offset
         stopper_depth = self.stopper_length
         stopper_radius = self.stopper_diameter / 2
+        stopper_start = self.bend_end
 
         if self.tandem_angle == 0:
-            top_point = gp_Pnt(0,0,self.max_height + self.height_offset)
-            return make_cylinder(self.bend_end, top_point, stopper_radius)
-
+            axis = gp_Ax2(stopper_start, gp_Dir(0,0,1))
+            length = max_height - stopper_start.Z() - 1
+            return BRepPrimAPI_MakeCylinder(axis, stopper_radius, length).Shape()
+   
         stopper_rads = math.radians(90 - self.tandem_angle)
         stopper_direction = gp_Dir(
             math.cos(stopper_rads),
             0,
             math.sin(stopper_rads))
-        stopper_start = self.bend_end
         axis = gp_Ax2(stopper_start, stopper_direction)
         circle = gp_Circ(axis, stopper_radius)
         distance = max_height - stopper_start.Z()
@@ -113,6 +114,13 @@ class Tandem():
         """
         Generate the points, edges, wires and then shapes for the tandem and outputs a shape
         """
+
+        # if angle = 0, it's a straight line
+        if self.tandem_angle < 0.1:
+            axis = gp_Ax2(gp_Pnt(0,0,0), gp_Dir(0,0,1))
+            length = self.cylinder_height + self.height_offset - 1
+            return BRepPrimAPI_MakeCylinder(axis, self.tandem_diameter / 2, length).Shape()
+
         # variables used
         height_offset = self.height_offset  # tandem extends past cylinder by this amount
         max_height = self.cylinder_height + height_offset
