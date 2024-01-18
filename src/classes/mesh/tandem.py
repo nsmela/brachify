@@ -63,6 +63,7 @@ class Tandem():
         # union cylinder and tandem+stopper model
         return BRepAlgoAPI_Common(shape, cylinder).Shape()
 
+
     def stopper_shape(self) -> TopoDS_Shape:
         # create a slanted circle and extrude it upwards
         max_height = self.cylinder_height + self.height_offset

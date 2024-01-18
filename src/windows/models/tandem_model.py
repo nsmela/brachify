@@ -24,30 +24,11 @@ TANDEM_TIP_HEIGHT_DEFAULT = 129.0
 class TandemModel(QObject):
 
     values_changed = Signal()
-    tandem = Tandem()
 
     def clear_tandem(self):
         # remove tandem from the display
         self._base_shape = None
         self.filepath = None
-        self.tandem = Tandem()
-        self.update()
-
-    def generate_tandem(self, 
-        channel_diameter: float, tip_diameter: float,
-        tip_thickness: float, tip_angle:float):
-        log.debug(f"generating tandem")
-
-        self.tandem.tandem_diameter = channel_diameter
-        self.tandem.stopper_diameter = tip_diameter
-        self.tandem.stopper_length = tip_thickness
-        self.tandem.tandem_angle = tip_angle
-
-        self.is_shape_imported = False #  used to flag height offsets
-        self._base_shape = self.tandem.generate_shape()
-
-        self.filepath = ""
-
         self.update()
 
     def import_tandem(self, filepath: str):
@@ -62,6 +43,23 @@ class TandemModel(QObject):
 
         self.mesh_offset = height_offset
         self.tandem.tandem_height = TANDEM_TIP_HEIGHT_DEFAULT + height_offset
+        self.update()
+
+    def set_tandem(self, 
+        channel_diameter: float, tip_diameter: float,
+        tip_thickness: float, tip_angle:float):
+
+        log.debug(f"setting tandem")
+        self.filepath = ""
+        self.is_shape_imported = False #  used to flag height offsets
+
+        self.tandem_diameter = channel_diameter
+        self.tip_diameter = tip_diameter
+        self.tip_thickness = tip_thickness
+        self.tip_angle = tip_angle
+
+        self._generate_tandem()
+        
         self.update()
     
     def set_tandem_channel(self, channel: NeedleChannel):
@@ -100,12 +98,13 @@ class TandemModel(QObject):
         log.debug("updating cylinder on tandem model")
 
         cylindermodel = get_app().window.cylindermodel
-        self.tandem.cylinder_height = cylindermodel.cylinder.length
-        self.tandem.cylinder_diameter = cylindermodel.cylinder.diameter
+        self.cylinder_length = cylindermodel.cylinder.length
+        self.cylinder_diameter = cylindermodel.cylinder.diameter
 
         if self._base_shape is None: return
 
-        self._base_shape = self.tandem.generate_shape()
+        if not self.is_shape_imported: self._generate_tandem()
+        
         self.update()
 
     def update_display(self):
@@ -126,6 +125,19 @@ class TandemModel(QObject):
         log.debug(f"updating tandem height offset to {height_offset}")
         self.height_offset = height_offset
         self.update()
+        
+    def _generate_tandem(self):
+        tandem = Tandem()
+
+        tandem.tandem_diameter = self.tandem_diameter
+        tandem.stopper_diameter = self.tip_diameter
+        tandem.stopper_length = self.tip_thickness
+        tandem.tandem_angle = self.tip_angle
+
+        tandem.cylinder_height = self.cylinder_length
+        tandem.cylinder_diameter = self.cylinder_diameter
+
+        self._base_shape = tandem.generate_shape()
 
     def __init__(self) -> None:
         super().__init__()
@@ -135,6 +147,16 @@ class TandemModel(QObject):
         self.filepath = None
         self.mesh_offset = 0.0
         self.is_shape_imported = False
+
+        # cylinder settings
+        self.cylinder_length = 0
+        self.cylinder_radius = 0
+
+        # tandem settings
+        self.tandem_diameter = TANDEM_CHANNEL_DIAMETER_DEFAULT
+        self.stopper_diameter = TANDEM_TIP_DIAMETER_DEFAULT
+        self.stopper_length = TANDEM_TIP_THICKNESS_DEFAULT
+        self.tandem_angle = TANDEM_TIP_ANGLE_DEFAULT
 
         # generated tandem settings
         self.channel_diameter = TANDEM_CHANNEL_DIAMETER_DEFAULT

@@ -22,10 +22,10 @@ class TandemView(CustomView):
         self.tandemmodel.clear_tandem()
 
     @display_action
-    def action_generate_tandem(self):
+    def action_set_tandem(self):
         log.debug(f"action: generate a tandem")
 
-        self.tandemmodel.generate_tandem(
+        self.tandemmodel.set_tandem(
             channel_diameter=self.ui.sp_channel_diameter.value(),
             tip_diameter=self.ui.sp_tip_diameter.value(),
             tip_thickness=self.ui.sp_tip_thickness.value(),
@@ -88,7 +88,7 @@ class TandemView(CustomView):
         self.tandemmodel = get_app().window.tandemmodel
 
         # signals and slots
-        self.ui.btn_apply.pressed.connect(self.action_generate_tandem)
+        self.ui.btn_apply.pressed.connect(self.action_set_tandem)
         self.ui.btn_clear_generate.pressed.connect(self.action_clear_tandem)
         self.ui.btn_import.pressed.connect(self.action_import_tandem)
         self.ui.btn_clear_import.pressed.connect(self.action_clear_tandem)
